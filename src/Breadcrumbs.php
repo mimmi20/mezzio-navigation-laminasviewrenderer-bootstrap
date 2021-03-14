@@ -132,8 +132,10 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
             $container = $this->getContainer();
         }
 
+        $active = $this->findActive($container);
+
         // find deepest active
-        if (!$active = $this->findActive($container)) {
+        if (!$active) {
             return '';
         }
 
@@ -382,6 +384,13 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
         return $this->minDepth;
     }
 
+    /**
+     * @param string $html
+     * @param string $liClass
+     * @param bool   $active
+     *
+     * @return string
+     */
     private function renderBreadcrumbItem(string $html, string $liClass = '', bool $active = false)
     {
         $classes = ['breadcrumb-item', $liClass];

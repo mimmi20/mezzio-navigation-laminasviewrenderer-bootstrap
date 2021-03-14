@@ -27,8 +27,8 @@ use RecursiveIteratorIterator;
  */
 final class Menu extends AbstractHtmlElement implements MenuInterface
 {
-    use HelperTrait;
     use BootstrapTrait;
+    use HelperTrait;
 
     /**
      * Whether page class should be applied to <li> element.
@@ -133,7 +133,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *                                                  that the helper should render
      *                                                  the container returned by {@link getContainer()}.
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws Exception\RuntimeException
      *
      * @return string
@@ -161,11 +161,13 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param bool               $escapeLabels       Whether or not to escape the labels
      * @param bool               $addClassToListItem Whether or not page class applied to <li> element
      * @param string             $liActiveClass      CSS class for active LI
-     * @param string|null $ulRole Role attribute for the UL-Element
+     * @param string|null        $ulRole             Role attribute for the UL-Element
      * @param string|null        $liRole             Role attribute for the LI-Element
-     * @param string|null        $role             Role attribute for the Link-Element
-     * @return string
+     * @param string|null        $role               Role attribute for the Link-Element
+     *
      * @throws Exception\InvalidArgumentException
+     *
+     * @return string
      */
     private function renderDeepestMenu(
         ContainerInterface $container,
@@ -181,7 +183,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         ?string $liRole = null,
         ?string $role = null
     ): string {
-        if (!$active = $this->findActive($container, $minDepth - 1, $maxDepth)) {
+        $active = $this->findActive($container, $minDepth - 1, $maxDepth);
+
+        if (!$active) {
             return '';
         }
 
@@ -250,7 +254,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *                                                  Default is to use the container retrieved from {@link getContainer()}.
      * @param array                          $options   [optional] options for controlling rendering
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return string
      */
@@ -264,7 +268,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         $options = $this->normalizeOptions($options);
 
-        $ulClasses = [$options['ulClass']];
+        $ulClasses   = [$options['ulClass']];
         $itemClasses = [];
 
         foreach (
@@ -278,13 +282,15 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 'vertical' => 'flex-column',
             ] as $optionname => $optionvalue
         ) {
-            if (!empty($options[$optionname])) {
-                $ulClasses[] = $optionvalue;
+            if (empty($options[$optionname])) {
+                continue;
             }
+
+            $ulClasses[] = $optionvalue;
         }
 
         if (isset($options['vertical']) && is_string($options['vertical'])) {
-            $ulClasses[] = $this->getSizeClass($options['vertical'], 'flex-%s-row');
+            $ulClasses[]   = $this->getSizeClass($options['vertical'], 'flex-%s-row');
             $itemClasses[] = $this->getSizeClass($options['vertical'], 'flex-%s-fill');
             $itemClasses[] = $this->getSizeClass($options['vertical'], 'text-%s-center');
         }
@@ -294,10 +300,10 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         $liRole  = null;
         $role    = null;
 
-        if ($options['tabs'] || $options['pills']) {
+        if (!empty($options['tabs']) || !empty($options['pills'])) {
             $ulRole = 'tablist';
-            $liRole  = 'presentation';
-            $role    = 'tab';
+            $liRole = 'presentation';
+            $role   = 'tab';
         }
 
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
@@ -347,9 +353,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param bool               $escapeLabels       Whether or not to escape the labels
      * @param bool               $addClassToListItem Whether or not page class applied to <li> element
      * @param string             $liActiveClass      CSS class for active LI
-     * @param string|null $ulRole Role attribute for the UL-Element
+     * @param string|null        $ulRole             Role attribute for the UL-Element
      * @param string|null        $liRole             Role attribute for the LI-Element
-     * @param string|null        $role             Role attribute for the Link-Element
+     * @param string|null        $role               Role attribute for the Link-Element
      *
      * @throws Exception\InvalidArgumentException
      *
@@ -464,11 +470,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             }
 
             // render li tag and page
-            $liClasses = [];
+            $liClasses   = [];
             $pageClasses = [];
 
             if (0 === $depth) {
-                $liClasses[] = 'nav-item';
+                $liClasses[]   = 'nav-item';
                 $pageClasses[] = 'nav-link';
             } else {
                 $pageClasses[] = 'dropdown-item';
@@ -495,7 +501,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             }
 
             if ($page->hasPages(true)) {
-                $liClasses[] = 'dropdown';
+                $liClasses[]   = 'dropdown';
                 $pageClasses[] = 'dropdown-toggle';
             }
 
@@ -612,7 +618,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param string|null             $liActiveClass [optional] CSS class to use for UL
      *                                               element. Default is to use the value from {@link getUlClass()}.
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \InvalidArgumentException
      *
      * @return string
      */

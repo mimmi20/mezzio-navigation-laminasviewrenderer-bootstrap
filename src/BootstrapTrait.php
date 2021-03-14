@@ -11,20 +11,13 @@
 declare(strict_types = 1);
 namespace Mezzio\Navigation\LaminasView\View\Helper\Navigation;
 
-use Laminas\Log\Logger;
-use Laminas\View\Exception;
-use Laminas\View\Helper\AbstractHtmlElement;
-use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasView\LaminasViewRenderer;
-use Mezzio\Navigation\ContainerInterface;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlifyInterface;
-use Mezzio\Navigation\Page\PageInterface;
-use RecursiveIteratorIterator;
-
 trait BootstrapTrait
 {
-    // Allowed sizes
+    /**
+     * Allowed sizes
+     *
+     * @var string[]
+     */
     private static $sizes = [
         'sm',
         'md',
@@ -37,14 +30,16 @@ trait BootstrapTrait
      * @param string $size
      * @param string $prefix
      *
-     * @return string
      * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     private function getSizeClass(string $size, string $prefix): string
     {
-        if (!in_array($size, $this->getSizes())) {
+        if (!in_array($size, $this->getSizes(), true)) {
             throw new \InvalidArgumentException('Size "' . $size . '" does not exist');
         }
+
         return $this->getPrefixedClass($size, $prefix);
     }
 
@@ -64,7 +59,7 @@ trait BootstrapTrait
      */
     private function getPrefixedClass(string $class, string $prefix): string
     {
-        if (!strstr($prefix, '%s')) {
+        if (!mb_strstr($prefix, '%s')) {
             return $prefix . '-' . $class;
         }
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer package.
+ * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2020-2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -2988,7 +2988,7 @@ final class MenuTest extends TestCase
 
     /**
      * @throws \PHPUnit\Framework\Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @throws \Laminas\View\Exception\ExceptionInterface
      *
      * @return void
@@ -3830,9 +3830,8 @@ final class MenuTest extends TestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Laminas\View\Exception\ExceptionInterface
      *
      * @return void
      */
@@ -3934,9 +3933,7 @@ final class MenuTest extends TestCase
 
     /**
      * @throws \PHPUnit\Framework\Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Laminas\View\Exception\ExceptionInterface
-     * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
@@ -4100,9 +4097,7 @@ final class MenuTest extends TestCase
 
     /**
      * @throws \PHPUnit\Framework\Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Laminas\View\Exception\ExceptionInterface
-     * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \InvalidArgumentException
      *
      * @return void
      */
