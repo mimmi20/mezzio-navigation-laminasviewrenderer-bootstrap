@@ -268,7 +268,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         $options = $this->normalizeOptions($options);
 
-        $ulClasses   = [$options['ulClass']];
+        $ulClasses   = ['nav', $options['ulClass']];
         $itemClasses = [];
 
         foreach (
