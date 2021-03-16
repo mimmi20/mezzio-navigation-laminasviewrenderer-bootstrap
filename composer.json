@@ -13,6 +13,7 @@
   ],
   "require": {
     "php": "^7.4.0 || ^8.0.0",
+    "mimmi20/mezzio-navigation-helpers": "^1.0.2",
     "mimmi20/mezzio-navigation-laminasviewrenderer": "^2.0.0"
   },
   "require-dev": {
