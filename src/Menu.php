@@ -85,7 +85,13 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         $options = $this->normalizeOptions($options);
 
-        $ulClasses   = ['nav', $options['ulClass']];
+        if (!empty($options['in-navbar'])) {
+            $ulClasses = ['navbar-nav'];
+        } else {
+            $ulClasses = ['nav'];
+        }
+
+        $ulClasses[] = $options['ulClass'];
         $itemClasses = [];
 
         foreach (
@@ -95,8 +101,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 'fill' => 'nav-fill',
                 'justified' => 'nav-justified',
                 'centered' => 'justify-content-center',
-                'right_aligned' => 'justify-content-end',
-                'vertical' => 'flex-column',
+                'right-aligned' => 'justify-content-end',
             ] as $optionname => $optionvalue
         ) {
             if (empty($options[$optionname])) {
@@ -322,6 +327,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         // iterate container
         $prevDepth = -1;
+        $prevPage  = null;
+
         foreach ($iterator as $page) {
             \assert($page instanceof PageInterface);
 
@@ -352,10 +359,14 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                     $ulClass = ' class="' . ($this->escaper)($ulClass) . '"';
 
                     if (null !== $ulRole) {
-                        $ulClass .= ' role="' . ($this->escaper)($ulRole) . '""';
+                        $ulClass .= ' role="' . ($this->escaper)($ulRole) . '"';
                     }
                 } else {
                     $ulClass = ' class="dropdown-menu"';
+
+                    if (null !== $prevPage && null !== $prevPage->getId()) {
+                        $ulClass .= ' aria-labelledby="' . ($this->escaper)($prevPage->getId()) . '"';
+                    }
                 }
 
                 $html .= $myIndent . '<ul' . $ulClass . '>' . PHP_EOL;
@@ -437,12 +448,13 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $page->setClass(implode(' ', $pageClasses));
             }
 
-            $html .= $myIndent . $indent . '<li' . $liClass . '>' . PHP_EOL . $myIndent . '        ';
-            $html .= $this->htmlify->toHtml(self::class, $page, $escapeLabels, $addClassToListItem, $pageAttrbutes);
+            $html .= $myIndent . $indent . '<li' . $liClass . '>' . PHP_EOL;
+            $html .= $myIndent . $indent . $indent . $this->htmlify->toHtml(self::class, $page, $escapeLabels, $addClassToListItem, $pageAttrbutes);
             $html .= PHP_EOL;
 
             // store as previous depth for next iteration
             $prevDepth = $depth;
+            $prevPage  = $page;
         }
 
         if ($html) {
