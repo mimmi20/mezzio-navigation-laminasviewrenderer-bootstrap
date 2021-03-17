@@ -17,6 +17,7 @@
     "mimmi20/mezzio-navigation-laminasviewrenderer": "^2.0.4"
   },
   "require-dev": {
+    "ext-intl": "*",
     "infection/infection": "^0.21.4",
     "laminas/laminas-config": "^3.5.0",
     "laminas/laminas-i18n": "^2.11.0",
@@ -32,8 +33,9 @@
     "phpunit/phpunit": "^9.5.3"
   },
   "suggest": {
+    "ext-intl": "required to use the Translator",
     "laminas/laminas-config": "^3.5.0, to provide page configuration (optional, as arrays and Traversables are also allowed)",
-    "laminas/laminas-i18n": "^2.11.0, required to use the Menu ViewHelper or the Breadcrumbs ViewHelper",
+    "laminas/laminas-i18n": "^2.11.0, required to use the Translator",
     "laminas/laminas-servicemanager": "^3.6.4, to use the navigation factories",
     "mimmi20/mezzio-generic-authorization": "^1.0.1, to use authrization roles or privileges"
   },
