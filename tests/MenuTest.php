@@ -4274,10 +4274,10 @@ final class MenuTest extends TestCase
         $escapePlugin = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $escapePlugin->expects(self::exactly(3))
+        $escapePlugin->expects(self::exactly(4))
             ->method('__invoke')
-            ->withConsecutive(['nav navigation'], ['nav-item active'], ['active'])
-            ->willReturnOnConsecutiveCalls('nav-escaped navigation-escaped', 'nav-item-escaped active-escaped', 'active-escaped');
+            ->withConsecutive(['nav navigation'], ['nav-item active'], ['parent-id'], ['active'])
+            ->willReturnOnConsecutiveCalls('nav-escaped navigation-escaped', 'nav-item-escaped active-escaped', 'parent-id-escaped', 'active-escaped');
 
         $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
@@ -4298,7 +4298,7 @@ final class MenuTest extends TestCase
         /* @var AuthorizationInterface $auth */
         $helper->setAuthorization($auth);
 
-        $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu">' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
+        $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '<li class="nav-item-escaped active-escaped">' . PHP_EOL . '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '<ul class="dropdown-menu" aria-labelledby="parent-id-escaped">' . PHP_EOL . '<li class="active-escaped">' . PHP_EOL . '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '</li>' . PHP_EOL . '</ul>' . PHP_EOL . '</li>' . PHP_EOL . '</ul>';
 
         $view = $this->getMockBuilder(PhpRenderer::class)
             ->disableOriginalConstructor()
