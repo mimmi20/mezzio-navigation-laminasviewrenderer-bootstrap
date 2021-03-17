@@ -13,8 +13,8 @@
   ],
   "require": {
     "php": "^7.4.0 || ^8.0.0",
-    "mimmi20/mezzio-navigation-helpers": "^1.0.2",
-    "mimmi20/mezzio-navigation-laminasviewrenderer": "^2.0.0"
+    "mimmi20/mezzio-navigation-helpers": "^1.0.3",
+    "mimmi20/mezzio-navigation-laminasviewrenderer": "^2.0.4"
   },
   "require-dev": {
     "infection/infection": "^0.21.4",
@@ -29,7 +29,7 @@
     "phpstan/phpstan": "^0.12.81",
     "phpstan/phpstan-deprecation-rules": "^0.12.6",
     "phpstan/phpstan-phpunit": "~0.12.18",
-    "phpunit/phpunit": "^9.5.2"
+    "phpunit/phpunit": "^9.5.3"
   },
   "suggest": {
     "laminas/laminas-config": "^3.5.0, to provide page configuration (optional, as arrays and Traversables are also allowed)",

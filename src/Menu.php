@@ -11,14 +11,9 @@
 declare(strict_types = 1);
 namespace Mezzio\Navigation\LaminasView\View\Helper\Navigation;
 
-use Laminas\Log\Logger;
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
-use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\Navigation\ContainerInterface;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlifyInterface;
 use Mezzio\Navigation\Page\PageInterface;
 use RecursiveIteratorIterator;
 
@@ -129,12 +124,14 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $role   = 'tab';
         }
 
+        $indent = $options['indent'] ?? $this->getIndent();
+
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
             return $this->renderDeepestMenu(
                 $container,
                 $ulClass,
                 $options['liClass'],
-                $options['indent'],
+                $indent,
                 $options['minDepth'] ?? 0,
                 $options['maxDepth'],
                 $options['escapeLabels'],
@@ -150,7 +147,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $container,
             $ulClass,
             $options['liClass'],
-            $options['indent'],
+            $indent,
             $options['minDepth'] ?? 0,
             $options['maxDepth'],
             $options['onlyActiveBranch'],
@@ -220,11 +217,12 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         if ($ulClass) {
             $html .= ' class="' . ($this->escaper)($ulClass) . '"';
         }
+
         if ($ulRole) {
             $html .= ' role="' . ($this->escaper)($ulRole) . '"';
         }
 
-        $html   .= '>' . PHP_EOL;
+        $html .= '>' . PHP_EOL;
 
         foreach ($active['page'] as $subPage) {
             if (!$this->accept($subPage)) {
@@ -252,17 +250,18 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $liClasses[] = $subPage->getClass();
             }
 
-            $html .= $indent . '    <li';
+            $html .= $indent . $indent . '<li';
             if ([] !== $liClasses) {
                 $html .= ' class="' . ($this->escaper)(implode(' ', $liClasses)) . '"';
             }
+
             if ($liRole) {
                 $html .= ' role="' . ($this->escaper)($liRole) . '"';
             }
 
             $html .= '>' . PHP_EOL;
-            $html .= $indent . '        ' . $this->htmlify->toHtml(self::class, $subPage, $escapeLabels, $addClassToListItem) . PHP_EOL;
-            $html .= $indent . '    </li>' . PHP_EOL;
+            $html .= $indent . $indent . $indent . $this->htmlify->toHtml(self::class, $subPage, $escapeLabels, $addClassToListItem) . PHP_EOL;
+            $html .= $indent . $indent . '</li>' . PHP_EOL;
         }
 
         $html .= $indent . '</ul>';
@@ -326,13 +325,14 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         foreach ($iterator as $page) {
             \assert($page instanceof PageInterface);
 
-            $depth    = $iterator->getDepth();
-            $isActive = $page->isActive(true);
+            $depth = $iterator->getDepth();
 
             if ($depth < $minDepth || !$this->accept($page)) {
                 // page is below minDepth or not accepted by acl/visibility
                 continue;
             }
+
+            $isActive = $page->isActive(true);
 
             if ($onlyActive && !$isActive) {
                 // page is not active itself, but might be in the active branch
@@ -345,7 +345,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
             // make sure indentation is correct
             $depth -= $minDepth;
-            $myIndent = $indent . str_repeat('        ', $depth);
+            $myIndent = str_repeat($indent, $depth + 1);
             if ($depth > $prevDepth) {
                 // start new ul tag
                 if ($ulClass && 0 === $depth) {
@@ -362,25 +362,30 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             } elseif ($prevDepth > $depth) {
                 // close li/ul tags until we're at current depth
                 for ($i = $prevDepth; $i > $depth; --$i) {
-                    $ind = $indent . str_repeat('        ', $i);
-                    $html .= $ind . '    </li>' . PHP_EOL;
+                    $ind = str_repeat($indent, $i + 1);
+                    $html .= $ind . $indent . '</li>' . PHP_EOL;
                     $html .= $ind . '</ul>' . PHP_EOL;
                 }
 
                 // close previous li tag
-                $html .= $myIndent . '    </li>' . PHP_EOL;
+                $html .= $myIndent . $indent . '</li>' . PHP_EOL;
             } else {
                 // close previous li tag
-                $html .= $myIndent . '    </li>' . PHP_EOL;
+                $html .= $myIndent . $indent . '</li>' . PHP_EOL;
             }
 
             // render li tag and page
-            $liClasses   = [];
-            $pageClasses = [];
+            $liClasses     = [];
+            $pageClasses   = [];
+            $pageAttrbutes = [];
 
             if (0 === $depth) {
                 $liClasses[]   = 'nav-item';
                 $pageClasses[] = 'nav-link';
+
+                if ($role) {
+                    $pageAttrbutes['role'] = $role;
+                }
             } else {
                 $pageClasses[] = 'dropdown-item';
             }
@@ -388,6 +393,10 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             // Is page active?
             if ($isActive) {
                 $liClasses[] = $liActiveClass;
+
+                if (0 === $depth) {
+                    $pageAttrbutes['aria-current'] = 'page';
+                }
             }
 
             if ($liCssClass) {
@@ -408,6 +417,10 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             if ($page->hasPages(true)) {
                 $liClasses[]   = 'dropdown';
                 $pageClasses[] = 'dropdown-toggle';
+
+                $pageAttrbutes['data-bs-toggle'] = 'dropdown';
+                $pageAttrbutes['aria-expanded']  = 'false';
+                $pageAttrbutes['role']           = 'button';
             }
 
             if ([] === $liClasses) {
@@ -424,8 +437,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $page->setClass(implode(' ', $pageClasses));
             }
 
-            $html .= $myIndent . '    <li' . $liClass . '>' . PHP_EOL
-                . $myIndent . '        ' . $this->htmlify->toHtml(self::class, $page, $escapeLabels, $addClassToListItem) . PHP_EOL;
+            $html .= $myIndent . $indent . '<li' . $liClass . '>' . PHP_EOL . $myIndent . '        ';
+            $html .= $this->htmlify->toHtml(self::class, $page, $escapeLabels, $addClassToListItem, $pageAttrbutes);
+            $html .= PHP_EOL;
 
             // store as previous depth for next iteration
             $prevDepth = $depth;
@@ -434,8 +448,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         if ($html) {
             // done iterating container; close open ul/li tags
             for ($i = $prevDepth + 1; 0 < $i; --$i) {
-                $myIndent = $indent . str_repeat('        ', $i - 1);
-                $html .= $myIndent . '    </li>' . PHP_EOL
+                $myIndent = str_repeat($indent, $i);
+                $html .= $myIndent . $indent . '</li>' . PHP_EOL
                     . $myIndent . '</ul>' . PHP_EOL;
             }
 

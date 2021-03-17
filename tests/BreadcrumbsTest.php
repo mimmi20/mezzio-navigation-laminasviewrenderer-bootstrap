@@ -4924,8 +4924,10 @@ final class BreadcrumbsTest extends TestCase
         $page->expects(self::once())
             ->method('getParent')
             ->willReturn($parentPage);
-        $page->expects(self::never())
-            ->method('isActive');
+        $page->expects(self::once())
+            ->method('isActive')
+            ->with(false)
+            ->willReturn(true);
         $page->expects(self::never())
             ->method('getLabel');
         $page->expects(self::never())
@@ -5043,7 +5045,17 @@ final class BreadcrumbsTest extends TestCase
         /* @var AuthorizationInterface $auth */
         $helper->setAuthorization($auth);
 
-        $expected  = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>/<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
+        $expected = '<nav aria-label="breadcrumb">'
+            . PHP_EOL . '<ul class="breadcrumb">'
+            . PHP_EOL . '<li class="breadcrumb-item">'
+            . PHP_EOL . '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>'
+            . PHP_EOL . '</li>'
+            . PHP_EOL . '/<li class="breadcrumb-item active" aria-current="page">'
+            . PHP_EOL . '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>'
+            . PHP_EOL . '</li>'
+            . PHP_EOL . '</ul>'
+            . PHP_EOL . '</nav>'
+            . PHP_EOL;
         $seperator = '/';
 
         $helper->setSeparator($seperator);
@@ -5124,8 +5136,10 @@ final class BreadcrumbsTest extends TestCase
         $page->expects(self::once())
             ->method('getParent')
             ->willReturn($parentPage);
-        $page->expects(self::never())
-            ->method('isActive');
+        $page->expects(self::once())
+            ->method('isActive')
+            ->with(false)
+            ->willReturn(false);
         $page->expects(self::once())
             ->method('getLabel')
             ->willReturn($label);
@@ -5249,7 +5263,17 @@ final class BreadcrumbsTest extends TestCase
         /* @var AuthorizationInterface $auth */
         $helper->setAuthorization($auth);
 
-        $expected  = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>/testLabelTranslatedAndEscaped';
+        $expected = '<nav aria-label="breadcrumb">'
+            . PHP_EOL . '<ul class="breadcrumb">'
+            . PHP_EOL . '<li class="breadcrumb-item">'
+            . PHP_EOL . '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>'
+            . PHP_EOL . '</li>'
+            . PHP_EOL . '/<li class="breadcrumb-item">'
+            . PHP_EOL . 'testLabelTranslatedAndEscaped'
+            . PHP_EOL . '</li>'
+            . PHP_EOL . '</ul>'
+            . PHP_EOL . '</nav>'
+            . PHP_EOL;
         $seperator = '/';
 
         $helper->setSeparator($seperator);
@@ -5327,8 +5351,10 @@ final class BreadcrumbsTest extends TestCase
         $page->expects(self::once())
             ->method('getParent')
             ->willReturn($parentPage);
-        $page->expects(self::never())
-            ->method('isActive');
+        $page->expects(self::once())
+            ->method('isActive')
+            ->with(false)
+            ->willReturn(false);
         $page->expects(self::never())
             ->method('getLabel');
         $page->expects(self::never())
@@ -5446,7 +5472,17 @@ final class BreadcrumbsTest extends TestCase
         /* @var AuthorizationInterface $auth */
         $helper->setAuthorization($auth);
 
-        $expected  = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>/<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
+        $expected = '<nav aria-label="breadcrumb">'
+            . PHP_EOL . '<ul class="breadcrumb">'
+            . PHP_EOL . '<li class="breadcrumb-item">'
+            . PHP_EOL . '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>'
+            . PHP_EOL . '</li>'
+            . PHP_EOL . '/<li class="breadcrumb-item">'
+            . PHP_EOL . '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>'
+            . PHP_EOL . '</li>'
+            . PHP_EOL . '</ul>'
+            . PHP_EOL . '</nav>'
+            . PHP_EOL;
         $seperator = '/';
 
         $helper->setSeparator($seperator);

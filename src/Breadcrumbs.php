@@ -11,17 +11,9 @@
 declare(strict_types = 1);
 namespace Mezzio\Navigation\LaminasView\View\Helper\Navigation;
 
-use Laminas\I18n\View\Helper\Translate;
-use Laminas\Log\Logger;
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
-use Laminas\View\Helper\EscapeHtml;
-use Laminas\View\Model\ModelInterface;
-use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\Navigation\ContainerInterface;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlifyInterface;
-use Mezzio\Navigation\Page\PageInterface;
 
 /**
  * Helper for printing breadcrumbs.
@@ -30,32 +22,62 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
 {
     use BreadcrumbsTrait, HelperTrait{
         BreadcrumbsTrait::getMinDepth insteadof HelperTrait;
+        renderStraight as parentRenderStraight;
     }
 
     /**
-     * @param string $html
+     * Renders breadcrumbs by chaining 'a' elements with the separator
+     * registered in the helper.
+     *
+     * @param ContainerInterface|string|null $container [optional] container to render. Default is
+     *                                                  to render the container registered in the helper.
+     *
+     * @throws Exception\InvalidArgumentException
+     *
+     * @return string
+     */
+    public function renderStraight($container = null): string
+    {
+        $content = $this->parentRenderStraight($container);
+
+        if ('' === $content) {
+            return '';
+        }
+
+        $html = $this->getIndent() . '<nav aria-label="breadcrumb">' . PHP_EOL;
+        $html .= $this->getIndent() . $this->getIndent() . '<ul class="breadcrumb">' . PHP_EOL;
+        $html .= $this->getIndent() . $this->getIndent() . $content;
+        $html .= $this->getIndent() . $this->getIndent() . '</ul>' . PHP_EOL;
+        $html .= $this->getIndent() . '</nav>' . PHP_EOL;
+
+        return $html;
+    }
+
+    /**
+     * @param string $content
      * @param string $liClass
      * @param bool   $active
      *
      * @return string
      */
-    private function renderBreadcrumbItem(string $html, string $liClass = '', bool $active = false)
+    private function renderBreadcrumbItem(string $content, string $liClass = '', bool $active = false)
     {
-        $classes = ['breadcrumb-item', $liClass];
+        $classes = ['breadcrumb-item'];
         $aria    = '';
+
+        if ($liClass) {
+            $classes[] = $liClass;
+        }
 
         if ($active) {
             $classes[] = 'active';
             $aria      = ' aria-current="page"';
         }
 
-        $html = sprintf(
-            '<li class="%s"%s>%s</li>',
-            implode(' ', $classes),
-            $aria,
-            $html
-        );
+        $html = $this->getIndent() . $this->getIndent() . $this->getIndent() . sprintf('<li class="%s"%s>', implode(' ', $classes), $aria) . PHP_EOL;
+        $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . $this->getIndent() . $content . PHP_EOL;
+        $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . '</li>' . PHP_EOL;
 
-        return '        ' . $html;
+        return $html;
     }
 }

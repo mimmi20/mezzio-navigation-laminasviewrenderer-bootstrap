@@ -3970,10 +3970,8 @@ final class MenuTest extends TestCase
             ->method('getResource');
         $page->expects(self::never())
             ->method('getPrivilege');
-        $page->expects(self::once())
-            ->method('isActive')
-            ->with(true)
-            ->willReturn(false);
+        $page->expects(self::never())
+            ->method('isActive');
         $page->expects(self::never())
             ->method('getParent');
 
@@ -4143,8 +4141,10 @@ final class MenuTest extends TestCase
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $page->expects(self::never())
-            ->method('isVisible');
+        $page->expects(self::once())
+            ->method('isVisible')
+            ->with(false)
+            ->willReturn(false);
         $page->expects(self::never())
             ->method('getResource');
         $page->expects(self::never())
@@ -4163,8 +4163,9 @@ final class MenuTest extends TestCase
             ->method('getTitle');
         $page->expects(self::never())
             ->method('getId');
-        $page->expects(self::never())
-            ->method('getClass');
+        $page->expects(self::exactly(2))
+            ->method('getClass')
+            ->willReturn('xxxx');
         $page->expects(self::never())
             ->method('getHref');
         $page->expects(self::never())
@@ -4275,8 +4276,8 @@ final class MenuTest extends TestCase
             ->getMock();
         $escapePlugin->expects(self::exactly(3))
             ->method('__invoke')
-            ->withConsecutive(['navigation'], ['active'], ['active'])
-            ->willReturnOnConsecutiveCalls('navigation-escaped', 'active-escaped', 'active-escaped');
+            ->withConsecutive(['nav navigation'], ['nav-item active'], ['active'])
+            ->willReturnOnConsecutiveCalls('nav-escaped navigation-escaped', 'nav-item-escaped active-escaped', 'active-escaped');
 
         $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
@@ -4297,7 +4298,7 @@ final class MenuTest extends TestCase
         /* @var AuthorizationInterface $auth */
         $helper->setAuthorization($auth);
 
-        $expected = '<ul class="navigation-escaped">' . PHP_EOL . '    <li class="active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
+        $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu">' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
 
         $view = $this->getMockBuilder(PhpRenderer::class)
             ->disableOriginalConstructor()
