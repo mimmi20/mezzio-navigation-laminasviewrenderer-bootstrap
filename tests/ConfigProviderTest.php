@@ -9,31 +9,28 @@
  */
 
 declare(strict_types = 1);
-namespace MezzioTest\Navigation\LaminasView\View\Helper\Navigation;
 
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\Breadcrumbs;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\ConfigProvider;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\Menu;
+namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+
+use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
+use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\ConfigProvider;
+use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 final class ConfigProviderTest extends TestCase
 {
-    /** @var ConfigProvider */
-    private $provider;
+    private ConfigProvider $provider;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         $this->provider = new ConfigProvider();
     }
 
     /**
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     *
-     * @return void
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function testProviderDefinesExpectedFactoryServices(): void
     {
@@ -48,10 +45,8 @@ final class ConfigProviderTest extends TestCase
     }
 
     /**
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     *
-     * @return void
+     * @throws Exception
+     * @throws InvalidArgumentException
      */
     public function testInvocationReturnsArrayWithDependencies(): void
     {

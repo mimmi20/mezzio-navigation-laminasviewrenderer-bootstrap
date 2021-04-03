@@ -9,11 +9,20 @@
  */
 
 declare(strict_types = 1);
-namespace Mezzio\Navigation\LaminasView\View\Helper\Navigation;
+
+namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Mezzio\Navigation\ContainerInterface;
+use Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsInterface;
+use Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsTrait;
+use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
+
+use function implode;
+use function sprintf;
+
+use const PHP_EOL;
 
 /**
  * Helper for printing breadcrumbs.
@@ -33,8 +42,6 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
      *                                                  to render the container registered in the helper.
      *
      * @throws Exception\InvalidArgumentException
-     *
-     * @return string
      */
     public function renderStraight($container = null): string
     {
@@ -44,7 +51,7 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
             return '';
         }
 
-        $html = $this->getIndent() . '<nav aria-label="breadcrumb">' . PHP_EOL;
+        $html  = $this->getIndent() . '<nav aria-label="breadcrumb">' . PHP_EOL;
         $html .= $this->getIndent() . $this->getIndent() . '<ul class="breadcrumb">' . PHP_EOL;
         $html .= $this->getIndent() . $this->getIndent() . $content;
         $html .= $this->getIndent() . $this->getIndent() . '</ul>' . PHP_EOL;
@@ -53,14 +60,7 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
         return $html;
     }
 
-    /**
-     * @param string $content
-     * @param string $liClass
-     * @param bool   $active
-     *
-     * @return string
-     */
-    private function renderBreadcrumbItem(string $content, string $liClass = '', bool $active = false)
+    private function renderBreadcrumbItem(string $content, string $liClass = '', bool $active = false): string
     {
         $classes = ['breadcrumb-item'];
         $aria    = '';
@@ -74,7 +74,7 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
             $aria      = ' aria-current="page"';
         }
 
-        $html = $this->getIndent() . $this->getIndent() . $this->getIndent() . sprintf('<li class="%s"%s>', implode(' ', $classes), $aria) . PHP_EOL;
+        $html  = $this->getIndent() . $this->getIndent() . $this->getIndent() . sprintf('<li class="%s"%s>', implode(' ', $classes), $aria) . PHP_EOL;
         $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . $this->getIndent() . $content . PHP_EOL;
         $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . '</li>' . PHP_EOL;
 

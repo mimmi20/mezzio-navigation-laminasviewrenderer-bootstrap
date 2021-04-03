@@ -9,13 +9,32 @@
  */
 
 declare(strict_types = 1);
-namespace Mezzio\Navigation\LaminasView\View\Helper\Navigation;
 
+namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+
+use InvalidArgumentException;
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Mezzio\Navigation\ContainerInterface;
+use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
+use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
+use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
 use Mezzio\Navigation\Page\PageInterface;
 use RecursiveIteratorIterator;
+
+use function assert;
+use function get_class;
+use function gettype;
+use function implode;
+use function is_bool;
+use function is_int;
+use function is_object;
+use function is_string;
+use function rtrim;
+use function sprintf;
+use function str_repeat;
+
+use const PHP_EOL;
 
 /**
  * Helper for rendering menus from navigation containers.
@@ -43,10 +62,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *                                                  that the helper should render
      *                                                  the container returned by {@link getContainer()}.
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws Exception\RuntimeException
-     *
-     * @return string
      */
     public function render($container = null): string
     {
@@ -67,13 +84,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *
      * Available $options:
      *
-     * @param ContainerInterface|string|null $container [optional] container to create menu from.
-     *                                                  Default is to use the container retrieved from {@link getContainer()}.
-     * @param array                          $options   [optional] options for controlling rendering
+     * @param ContainerInterface|string|null      $container [optional] container to create menu from.
+     *                                                       Default is to use the container retrieved from {@link getContainer()}.
+     * @param array<string, bool|int|string|null> $options   [optional] options for controlling rendering
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
+     * @throws InvalidArgumentException
      */
     public function renderMenu($container = null, array $options = []): string
     {
@@ -129,7 +144,19 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $role   = 'tab';
         }
 
+        assert(is_string($options['indent']));
+
         $indent = $options['indent'] ?? $this->getIndent();
+
+        assert(is_string($options['ulClass']));
+        assert(is_string($options['liClass']));
+        assert(is_string($indent));
+        assert(is_int($options['minDepth']));
+        assert(is_int($options['maxDepth']) || null === $options['maxDepth']);
+        assert(is_bool($options['onlyActiveBranch']));
+        assert(is_bool($options['escapeLabels']));
+        assert(is_bool($options['addClassToListItem']));
+        assert(is_string($options['liActiveClass']));
 
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
             return $this->renderDeepestMenu(
@@ -143,8 +170,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $options['addClassToListItem'],
                 $options['liActiveClass'],
                 $ulRole,
-                $liRole,
-                $role
+                $liRole
             );
         }
 
@@ -166,6 +192,61 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     }
 
     /**
+     * Renders the inner-most sub menu for the active page in the $container.
+     *
+     * This is a convenience method which is equivalent to the following call:
+     * <code>
+     * renderMenu($container, array(
+     *     'indent'           => $indent,
+     *     'ulClass'          => $ulClass,
+     *     'liClass'          => $liClass,
+     *     'minDepth'         => null,
+     *     'maxDepth'         => null,
+     *     'onlyActiveBranch' => true,
+     *     'renderParents'    => false,
+     *     'liActiveClass'    => $liActiveClass
+     * ));
+     * </code>
+     *
+     * @param ContainerInterface|null $container     [optional] container to render.
+     *                                               Default is to render the container registered in the helper.
+     * @param string|null             $ulClass       [optional] CSS class to use for UL element.
+     *                                               Default is to use the value from {@link getUlClass()}.
+     * @param string|null             $liClass       [optional] CSS class to use for LI elements.
+     *                                               Default is to use the value from {@link getLiClass()}.
+     * @param int|string|null         $indent        [optional] indentation as a string or number
+     *                                               of spaces. Default is to use the value retrieved from
+     *                                               {@link getIndent()}.
+     * @param string|null             $liActiveClass [optional] CSS class to use for UL
+     *                                               element. Default is to use the value from {@link getUlClass()}.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function renderSubMenu(
+        ?ContainerInterface $container = null,
+        ?string $ulClass = null,
+        ?string $liClass = null,
+        $indent = null,
+        ?string $liActiveClass = null
+    ): string {
+        return $this->renderMenu(
+            $container,
+            [
+                'indent' => $indent,
+                'ulClass' => $ulClass,
+                'liClass' => $liClass,
+                'minDepth' => null,
+                'maxDepth' => null,
+                'onlyActiveBranch' => true,
+                'renderParents' => false,
+                'escapeLabels' => true,
+                'addClassToListItem' => false,
+                'liActiveClass' => $liActiveClass,
+            ]
+        );
+    }
+
+    /**
      * Renders the deepest active menu within [$minDepth, $maxDepth], (called from {@link renderMenu()}).
      *
      * @param ContainerInterface $container          container to render
@@ -179,11 +260,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param string             $liActiveClass      CSS class for active LI
      * @param string|null        $ulRole             Role attribute for the UL-Element
      * @param string|null        $liRole             Role attribute for the LI-Element
-     * @param string|null        $role               Role attribute for the Link-Element
      *
      * @throws Exception\InvalidArgumentException
-     *
-     * @return string
      */
     private function renderDeepestMenu(
         ContainerInterface $container,
@@ -196,14 +274,24 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         bool $addClassToListItem,
         string $liActiveClass,
         ?string $ulRole = null,
-        ?string $liRole = null,
-        ?string $role = null
+        ?string $liRole = null
     ): string {
         $active = $this->findActive($container, $minDepth - 1, $maxDepth);
 
         if (!$active) {
             return '';
         }
+
+        assert(
+            $active['page'] instanceof PageInterface,
+            sprintf(
+                '$active[\'page\'] should be an Instance of %s, but was %s',
+                PageInterface::class,
+                is_object($active['page']) ? get_class($active['page']) : gettype($active['page'])
+            )
+        );
+
+        assert(is_int($active['depth']));
 
         // special case if active page is one below minDepth
         if ($active['depth'] < $minDepth) {
@@ -217,6 +305,15 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             // children are below max depth; render siblings
             $active['page'] = $active['page']->getParent();
         }
+
+        assert(
+            $active['page'] instanceof ContainerInterface,
+            sprintf(
+                '$active[\'page\'] should be an Instance of %s, but was %s',
+                ContainerInterface::class,
+                is_object($active['page']) ? get_class($active['page']) : gettype($active['page'])
+            )
+        );
 
         $html = $indent . '<ul';
         if ($ulClass) {
@@ -292,8 +389,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param string|null        $role               Role attribute for the Link-Element
      *
      * @throws Exception\InvalidArgumentException
-     *
-     * @return string
      */
     private function renderNormalMenu(
         ContainerInterface $container,
@@ -330,7 +425,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         $prevPage  = null;
 
         foreach ($iterator as $page) {
-            \assert($page instanceof PageInterface);
+            assert($page instanceof PageInterface);
 
             $depth = $iterator->getDepth();
 
@@ -351,12 +446,16 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             }
 
             // make sure indentation is correct
-            $depth -= $minDepth;
+            $depth   -= $minDepth;
             $myIndent = str_repeat($indent, $depth + 1);
             if ($depth > $prevDepth) {
                 // start new ul tag
-                if ($ulClass && 0 === $depth) {
-                    $ulClass = ' class="' . ($this->escaper)($ulClass) . '"';
+                if (0 === $depth) {
+                    if ($ulClass) {
+                        $ulClass = ' class="' . ($this->escaper)($ulClass) . '"';
+                    } else {
+                        $ulClass = '';
+                    }
 
                     if (null !== $ulRole) {
                         $ulClass .= ' role="' . ($this->escaper)($ulRole) . '"';
@@ -373,7 +472,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             } elseif ($prevDepth > $depth) {
                 // close li/ul tags until we're at current depth
                 for ($i = $prevDepth; $i > $depth; --$i) {
-                    $ind = str_repeat($indent, $i + 1);
+                    $ind   = str_repeat($indent, $i + 1);
                     $html .= $ind . $indent . '</li>' . PHP_EOL;
                     $html .= $ind . '</ul>' . PHP_EOL;
                 }
@@ -461,7 +560,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             // done iterating container; close open ul/li tags
             for ($i = $prevDepth + 1; 0 < $i; --$i) {
                 $myIndent = str_repeat($indent, $i);
-                $html .= $myIndent . $indent . '</li>' . PHP_EOL
+                $html    .= $myIndent . $indent . '</li>' . PHP_EOL
                     . $myIndent . '</ul>' . PHP_EOL;
             }
 
@@ -469,62 +568,5 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         }
 
         return $html;
-    }
-
-    /**
-     * Renders the inner-most sub menu for the active page in the $container.
-     *
-     * This is a convenience method which is equivalent to the following call:
-     * <code>
-     * renderMenu($container, array(
-     *     'indent'           => $indent,
-     *     'ulClass'          => $ulClass,
-     *     'liClass'          => $liClass,
-     *     'minDepth'         => null,
-     *     'maxDepth'         => null,
-     *     'onlyActiveBranch' => true,
-     *     'renderParents'    => false,
-     *     'liActiveClass'    => $liActiveClass
-     * ));
-     * </code>
-     *
-     * @param ContainerInterface|null $container     [optional] container to render.
-     *                                               Default is to render the container registered in the helper.
-     * @param string|null             $ulClass       [optional] CSS class to use for UL element.
-     *                                               Default is to use the value from {@link getUlClass()}.
-     * @param string|null             $liClass       [optional] CSS class to use for LI elements.
-     *                                               Default is to use the value from {@link getLiClass()}.
-     * @param int|string|null         $indent        [optional] indentation as a string or number
-     *                                               of spaces. Default is to use the value retrieved from
-     *                                               {@link getIndent()}.
-     * @param string|null             $liActiveClass [optional] CSS class to use for UL
-     *                                               element. Default is to use the value from {@link getUlClass()}.
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
-     */
-    public function renderSubMenu(
-        ?ContainerInterface $container = null,
-        ?string $ulClass = null,
-        ?string $liClass = null,
-        $indent = null,
-        ?string $liActiveClass = null
-    ): string {
-        return $this->renderMenu(
-            $container,
-            [
-                'indent' => $indent,
-                'ulClass' => $ulClass,
-                'liClass' => $liClass,
-                'minDepth' => null,
-                'maxDepth' => null,
-                'onlyActiveBranch' => true,
-                'renderParents' => false,
-                'escapeLabels' => true,
-                'addClassToListItem' => false,
-                'liActiveClass' => $liActiveClass,
-            ]
-        );
     }
 }
