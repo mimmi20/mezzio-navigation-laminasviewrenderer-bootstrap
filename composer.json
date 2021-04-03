@@ -24,7 +24,7 @@
     "laminas/laminas-servicemanager": "^3.6.4",
     "mezzio/mezzio-authentication": "^1.2.1",
     "mezzio/mezzio-router": "^3.3.0",
-    "mimmi20/coding-standard": "^2.0.1",
+    "mimmi20/coding-standard": "^2.1.0",
     "pepakriz/phpstan-exception-rules": "^0.11.6",
     "phpstan/extension-installer": "^1.1.0",
     "phpstan/phpstan": "^0.12.82",
