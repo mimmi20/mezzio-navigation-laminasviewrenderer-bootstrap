@@ -50,7 +50,7 @@
   },
   "extra": {
     "laminas": {
-      "config-provider": "Mezzio\\Navigation\\LaminasView\\View\\Helper\\Navigation\\ConfigProvider"
+      "config-provider": "Mezzio\\Navigation\\LaminasView\\View\\Helper\\BootstrapNavigation\\ConfigProvider"
     }
   },
   "autoload": {
