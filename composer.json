@@ -18,7 +18,7 @@
   },
   "require-dev": {
     "ext-intl": "*",
-    "infection/infection": "^0.21.4",
+    "infection/infection": "^0.21.5",
     "laminas/laminas-config": "^3.5.0",
     "laminas/laminas-i18n": "^2.11.0",
     "laminas/laminas-servicemanager": "^3.6.4",
