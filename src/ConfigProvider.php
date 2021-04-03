@@ -9,14 +9,15 @@
  */
 
 declare(strict_types = 1);
-namespace Mezzio\Navigation\LaminasView\View\Helper\Navigation;
+
+namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 final class ConfigProvider
 {
     /**
      * Return general-purpose laminas-navigation configuration.
      *
-     * @return array
+     * @return array<string, array<string, array<string, string>>>
      */
     public function __invoke(): array
     {
@@ -26,7 +27,7 @@ final class ConfigProvider
     }
 
     /**
-     * @return array
+     * @return array<string, array<string, string>>
      */
     public function getNavigationHelperConfig(): array
     {

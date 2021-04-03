@@ -11,7 +11,9 @@
 
     <!-- inherit rules from: -->
     <rule ref="mimmi20-cs">
+        <!-- does not work if a function collision between 2 Traits has to be solved -->
         <exclude name="SlevomatCodingStandard.Classes.TraitUseDeclaration.MultipleTraitsPerDeclaration"/>
+        <!-- does not work if private function is called from a Trait -->
         <exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod"/>
     </rule>
 
