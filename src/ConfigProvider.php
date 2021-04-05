@@ -32,6 +32,10 @@ final class ConfigProvider
     public function getNavigationHelperConfig(): array
     {
         return [
+            'aliases' => [
+                'breadcrumbs' => Breadcrumbs::class,
+                'menu' => Menu::class,
+            ],
             'factories' => [
                 Breadcrumbs::class => BreadcrumbsFactory::class,
                 Menu::class => MenuFactory::class,
