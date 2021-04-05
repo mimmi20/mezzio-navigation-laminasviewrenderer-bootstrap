@@ -42,6 +42,10 @@ final class ConfigProviderTest extends TestCase
         self::assertIsArray($factories);
         self::assertArrayHasKey(Breadcrumbs::class, $factories);
         self::assertArrayHasKey(Menu::class, $factories);
+
+        self::assertArrayHasKey('aliases', $navigationHelperConfig);
+        $aliases = $navigationHelperConfig['aliases'];
+        self::assertIsArray($aliases);
     }
 
     /**
@@ -63,5 +67,9 @@ final class ConfigProviderTest extends TestCase
         self::assertIsArray($factories);
         self::assertArrayHasKey(Breadcrumbs::class, $factories);
         self::assertArrayHasKey(Menu::class, $factories);
+
+        self::assertArrayHasKey('aliases', $navigationHelperConfig);
+        $aliases = $navigationHelperConfig['aliases'];
+        self::assertIsArray($aliases);
     }
 }
