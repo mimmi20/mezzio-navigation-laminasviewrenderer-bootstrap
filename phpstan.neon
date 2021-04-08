@@ -22,3 +22,5 @@ parameters:
     - '~PHPDoc tag @throws with type .* is not compatible with parent~'
     - '~Call to static method PHPUnit~'
     - '~Parameter #1 \$partial of method .*setPartial\(\) expects .*, int given~'
+    - '~Call to an undefined method .*::find(All|One)By.*\(\)~'
+    - '~Parameter #2 \$filename of method Laminas\\I18n\\Translator\\Translator::addTranslationFile\(\) expects string, null given~'
