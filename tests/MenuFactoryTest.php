@@ -15,11 +15,12 @@ namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 use Interop\Container\ContainerInterface;
 use Laminas\Log\Logger;
 use Laminas\ServiceManager\PluginManagerInterface;
+use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlifyInterface;
+use Mezzio\Navigation\Helper\HtmlElementInterface;
 use Mezzio\Navigation\Helper\PluginManager;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
@@ -64,9 +65,10 @@ final class MenuFactoryTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $htmlify         = $this->createMock(HtmlifyInterface::class);
         $containerParser = $this->createMock(ContainerParserInterface::class);
-        $escapePlugin    = $this->createMock(EscapeHtmlAttr::class);
+        $htmlElement     = $this->createMock(HtmlElementInterface::class);
+        $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
+        $escapeHtml      = $this->createMock(EscapeHtml::class);
         $renderer        = $this->createMock(LaminasViewRenderer::class);
 
         $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
@@ -74,16 +76,16 @@ final class MenuFactoryTest extends TestCase
             ->getMock();
         $helperPluginManager->expects(self::exactly(2))
             ->method('get')
-            ->withConsecutive([HtmlifyInterface::class], [ContainerParserInterface::class])
-            ->willReturn($htmlify, $containerParser);
+            ->withConsecutive([ContainerParserInterface::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($containerParser, $htmlElement);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $viewHelperPluginManager->expects(self::once())
+        $viewHelperPluginManager->expects(self::exactly(2))
             ->method('get')
-            ->with(EscapeHtmlAttr::class)
-            ->willReturn($escapePlugin);
+            ->withConsecutive([EscapeHtmlAttr::class], [EscapeHtml::class])
+            ->willReturnOnConsecutiveCalls($escapeHtmlAttr, $escapeHtml);
 
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
