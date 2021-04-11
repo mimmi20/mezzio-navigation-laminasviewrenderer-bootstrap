@@ -38,19 +38,11 @@ trait BootstrapTrait
      */
     private function getSizeClass(string $size, string $prefix): string
     {
-        if (!in_array($size, $this->getSizes(), true)) {
+        if (!in_array($size, static::$sizes, true)) {
             throw new InvalidArgumentException('Size "' . $size . '" does not exist');
         }
 
         return $this->getPrefixedClass($size, $prefix);
-    }
-
-    /**
-     * @return array<string>
-     */
-    private function getSizes(): array
-    {
-        return static::$sizes;
     }
 
     private function getPrefixedClass(string $class, string $prefix): string
