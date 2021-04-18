@@ -19,9 +19,9 @@ use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
+use Mezzio\LaminasView\Helper\HtmlElementInterface;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlElementInterface;
 use Mezzio\Navigation\Helper\PluginManager as HelperPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 

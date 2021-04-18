@@ -18,6 +18,7 @@ use Laminas\Log\Logger;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
+use Mezzio\LaminasView\Helper\PartialRendererInterface;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\Helper\HtmlifyInterface;
@@ -69,7 +70,7 @@ final class BreadcrumbsFactoryTest extends TestCase
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $translatePlugin = $this->createMock(Translate::class);
         $escapePlugin    = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(LaminasViewRenderer::class);
+        $renderer        = $this->createMock(PartialRendererInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
             ->disableOriginalConstructor()
@@ -134,7 +135,7 @@ final class BreadcrumbsFactoryTest extends TestCase
         $htmlify         = $this->createMock(HtmlifyInterface::class);
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $escapePlugin    = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(LaminasViewRenderer::class);
+        $renderer        = $this->createMock(PartialRendererInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
             ->disableOriginalConstructor()
