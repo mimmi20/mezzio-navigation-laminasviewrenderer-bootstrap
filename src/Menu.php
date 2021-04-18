@@ -19,10 +19,10 @@ use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasView\LaminasViewRenderer;
+use Mezzio\LaminasView\Helper\HtmlElementInterface;
+use Mezzio\LaminasView\Helper\PartialRendererInterface;
 use Mezzio\Navigation\ContainerInterface;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlElementInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
@@ -82,7 +82,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         Logger $logger,
         ContainerParserInterface $containerParser,
         EscapeHtmlAttr $escapeHtmlAttr,
-        LaminasViewRenderer $renderer,
+        PartialRendererInterface $renderer,
         EscapeHtml $escapeHtml,
         HtmlElementInterface $htmlElement,
         ?Translate $translator = null

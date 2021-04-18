@@ -19,9 +19,10 @@ use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
+use Mezzio\LaminasView\Helper\HtmlElementInterface;
+use Mezzio\LaminasView\Helper\PartialRendererInterface;
 use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlElementInterface;
 use Mezzio\Navigation\Helper\PluginManager;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
@@ -70,7 +71,7 @@ final class MenuFactoryTest extends TestCase
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
         $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(LaminasViewRenderer::class);
+        $renderer        = $this->createMock(PartialRendererInterface::class);
 
         $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
             ->disableOriginalConstructor()
@@ -136,7 +137,7 @@ final class MenuFactoryTest extends TestCase
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
         $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(LaminasViewRenderer::class);
+        $renderer        = $this->createMock(PartialRendererInterface::class);
         $translator      = $this->createMock(Translate::class);
 
         $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
