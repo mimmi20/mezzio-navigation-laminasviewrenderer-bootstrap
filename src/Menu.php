@@ -19,8 +19,8 @@ use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasView\Helper\HtmlElementInterface;
-use Mezzio\LaminasView\Helper\PartialRendererInterface;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Mezzio\Navigation\ContainerInterface;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
@@ -234,7 +234,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      */
     public function htmlify(PageInterface $page, bool $escapeLabel = true, bool $addClassToListItem = false): string
     {
-        return $this->toHtml(self::class, $page, ['escapeLabels' => $escapeLabel, 'sublink' => null], [], true);
+        return $this->toHtml($page, ['escapeLabels' => $escapeLabel, 'sublink' => null], [], true);
     }
 
     /**
@@ -336,7 +336,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $subHtml .= '>' . PHP_EOL;
             $subHtml .= $options['indent'] . '        ';
             $subHtml .= $this->toHtml(
-                self::class,
                 $subPage,
                 $options,
                 $pageAttributes,
@@ -519,7 +518,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
             $html .= $myIndent . '        ';
             $html .= $this->toHtml(
-                self::class,
                 $page,
                 $options,
                 $pageAttributes,
@@ -772,7 +770,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     /**
      * Returns an HTML string for the given page
      *
-     * @param string                              $prefix     prefix to normalize the id attribute
      * @param PageInterface                       $page       page to generate HTML for
      * @param array<string, bool|int|string|null> $options    options for controlling rendering
      * @param array<string, string>               $attributes
@@ -780,7 +777,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @return string HTML string
      */
     private function toHtml(
-        string $prefix,
         PageInterface $page,
         array $options,
         array $attributes,
@@ -825,6 +821,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $label = ($this->escapeHtml)($label);
         }
 
-        return $this->htmlElement->toHtml($element, $attributes, $label, $prefix);
+        return $this->htmlElement->toHtml($element, $attributes, $label);
     }
 }
