@@ -25,8 +25,8 @@ use Laminas\View\Model\ModelInterface;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Renderer\RendererInterface;
 use Mezzio\GenericAuthorization\AuthorizationInterface;
-use Mezzio\LaminasView\Helper\HtmlElementInterface;
-use Mezzio\LaminasView\Helper\PartialRendererInterface;
+use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Mezzio\Navigation\Helper\AcceptHelperInterface;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\Helper\FindActiveInterface;
@@ -1366,7 +1366,7 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class)
+            ->with('a', ['id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
             ->willReturn($expected);
 
         assert($serviceLocator instanceof ContainerInterface);
@@ -5165,8 +5165,8 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(2))
             ->method('toHtml')
             ->withConsecutive(
-                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class]
+                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
@@ -5634,8 +5634,8 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(2))
             ->method('toHtml')
             ->withConsecutive(
-                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class]
+                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
@@ -5918,8 +5918,8 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(2))
             ->method('toHtml')
             ->withConsecutive(
-                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class]
+                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
@@ -6203,8 +6203,8 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(2))
             ->method('toHtml')
             ->withConsecutive(
-                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class]
+                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
@@ -6487,8 +6487,8 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(2))
             ->method('toHtml')
             ->withConsecutive(
-                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self', 'role' => 'tab'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class]
+                ['a', ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self', 'role' => 'tab'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
@@ -7164,7 +7164,7 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped, Menu::class)
+            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
         assert($serviceLocator instanceof ContainerInterface);
@@ -7431,7 +7431,7 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class)
+            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
         assert($serviceLocator instanceof ContainerInterface);
@@ -8121,7 +8121,7 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped, Menu::class)
+            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
         assert($serviceLocator instanceof ContainerInterface);
@@ -8625,7 +8625,7 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped, Menu::class)
+            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
         assert($serviceLocator instanceof ContainerInterface);
@@ -9113,11 +9113,11 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(5))
             ->method('toHtml')
             ->withConsecutive(
-                ['a', ['aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'href' => '###', 'target' => 'self-parent', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped, Menu::class]
+                ['a', ['aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'href' => '###', 'target' => 'self-parent', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self', 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
@@ -9588,10 +9588,10 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(4))
             ->method('toHtml')
             ->withConsecutive(
-                ['span', ['aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped, Menu::class],
-                ['span', ['class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped, Menu::class]
+                ['span', ['aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped],
+                ['span', ['class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected5);
 
@@ -10062,10 +10062,10 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(4))
             ->method('toHtml')
             ->withConsecutive(
-                ['button', ['aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentParentTranslatedLabelEscaped, Menu::class],
-                ['button', ['class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped, Menu::class]
+                ['button', ['aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentParentTranslatedLabelEscaped],
+                ['button', ['class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected5);
 
@@ -10554,11 +10554,11 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(5))
             ->method('toHtml')
             ->withConsecutive(
-                ['button', ['aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentParentTranslatedLabelEscaped, Menu::class],
-                ['button', ['class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped, Menu::class]
+                ['button', ['aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentParentTranslatedLabelEscaped],
+                ['button', ['class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'type' => 'button'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
@@ -11047,11 +11047,11 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::exactly(5))
             ->method('toHtml')
             ->withConsecutive(
-                ['summary', ['aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped, Menu::class],
-                ['summary', ['class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped, Menu::class],
-                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped, Menu::class]
+                ['summary', ['aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped],
+                ['summary', ['class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped]
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
