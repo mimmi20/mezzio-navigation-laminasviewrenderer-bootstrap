@@ -396,4 +396,4 @@ jobs:
           verbose: true
 
       - name: "Run mutation tests with infection/infection"
-        run: "vendor/bin/infection --min-covered-msi=31 --min-msi=31 --coverage=.build/coverage"
+        run: "vendor/bin/infection --min-covered-msi=31 --min-msi=31 --coverage=.build/coverage --logger-github"
