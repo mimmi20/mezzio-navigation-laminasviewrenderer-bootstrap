@@ -16,7 +16,7 @@
     "ext-mbstring": "*",
     "mimmi20/mezzio-laminasviewrenderer-helpers": "^1.0.4",
     "mimmi20/mezzio-navigation": "^2.0.3",
-    "mimmi20/mezzio-navigation-helpers": "^1.0.10",
+    "mimmi20/mezzio-navigation-helpers": "^1.0.11",
     "mimmi20/mezzio-navigation-laminasviewrenderer": "^2.0.9"
   },
   "require-dev": {
