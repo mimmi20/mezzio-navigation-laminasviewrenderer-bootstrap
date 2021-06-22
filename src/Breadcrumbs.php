@@ -60,7 +60,7 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
         return $html;
     }
 
-    private function renderBreadcrumbItem(string $content, string $liClass = '', bool $active = false): string
+    private function renderBreadcrumbItem(string $content, string $liClass, bool $active): string
     {
         $classes = ['breadcrumb-item'];
         $aria    = '';
