@@ -53,7 +53,7 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
 
         $html  = $this->getIndent() . '<nav aria-label="breadcrumb">' . PHP_EOL;
         $html .= $this->getIndent() . $this->getIndent() . '<ul class="breadcrumb">' . PHP_EOL;
-        $html .= $this->getIndent() . $this->getIndent() . $content;
+        $html .= $content;
         $html .= $this->getIndent() . $this->getIndent() . '</ul>' . PHP_EOL;
         $html .= $this->getIndent() . '</nav>' . PHP_EOL;
 
@@ -79,5 +79,18 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
         $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . '</li>' . PHP_EOL;
 
         return $html;
+    }
+
+    private function renderSeparator(): string
+    {
+        return $this->getIndent() . $this->getIndent() . $this->getIndent() . $this->getSeparator() . PHP_EOL;
+    }
+
+    /**
+     * @param array<string> $html
+     */
+    private function combineRendered(array $html): string
+    {
+        return [] !== $html ? implode($this->renderSeparator(), $html) : '';
     }
 }
