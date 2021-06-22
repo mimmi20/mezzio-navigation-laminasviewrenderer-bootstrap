@@ -21,6 +21,7 @@ use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
 
 use function implode;
 use function sprintf;
+use function str_repeat;
 
 use const PHP_EOL;
 
@@ -52,9 +53,9 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
         }
 
         $html  = $this->getIndent() . '<nav aria-label="breadcrumb">' . PHP_EOL;
-        $html .= $this->getIndent() . $this->getIndent() . '<ul class="breadcrumb">' . PHP_EOL;
+        $html .= str_repeat($this->getIndent(), 2) . '<ul class="breadcrumb">' . PHP_EOL;
         $html .= $content;
-        $html .= $this->getIndent() . $this->getIndent() . '</ul>' . PHP_EOL;
+        $html .= str_repeat($this->getIndent(), 2) . '</ul>' . PHP_EOL;
         $html .= $this->getIndent() . '</nav>' . PHP_EOL;
 
         return $html;
@@ -74,16 +75,16 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
             $aria      = ' aria-current="page"';
         }
 
-        $html  = $this->getIndent() . $this->getIndent() . $this->getIndent() . sprintf('<li class="%s"%s>', implode(' ', $classes), $aria) . PHP_EOL;
-        $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . $this->getIndent() . $content . PHP_EOL;
-        $html .= $this->getIndent() . $this->getIndent() . $this->getIndent() . '</li>' . PHP_EOL;
+        $html  = str_repeat($this->getIndent(), 3) . sprintf('<li class="%s"%s>', implode(' ', $classes), $aria) . PHP_EOL;
+        $html .= str_repeat($this->getIndent(), 4) . $content . PHP_EOL;
+        $html .= str_repeat($this->getIndent(), 3) . '</li>' . PHP_EOL;
 
         return $html;
     }
 
     private function renderSeparator(): string
     {
-        return $this->getIndent() . $this->getIndent() . $this->getIndent() . $this->getSeparator() . PHP_EOL;
+        return str_repeat($this->getIndent(), 3) . $this->getSeparator() . PHP_EOL;
     }
 
     /**
