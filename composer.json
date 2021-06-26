@@ -23,7 +23,7 @@
     "ext-intl": "*",
     "infection/infection": "^0.23.0",
     "laminas/laminas-config": "^3.5.0",
-    "laminas/laminas-escaper": "^2.7.0",
+    "laminas/laminas-escaper": "^2.7.1",
     "laminas/laminas-i18n": "^2.11.1",
     "laminas/laminas-servicemanager": "^3.6.4",
     "mezzio/mezzio-authentication": "^1.2.1",
