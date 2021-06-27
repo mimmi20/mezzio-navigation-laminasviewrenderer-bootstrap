@@ -114,6 +114,7 @@ final class BreadcrumbsTest extends AbstractTest
 
         // set nav1 in helper as default
         $this->helper->setContainer($this->nav1);
+        $this->helper->setSeparator('&gt;');
     }
 
     /**
