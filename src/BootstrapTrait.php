@@ -15,7 +15,6 @@ namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 use InvalidArgumentException;
 
 use function in_array;
-use function mb_strstr;
 use function sprintf;
 
 trait BootstrapTrait
@@ -42,15 +41,6 @@ trait BootstrapTrait
             throw new InvalidArgumentException('Size "' . $size . '" does not exist');
         }
 
-        return $this->getPrefixedClass($size, $prefix);
-    }
-
-    private function getPrefixedClass(string $class, string $prefix): string
-    {
-        if (!mb_strstr($prefix, '%s')) {
-            return $prefix . '-' . $class;
-        }
-
-        return sprintf($prefix, $class);
+        return sprintf($prefix, $size);
     }
 }

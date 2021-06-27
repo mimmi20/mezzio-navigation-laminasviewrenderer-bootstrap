@@ -606,10 +606,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $options['liActiveClass'] = $this->getLiActiveClass();
         }
 
-        if (array_key_exists('vertical', $options) && is_string($options['vertical'])) {
-            if (!array_key_exists('direction', $options)) {
-                $options['direction'] = self::DROP_ORIENTATION_END;
-            }
+        if (array_key_exists('vertical', $options) && is_string($options['vertical']) && !array_key_exists('direction', $options)) {
+            $options['direction'] = self::DROP_ORIENTATION_END;
         } elseif (!array_key_exists('direction', $options)) {
             $options['direction'] = self::DROP_ORIENTATION_DOWN;
         }

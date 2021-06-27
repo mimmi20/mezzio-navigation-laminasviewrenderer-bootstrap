@@ -12127,4 +12127,500 @@ final class MenuTest extends TestCase
 
         self::assertSame($expected, $helper->renderMenu($name, ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS]));
     }
+
+    /**
+     * @throws Exception
+     * @throws \InvalidArgumentException
+     */
+    public function testRenderMenu7(): void
+    {
+        $logger = $this->getMockBuilder(Logger::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $logger->expects(self::never())
+            ->method('emerg');
+        $logger->expects(self::never())
+            ->method('alert');
+        $logger->expects(self::never())
+            ->method('crit');
+        $logger->expects(self::never())
+            ->method('err');
+        $logger->expects(self::never())
+            ->method('warn');
+        $logger->expects(self::never())
+            ->method('notice');
+        $logger->expects(self::never())
+            ->method('info');
+        $logger->expects(self::never())
+            ->method('debug');
+
+        $name = 'Mezzio\\Navigation\\Top';
+
+        $resource  = 'testResource';
+        $privilege = 'testPrivilege';
+
+        $liActiveClass = 'li-active';
+        $ulClass       = 'ul-class ul';
+
+        $parentLabel                  = 'parent-label';
+        $parentTranslatedLabel        = 'parent-label-translated';
+        $parentTranslatedLabelEscaped = 'parent-label-translated-escaped';
+        $parentTextDomain             = 'parent-text-domain';
+        $parentTitle                  = 'parent-title';
+        $parentTranslatedTitle        = 'parent-title-translated';
+
+        $parentParentLabel                  = 'parent-parent-label';
+        $parentParentTranslatedLabel        = 'parent-parent-label-translated';
+        $parentParentTranslatedLabelEscaped = 'parent-parent-label-translated-escaped';
+        $parentParentTextDomain             = 'parent-parent-text-domain';
+        $parentParentTitle                  = 'parent-parent-title';
+        $parentParentTranslatedTitle        = 'parent-parent-title-translated';
+
+        $pageLabel                  = 'page-label';
+        $pageLabelTranslated        = 'page-label-translated';
+        $pageLabelTranslatedEscaped = 'page-label-translated-escaped';
+        $pageTitle                  = 'page-title';
+        $pageTitleTranslated        = 'page-title-translated';
+        $pageTextDomain             = 'page-text-domain';
+        $pageId                     = 'page-id';
+        $pageHref                   = 'http://page';
+        $pageTarget                 = 'page-target';
+
+        $page2Label                  = 'page2-label';
+        $page2LabelTranslated        = 'page2-label-translated';
+        $page2LabelTranslatedEscaped = 'page2-label-translated-escaped';
+        $page2Title                  = 'page2-title';
+        $page2TitleTranslated        = 'page2-title-translated';
+        $page2TextDomain             = 'page2-text-domain';
+        $page2Id                     = 'page2-id';
+        $page2Href                   = 'http://page2';
+        $page2Target                 = 'page2-target';
+
+        $page3Label                  = 'page3-label';
+        $page3LabelTranslated        = 'page3-label-translated';
+        $page3LabelTranslatedEscaped = 'page3-label-translated-escaped';
+        $page3Title                  = 'page3-title';
+        $page3TitleTranslated        = 'page3-title-translated';
+        $page3TextDomain             = 'page3-text-domain';
+        $page3Id                     = 'page3-id';
+        $page3Href                   = 'http://page3';
+        $page3Target                 = 'page3-target';
+
+        $parentPage = new Uri();
+        $parentPage->setVisible(true);
+        $parentPage->setResource($resource);
+        $parentPage->setPrivilege($privilege);
+        $parentPage->setId('parent-id');
+        $parentPage->setClass('parent-class');
+        $parentPage->setUri('##');
+        $parentPage->setTarget('self');
+        $parentPage->setLabel($parentLabel);
+        $parentPage->setTitle($parentTitle);
+        $parentPage->setTextDomain($parentTextDomain);
+
+        $parentParentPage = new Uri();
+        $parentParentPage->setVisible(true);
+        $parentParentPage->setResource($resource);
+        $parentParentPage->setPrivilege($privilege);
+        $parentParentPage->setId('parent-parent-id');
+        $parentParentPage->setClass('parent-parent-class');
+        $parentParentPage->setUri('###');
+        $parentParentPage->setTarget('self-parent');
+        $parentParentPage->setLabel($parentParentLabel);
+        $parentParentPage->setTitle($parentParentTitle);
+        $parentParentPage->setTextDomain($parentParentTextDomain);
+
+        $page = $this->getMockBuilder(PageInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $page->expects(self::once())
+            ->method('isVisible')
+            ->with(false)
+            ->willReturn(true);
+        $page->expects(self::never())
+            ->method('getResource');
+        $page->expects(self::never())
+            ->method('getPrivilege');
+        $page->expects(self::never())
+            ->method('getParent');
+        $page->expects(self::exactly(3))
+            ->method('isActive')
+            ->with(true)
+            ->willReturn(true);
+        $page->expects(self::once())
+            ->method('getLabel')
+            ->willReturn($pageLabel);
+        $page->expects(self::exactly(2))
+            ->method('getTextDomain')
+            ->willReturn($pageTextDomain);
+        $page->expects(self::once())
+            ->method('getTitle')
+            ->willReturn($pageTitle);
+        $page->expects(self::once())
+            ->method('getId')
+            ->willReturn($pageId);
+        $page->expects(self::exactly(2))
+            ->method('getClass')
+            ->willReturn('xxxx');
+        $page->expects(self::exactly(2))
+            ->method('getHref')
+            ->willReturn($pageHref);
+        $page->expects(self::once())
+            ->method('getTarget')
+            ->willReturn($pageTarget);
+        $page->expects(self::never())
+            ->method('hasPage');
+        $page->expects(self::exactly(2))
+            ->method('hasPages')
+            ->withConsecutive([false], [true])
+            ->willReturnOnConsecutiveCalls(false, false);
+        $page->expects(self::once())
+            ->method('getLiClass')
+            ->willReturn(null);
+        $page->expects(self::once())
+            ->method('hashCode')
+            ->willReturn('page');
+
+        $page2 = $this->getMockBuilder(PageInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $page2->expects(self::never())
+            ->method('isVisible');
+        $page2->expects(self::never())
+            ->method('getResource');
+        $page2->expects(self::never())
+            ->method('getPrivilege');
+        $page2->expects(self::never())
+            ->method('getParent');
+        $page2->expects(self::once())
+            ->method('isActive')
+            ->with(true)
+            ->willReturn(true);
+        $page2->expects(self::once())
+            ->method('getLabel')
+            ->willReturn($page2Label);
+        $page2->expects(self::exactly(2))
+            ->method('getTextDomain')
+            ->willReturn($page2TextDomain);
+        $page2->expects(self::once())
+            ->method('getTitle')
+            ->willReturn($page2Title);
+        $page2->expects(self::once())
+            ->method('getId')
+            ->willReturn($page2Id);
+        $page2->expects(self::exactly(2))
+            ->method('getClass')
+            ->willReturn('xxxx2');
+        $page2->expects(self::exactly(2))
+            ->method('getHref')
+            ->willReturn($page2Href);
+        $page2->expects(self::once())
+            ->method('getTarget')
+            ->willReturn($page2Target);
+        $page2->expects(self::never())
+            ->method('hasPage');
+        $page2->expects(self::exactly(2))
+            ->method('hasPages')
+            ->withConsecutive([false], [true])
+            ->willReturnOnConsecutiveCalls(false, false);
+        $page2->expects(self::once())
+            ->method('getLiClass')
+            ->willReturn(null);
+        $page2->expects(self::once())
+            ->method('hashCode')
+            ->willReturn('page2');
+
+        $page3 = $this->getMockBuilder(PageInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $page3->expects(self::never())
+            ->method('isVisible');
+        $page3->expects(self::never())
+            ->method('getResource');
+        $page3->expects(self::never())
+            ->method('getPrivilege');
+        $page3->expects(self::never())
+            ->method('getParent');
+        $page3->expects(self::once())
+            ->method('isActive')
+            ->with(true)
+            ->willReturn(true);
+        $page3->expects(self::once())
+            ->method('getLabel')
+            ->willReturn($page3Label);
+        $page3->expects(self::exactly(2))
+            ->method('getTextDomain')
+            ->willReturn($page3TextDomain);
+        $page3->expects(self::once())
+            ->method('getTitle')
+            ->willReturn($page3Title);
+        $page3->expects(self::once())
+            ->method('getId')
+            ->willReturn($page3Id);
+        $page3->expects(self::exactly(2))
+            ->method('getClass')
+            ->willReturn('xxxx3');
+        $page3->expects(self::exactly(2))
+            ->method('getHref')
+            ->willReturn($page3Href);
+        $page3->expects(self::once())
+            ->method('getTarget')
+            ->willReturn($page3Target);
+        $page3->expects(self::never())
+            ->method('hasPage');
+        $page3->expects(self::exactly(2))
+            ->method('hasPages')
+            ->withConsecutive([false], [true])
+            ->willReturnOnConsecutiveCalls(false, false);
+        $page3->expects(self::once())
+            ->method('getLiClass')
+            ->willReturn(null);
+        $page3->expects(self::once())
+            ->method('hashCode')
+            ->willReturn('page3');
+
+        $parentPage->addPage($page);
+        $parentParentPage->addPage($parentPage);
+        $parentParentPage->addPage($page2);
+        $parentParentPage->addPage($page3);
+
+        $container = new Navigation();
+        $container->addPage($parentParentPage);
+
+        $role = 'testRole';
+
+        $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $findActiveHelper->expects(self::once())
+            ->method('find')
+            ->with($container, 0, null)
+            ->willReturn(
+                [
+                    'page' => $page,
+                    'depth' => 1,
+                ]
+            );
+
+        $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $acceptHelper->expects(self::exactly(9))
+            ->method('accept')
+            ->withConsecutive([$parentParentPage], [$parentPage], [$page], [$page], [$parentPage], [$page], [$page], [$page2], [$page3])
+            ->willReturnOnConsecutiveCalls(true, true, true, true, true, true, true, true, true);
+
+        $auth = $this->getMockBuilder(AuthorizationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $auth->expects(self::never())
+            ->method('isGranted');
+
+        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $helperPluginManager->expects(self::exactly(10))
+            ->method('build')
+            ->withConsecutive(
+                [
+                    FindActiveInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ],
+                [
+                    AcceptHelperInterface::class,
+                    [
+                        'authorization' => $auth,
+                        'renderInvisible' => false,
+                        'role' => $role,
+                    ],
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $findActiveHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper,
+                $acceptHelper
+            );
+
+        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::exactly(10))
+            ->method('get')
+            ->with(PluginManager::class)
+            ->willReturn($helperPluginManager);
+
+        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $containerParser->expects(self::exactly(2))
+            ->method('parseContainer')
+            ->withConsecutive([$name], [$container])
+            ->willReturnOnConsecutiveCalls($container, $container);
+
+        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtmlAttr->expects(self::exactly(10))
+            ->method('__invoke')
+            ->withConsecutive(['nav ul-class ul'], ['nav-item dropup li-active'], ['dropdown-details-menu'], ['parent-parent-id'], ['dropup li-active'], ['dropdown-details-menu'], ['parent-id'], ['li-active'], ['li-active'], ['li-active'])
+            ->willReturnOnConsecutiveCalls('nav-escaped ul-class-escaped ul-escaped', 'nav-item-escaped dropdown-escaped li-active-escaped', 'dropdown-menu-escaped', 'parent-parent-id-escaped', 'dropdown-escaped li-active-escaped', 'dropdown-menu-escaped', 'parent-id-escaped', 'li-active-escaped', 'li-active-escaped', 'li-active-escaped');
+
+        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $escapeHtml->expects(self::exactly(5))
+            ->method('__invoke')
+            ->withConsecutive([$parentParentTranslatedLabel], [$parentTranslatedLabel], [$pageLabelTranslated], [$page2LabelTranslated], [$page3LabelTranslated])
+            ->willReturnOnConsecutiveCalls($parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped);
+
+        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $renderer->expects(self::never())
+            ->method('render');
+
+        $translator = $this->getMockBuilder(Translate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator->expects(self::exactly(10))
+            ->method('__invoke')
+            ->withConsecutive([$parentParentLabel, $parentParentTextDomain], [$parentParentTitle, $parentParentTextDomain], [$parentLabel, $parentTextDomain], [$parentTitle, $parentTextDomain], [$pageLabel, $pageTextDomain], [$pageTitle, $pageTextDomain], [$page2Label, $page2TextDomain], [$page2Title, $page2TextDomain], [$page3Label, $page3TextDomain], [$page3Title, $page3TextDomain])
+            ->willReturnOnConsecutiveCalls($parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated);
+
+        $expected = '<ul class="nav-escaped ul-class-escaped ul-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropdown-escaped li-active-escaped">' . PHP_EOL . '        <details>' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropdown-escaped li-active-escaped">' . PHP_EOL . '                <details>' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="li-active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '                </details>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '        </details>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
+
+        $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
+        $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
+        $expected3 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
+        $expected4 = '<a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>';
+        $expected5 = '<a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>';
+
+        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlElement->expects(self::exactly(5))
+            ->method('toHtml')
+            ->withConsecutive(
+                ['summary', ['aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'aria-expanded' => 'false', 'role' => 'button'], $parentParentTranslatedLabelEscaped],
+                ['summary', ['class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'aria-expanded' => 'false', 'role' => 'button'], $parentTranslatedLabelEscaped],
+                ['a', ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $page2LabelTranslatedEscaped],
+                ['a', ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $page3LabelTranslatedEscaped]
+            )
+            ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
+
+        assert($serviceLocator instanceof ContainerInterface);
+        assert($logger instanceof Logger);
+        assert($containerParser instanceof ContainerParserInterface);
+        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
+        assert($escapeHtml instanceof EscapeHtml);
+        assert($renderer instanceof PartialRendererInterface);
+        assert($translator instanceof Translate);
+        assert($htmlElement instanceof HtmlElementInterface);
+        $helper = new Menu(
+            $serviceLocator,
+            $logger,
+            $containerParser,
+            $escapeHtmlAttr,
+            $renderer,
+            $escapeHtml,
+            $htmlElement,
+            $translator
+        );
+
+        $helper->setRole($role);
+
+        assert($auth instanceof AuthorizationInterface);
+        $helper->setAuthorization($auth);
+
+        $view = $this->getMockBuilder(PhpRenderer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $view->expects(self::never())
+            ->method('plugin');
+        $view->expects(self::never())
+            ->method('getHelperPluginManager');
+
+        assert($view instanceof PhpRenderer);
+        $helper->setView($view);
+
+        self::assertSame($expected, $helper->renderMenu($name, ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass]));
+    }
 }
