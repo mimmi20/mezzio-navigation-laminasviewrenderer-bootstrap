@@ -55,7 +55,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 {
     use BootstrapTrait, HelperTrait, MenuTrait {
         MenuTrait::htmlify insteadof HelperTrait;
-        MenuTrait::normalizeOptions as parentNormalizeOptions;
     }
 
     public const STYLE_UL = 'ul';
@@ -139,6 +138,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param ContainerInterface|string|null      $container [optional] container to create menu from.
      *                                                       Default is to use the container retrieved from {@link getContainer()}.
      * @param array<string, bool|int|string|null> $options   [optional] options for controlling rendering
+     * @phpstan-param array{in-navbar?: bool, ulClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, onlyActiveBranch?: bool, renderParents?: bool, indent?: int|string|null} $options
      *
      * @throws InvalidArgumentException
      */
@@ -242,6 +242,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *
      * @param ContainerInterface                  $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, renderParents: bool, escapeLabels: bool, addClassToListItem: bool, role: string|null, liActiveClass: string} $options
      *
      * @throws Exception\InvalidArgumentException
      */
@@ -253,57 +254,44 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         assert(is_string($options['liClass']));
         assert(is_string($options['indent']));
         assert(is_int($options['minDepth']));
-        assert(is_int($options['maxDepth']) || null === $options['maxDepth']);
         assert(is_bool($options['onlyActiveBranch']));
         assert(is_bool($options['escapeLabels']));
         assert(is_bool($options['addClassToListItem']));
         assert(is_string($options['liActiveClass']));
-        assert(is_string($options['role']) || null === $options['role']);
 
         $active = $this->findActive($container, $options['minDepth'] - 1, $options['maxDepth']);
 
-        if (!$active) {
+        if (!array_key_exists('page', $active) || !($active['page'] instanceof PageInterface)) {
             return '';
         }
 
-        assert(
-            $active['page'] instanceof PageInterface,
-            sprintf(
-                '$active[\'page\'] should be an Instance of %s, but was %s',
-                PageInterface::class,
-                is_object($active['page']) ? get_class($active['page']) : gettype($active['page'])
-            )
-        );
-
-        assert(is_int($active['depth']));
+        $activePage = $active['page'];
 
         // special case if active page is one below minDepth
-        if ($active['depth'] < $options['minDepth']) {
-            if (!$active['page']->hasPages(!$this->renderInvisible)) {
+        if (!array_key_exists('depth', $active) || $active['depth'] < $options['minDepth']) {
+            if (!$activePage->hasPages(!$this->renderInvisible)) {
                 return '';
             }
         } elseif (!$active['page']->hasPages(!$this->renderInvisible)) {
             // found pages has no children; render siblings
-            $active['page'] = $active['page']->getParent();
+            $activePage = $active['page']->getParent();
         } elseif (is_int($options['maxDepth']) && $active['depth'] + 1 > $options['maxDepth']) {
             // children are below max depth; render siblings
-            $active['page'] = $active['page']->getParent();
+            $activePage = $active['page']->getParent();
         }
 
         assert(
-            $active['page'] instanceof ContainerInterface,
+            $activePage instanceof ContainerInterface,
             sprintf(
-                '$active[\'page\'] should be an Instance of %s, but was %s',
+                '$activePage should be an Instance of %s, but was %s',
                 ContainerInterface::class,
-                is_object($active['page']) ? get_class($active['page']) : gettype($active['page'])
+                is_object($activePage) ? get_class($activePage) : gettype($activePage)
             )
         );
 
         $subHtml = '';
 
-        foreach ($active['page'] as $subPage) {
-            assert($subPage instanceof PageInterface);
-
+        foreach ($activePage as $subPage) {
             if (!$this->accept($subPage)) {
                 continue;
             }
@@ -554,47 +542,71 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * Normalizes given render options.
      *
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
      *
      * @return array<string, bool|int|string|null>
+     * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
      *
      * @throws InvalidArgumentException
      */
     private function normalizeOptions(array $options = []): array
     {
-        $options = $this->parentNormalizeOptions($options);
-
-        if (array_key_exists('in-navbar', $options)) {
-            $ulClasses = ['navbar-nav'];
+        if (isset($options['indent'])) {
+            assert(is_int($options['indent']) || is_string($options['indent']));
+            $options['indent'] = $this->getWhitespace($options['indent']);
         } else {
-            $ulClasses = ['nav'];
+            $options['indent'] = $this->getIndent();
         }
 
-        $ulClasses[] = $options['ulClass'];
-        $itemClasses = [];
+        if (isset($options['liClass']) && null !== $options['liClass']) {
+            $options['liClass'] = (string) $options['liClass'];
+        } else {
+            $options['liClass'] = $this->getLiClass();
+        }
 
-        foreach (
-            [
-                'tabs' => 'nav-tabs',
-                'pills' => 'nav-pills',
-                'fill' => 'nav-fill',
-                'justified' => 'nav-justified',
-                'centered' => 'justify-content-center',
-                'right-aligned' => 'justify-content-end',
-            ] as $optionname => $optionvalue
-        ) {
-            if (!array_key_exists($optionname, $options)) {
-                continue;
+        if (array_key_exists('minDepth', $options)) {
+            if (null !== $options['minDepth']) {
+                $options['minDepth'] = (int) $options['minDepth'];
             }
+        } else {
+            $options['minDepth'] = $this->getMinDepth();
+        }
 
-            $ulClasses[] = $optionvalue;
+        if (0 > $options['minDepth'] || null === $options['minDepth']) {
+            $options['minDepth'] = 0;
+        }
+
+        if (array_key_exists('maxDepth', $options)) {
+            if (null !== $options['maxDepth']) {
+                $options['maxDepth'] = (int) $options['maxDepth'];
+            }
+        } else {
+            $options['maxDepth'] = $this->getMaxDepth();
+        }
+
+        if (!array_key_exists('onlyActiveBranch', $options)) {
+            $options['onlyActiveBranch'] = $this->getOnlyActiveBranch();
+        }
+
+        if (!array_key_exists('escapeLabels', $options)) {
+            $options['escapeLabels'] = $this->getEscapeLabels();
+        }
+
+        if (!array_key_exists('renderParents', $options)) {
+            $options['renderParents'] = $this->getRenderParents();
+        }
+
+        if (!array_key_exists('addClassToListItem', $options)) {
+            $options['addClassToListItem'] = $this->getAddClassToListItem();
+        }
+
+        if (array_key_exists('liActiveClass', $options) && null !== $options['liActiveClass']) {
+            $options['liActiveClass'] = (string) $options['liActiveClass'];
+        } else {
+            $options['liActiveClass'] = $this->getLiActiveClass();
         }
 
         if (array_key_exists('vertical', $options) && is_string($options['vertical'])) {
-            $ulClasses[]   = 'flex-column';
-            $ulClasses[]   = $this->getSizeClass($options['vertical'], 'flex-%s-row');
-            $itemClasses[] = $this->getSizeClass($options['vertical'], 'flex-%s-fill');
-            $itemClasses[] = $this->getSizeClass($options['vertical'], 'text-%s-center');
-
             if (!array_key_exists('direction', $options)) {
                 $options['direction'] = self::DROP_ORIENTATION_END;
             }
@@ -602,8 +614,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $options['direction'] = self::DROP_ORIENTATION_DOWN;
         }
 
-        $options['ulClass'] = implode(' ', $ulClasses);
-        $options['class']   = implode(' ', $itemClasses);
+        $options['ulClass'] = $this->normalizeUlClass($options);
+        $options['class']   = $this->normalizeItemClass($options);
         $options['ulRole']  = null;
         $options['liRole']  = null;
         $options['role']    = null;
@@ -659,6 +671,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param array<string, bool|int|string|null>   $options options for controlling rendering
      * @param int                                   $level   current level of rendering
      * @param array<string, int|PageInterface|null> $found
+     * @phpstan-param array{page?: PageInterface|null, depth?: int|null} $found
      *
      * @return array<bool>
      */
@@ -822,5 +835,66 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         }
 
         return $this->htmlElement->toHtml($element, $attributes, $label);
+    }
+
+    /**
+     * @param array<string, bool|int|string|null> $options [optional] options to normalize
+     *
+     * @throws InvalidArgumentException
+     */
+    private function normalizeUlClass(array $options): string
+    {
+        if (array_key_exists('in-navbar', $options)) {
+            $ulClasses = ['navbar-nav'];
+        } else {
+            $ulClasses = ['nav'];
+        }
+
+        if (isset($options['ulClass']) && null !== $options['ulClass']) {
+            $ulClasses[] = (string) $options['ulClass'];
+        } else {
+            $ulClasses[] = $this->getUlClass();
+        }
+
+        foreach (
+            [
+                'tabs' => 'nav-tabs',
+                'pills' => 'nav-pills',
+                'fill' => 'nav-fill',
+                'justified' => 'nav-justified',
+                'centered' => 'justify-content-center',
+                'right-aligned' => 'justify-content-end',
+            ] as $optionname => $optionvalue
+        ) {
+            if (!array_key_exists($optionname, $options)) {
+                continue;
+            }
+
+            $ulClasses[] = $optionvalue;
+        }
+
+        if (array_key_exists('vertical', $options) && is_string($options['vertical'])) {
+            $ulClasses[] = 'flex-column';
+            $ulClasses[] = $this->getSizeClass($options['vertical'], 'flex-%s-row');
+        }
+
+        return implode(' ', $ulClasses);
+    }
+
+    /**
+     * @param array<string, bool|int|string|null> $options [optional] options to normalize
+     *
+     * @throws InvalidArgumentException
+     */
+    private function normalizeItemClass(array $options): string
+    {
+        $itemClasses = [];
+
+        if (array_key_exists('vertical', $options) && is_string($options['vertical'])) {
+            $itemClasses[] = $this->getSizeClass($options['vertical'], 'flex-%s-fill');
+            $itemClasses[] = $this->getSizeClass($options['vertical'], 'text-%s-center');
+        }
+
+        return implode(' ', $itemClasses);
     }
 }
