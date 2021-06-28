@@ -18,15 +18,18 @@ use Laminas\Log\Logger;
 use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mezzio\LaminasView\LaminasViewRenderer;
+use Laminas\View\HelperPluginManager as ViewPluginManager;
 use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
+use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
+use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\Helper\PluginManager as HelperPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
 use function get_class;
+use function gettype;
+use function is_object;
 use function sprintf;
 
 final class MenuFactory
@@ -48,13 +51,23 @@ final class MenuFactory
             )
         );
 
-        $plugin = $container->get(ViewHelperPluginManager::class);
+        $plugin = $container->get(ViewPluginManager::class);
         assert(
-            $plugin instanceof ViewHelperPluginManager,
+            $plugin instanceof ViewPluginManager,
             sprintf(
                 '$plugin should be an Instance of %s, but was %s',
-                ViewHelperPluginManager::class,
+                ViewPluginManager::class,
                 get_class($plugin)
+            )
+        );
+
+        $lvhPluginManager = $container->get(LvhPluginManager::class);
+        assert(
+            $lvhPluginManager instanceof PluginManagerInterface,
+            sprintf(
+                '$lvhPluginManager should be an Instance of %s, but was %s',
+                LvhPluginManager::class,
+                is_object($lvhPluginManager) ? get_class($lvhPluginManager) : gettype($lvhPluginManager)
             )
         );
 
@@ -69,9 +82,9 @@ final class MenuFactory
             $container->get(Logger::class),
             $helperPluginManager->get(ContainerParserInterface::class),
             $plugin->get(EscapeHtmlAttr::class),
-            $container->get(LaminasViewRenderer::class),
+            $lvhPluginManager->get(PartialRendererInterface::class),
             $plugin->get(EscapeHtml::class),
-            $helperPluginManager->get(HtmlElementInterface::class),
+            $lvhPluginManager->get(HtmlElementInterface::class),
             $translator
         );
     }
