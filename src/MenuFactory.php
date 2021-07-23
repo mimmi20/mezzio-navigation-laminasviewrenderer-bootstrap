@@ -19,17 +19,14 @@ use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\Helper\PluginManager as HelperPluginManager;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
 use function get_class;
-use function gettype;
-use function is_object;
 use function sprintf;
 
 final class MenuFactory
@@ -61,16 +58,6 @@ final class MenuFactory
             )
         );
 
-        $lvhPluginManager = $container->get(LvhPluginManager::class);
-        assert(
-            $lvhPluginManager instanceof PluginManagerInterface,
-            sprintf(
-                '$lvhPluginManager should be an Instance of %s, but was %s',
-                LvhPluginManager::class,
-                is_object($lvhPluginManager) ? get_class($lvhPluginManager) : gettype($lvhPluginManager)
-            )
-        );
-
         $translator = null;
 
         if ($plugin->has(Translate::class)) {
@@ -82,9 +69,9 @@ final class MenuFactory
             $container->get(Logger::class),
             $helperPluginManager->get(ContainerParserInterface::class),
             $plugin->get(EscapeHtmlAttr::class),
-            $lvhPluginManager->get(PartialRendererInterface::class),
+            $container->get(PartialRendererInterface::class),
             $plugin->get(EscapeHtml::class),
-            $lvhPluginManager->get(HtmlElementInterface::class),
+            $container->get(HtmlElementInterface::class),
             $translator
         );
     }

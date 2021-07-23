@@ -19,14 +19,14 @@ use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
 use Mezzio\Navigation\ContainerInterface;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
 use Mezzio\Navigation\Page\PageInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use RecursiveIteratorIterator;
 
 use function array_diff_key;
