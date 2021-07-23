@@ -19,13 +19,12 @@ use Laminas\ServiceManager\PluginManagerInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mezzio\LaminasViewHelper\Helper\HtmlElementInterface;
-use Mezzio\LaminasViewHelper\Helper\PartialRendererInterface;
-use Mezzio\LaminasViewHelper\Helper\PluginManager as LvhPluginManager;
 use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\Helper\PluginManager;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -93,23 +92,13 @@ final class MenuFactoryTest extends TestCase
             ->with(Translate::class)
             ->willReturn(false);
 
-        $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $lvhPluginManager->expects(self::never())
-            ->method('has');
-        $lvhPluginManager->expects(self::exactly(2))
-            ->method('get')
-            ->withConsecutive([PartialRendererInterface::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($renderer, $htmlElement);
-
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $container->expects(self::exactly(4))
+        $container->expects(self::exactly(5))
             ->method('get')
-            ->withConsecutive([PluginManager::class], [ViewHelperPluginManager::class], [LvhPluginManager::class], [Logger::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $viewHelperPluginManager, $lvhPluginManager, $logger);
+            ->withConsecutive([PluginManager::class], [ViewHelperPluginManager::class], [Logger::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($helperPluginManager, $viewHelperPluginManager, $logger, $renderer, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
@@ -170,23 +159,13 @@ final class MenuFactoryTest extends TestCase
             ->with(Translate::class)
             ->willReturn(true);
 
-        $lvhPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $lvhPluginManager->expects(self::never())
-            ->method('has');
-        $lvhPluginManager->expects(self::exactly(2))
-            ->method('get')
-            ->withConsecutive([PartialRendererInterface::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($renderer, $htmlElement);
-
         $container = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $container->expects(self::exactly(4))
+        $container->expects(self::exactly(5))
             ->method('get')
-            ->withConsecutive([PluginManager::class], [ViewHelperPluginManager::class], [LvhPluginManager::class], [Logger::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $viewHelperPluginManager, $lvhPluginManager, $logger);
+            ->withConsecutive([PluginManager::class], [ViewHelperPluginManager::class], [Logger::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($helperPluginManager, $viewHelperPluginManager, $logger, $renderer, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
