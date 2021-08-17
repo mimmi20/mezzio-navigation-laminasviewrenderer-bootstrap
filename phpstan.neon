@@ -10,16 +10,19 @@ parameters:
     - %currentWorkingDirectory%/vendor/autoload.php
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/autoload.php
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
-  exceptionRules:
-    reportUnusedCatchesOfUncheckedExceptions: true
-    uncheckedExceptions: []
+  checkGenericClassInNonGenericObjectType: false
   checkMissingIterableValueType: false
   treatPhpDocTypesAsCertain: false
-#  excludes_analyse:
-#    - */tests/*/data/*
+  implicitThrows: false
+  exceptions:
+    checkedExceptionRegexes:
+      - '#Exception#'
+      - '#Throwable#'
+    check:
+      missingCheckedExceptionInThrows: true
+      tooWideThrowType: true
   ignoreErrors:
     - '~is not subtype of Throwable~'
-    - '~PHPDoc tag @throws with type .* is not compatible with parent~'
     - '~Call to static method PHPUnit~'
     - '~Parameter #1 \$partial of method .*setPartial\(\) expects .*, int given~'
     - '~Call to an undefined method .*::find(All|One)By.*\(\)~'

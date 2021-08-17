@@ -18,24 +18,21 @@ use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
 use Mezzio\GenericAuthorization\AuthorizationInterface;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\HtmlifyInterface;
-use Mezzio\Navigation\Helper\PluginManager as HelperPluginManager;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
 use Mezzio\Navigation\Navigation;
 use Mezzio\Navigation\Page\PageFactory;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
+use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
-use function get_class;
 use function is_string;
 use function mb_strlen;
 use function mb_substr;
-use function sprintf;
 use function str_replace;
 use function trim;
 
@@ -69,42 +66,23 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws ContainerExceptionInterface
      * @throws \Laminas\Config\Exception\InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $helperPluginManager = $this->serviceManager->get(HelperPluginManager::class);
-        $plugin              = $this->serviceManager->get(ViewHelperPluginManager::class);
-
-        $renderer = $this->serviceManager->get(PartialRendererInterface::class);
-        assert(
-            $renderer instanceof PartialRendererInterface,
-            sprintf(
-                '$renderer should be an Instance of %s, but was %s',
-                PartialRendererInterface::class,
-                get_class($renderer)
-            )
-        );
-
+        $plugin       = $this->serviceManager->get(ViewHelperPluginManager::class);
+        $renderer     = $this->serviceManager->get(PartialRendererInterface::class);
         $escapeHelper = $plugin->get(EscapeHtml::class);
-        assert(
-            $escapeHelper instanceof EscapeHtml,
-            sprintf(
-                '$escapeHelper should be an Instance of %s, but was %s',
-                EscapeHtml::class,
-                get_class($escapeHelper)
-            )
-        );
-
-        $translator = null;
+        $translator   = null;
 
         // create helper
         $this->helper = new Breadcrumbs(
             $this->serviceManager,
             $this->serviceManager->get(Logger::class),
-            $helperPluginManager->get(HtmlifyInterface::class),
-            $helperPluginManager->get(ContainerParserInterface::class),
+            $this->serviceManager->get(HtmlifyInterface::class),
+            $this->serviceManager->get(ContainerParserInterface::class),
             $escapeHelper,
             $renderer,
             $translator
@@ -119,6 +97,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testHelperEntryPointWithoutAnyParams(): void
     {
@@ -131,6 +110,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testHelperEntryPointWithContainerParam(): void
     {
@@ -144,6 +124,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testNullOutContainer(): void
     {
@@ -158,6 +139,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetSeparator(): void
     {
@@ -173,6 +155,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetMaxDepth(): void
     {
@@ -188,6 +171,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetMinDepth(): void
     {
@@ -203,6 +187,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testLinkLastElement(): void
     {
@@ -218,6 +203,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetIndent(): void
     {
@@ -233,6 +219,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderSuppliedContainerWithoutInterfering(): void
     {
@@ -262,6 +249,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Laminas\Permissions\Acl\Exception\InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testUseAclResourceFromPages(): void
     {
@@ -279,6 +267,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderingPartial(): void
     {
@@ -292,6 +281,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderingPartialWithSeparator(): void
     {
@@ -305,6 +295,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderingPartialBySpecifyingAnArrayAsPartial(): void
     {
@@ -316,6 +307,7 @@ final class BreadcrumbsTest extends AbstractTest
 
     /**
      * @throws Exception
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderingPartialShouldFailOnInvalidPartialArray(): void
     {
@@ -335,6 +327,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderingPartialWithParams(): void
     {
@@ -351,6 +344,7 @@ final class BreadcrumbsTest extends AbstractTest
      * @throws InvalidArgumentException
      * @throws \Mezzio\Navigation\Exception\InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testLastBreadcrumbShouldBeEscaped(): void
     {

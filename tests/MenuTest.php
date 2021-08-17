@@ -12,10 +12,9 @@ declare(strict_types = 1);
 
 namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Log\Logger;
-use Laminas\ServiceManager\PluginManagerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
@@ -25,17 +24,17 @@ use Laminas\View\Model\ModelInterface;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Renderer\RendererInterface;
 use Mezzio\GenericAuthorization\AuthorizationInterface;
-use Mezzio\Navigation\Helper\AcceptHelperInterface;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\FindActiveInterface;
-use Mezzio\Navigation\Helper\PluginManager as HelperPluginManager;
-use Mezzio\Navigation\Helper\PluginManager;
+use Mezzio\Navigation\ContainerInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mezzio\Navigation\Navigation;
 use Mezzio\Navigation\Page\PageInterface;
 use Mezzio\Navigation\Page\Uri;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\NavigationHelper\Accept\AcceptHelperInterface;
+use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
+use Mimmi20\NavigationHelper\FindActive\FindActiveInterface;
+use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -49,8 +48,7 @@ use const PHP_EOL;
 final class MenuTest extends TestCase
 {
     /**
-     * @throws Exception
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws void
      */
     protected function tearDown(): void
     {
@@ -86,13 +84,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -130,17 +130,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -182,13 +181,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -226,17 +227,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -294,13 +294,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -338,17 +340,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -393,13 +394,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -437,17 +440,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -496,13 +498,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -540,17 +544,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -599,13 +602,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -643,17 +648,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -706,13 +710,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -750,17 +756,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -782,10 +787,11 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetContainer(): void
     {
-        $container = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
 
         $logger = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
@@ -807,13 +813,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -853,17 +861,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -891,6 +898,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetContainerWithStringDefaultAndNavigationNotFound(): void
     {
@@ -916,13 +924,15 @@ final class MenuTest extends TestCase
 
         $name = 'default';
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -962,17 +972,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -992,6 +1001,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetContainerWithStringFound(): void
     {
@@ -1015,16 +1025,18 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $container = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mezzio\\Navigation\\Top';
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -1064,17 +1076,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1092,6 +1103,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testDoNotAccept(): void
     {
@@ -1115,7 +1127,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $container = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mezzio\\Navigation\\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -1142,10 +1154,14 @@ final class MenuTest extends TestCase
 
         $role = 'testRole';
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 AcceptHelperInterface::class,
@@ -1156,16 +1172,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($acceptHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -1205,17 +1211,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1238,6 +1243,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testHtmlify(): void
     {
@@ -1263,16 +1269,18 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $container = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mezzio\\Navigation\\Top';
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $pageLabel                  = 'page-label';
         $pageLabelTranslated        = 'page-label-translated';
@@ -1369,17 +1377,16 @@ final class MenuTest extends TestCase
             ->with('a', ['id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
             ->willReturn($expected);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1431,13 +1438,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -1475,17 +1484,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1510,6 +1518,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveNoActivePages(): void
     {
@@ -1584,10 +1593,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -1598,16 +1611,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -1647,17 +1650,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1679,6 +1681,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePage(): void
     {
@@ -1758,10 +1761,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -1772,16 +1779,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -1821,17 +1818,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1857,6 +1853,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveWithoutContainer(): void
     {
@@ -1898,10 +1895,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -1912,16 +1913,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -1961,17 +1952,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -1995,6 +1985,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageWithoutDepth(): void
     {
@@ -2074,10 +2065,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -2088,16 +2083,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -2137,17 +2122,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -2177,6 +2161,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageOutOfRange(): void
     {
@@ -2237,10 +2222,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -2251,16 +2240,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -2300,17 +2279,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -2334,6 +2312,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageRecursive(): void
     {
@@ -2409,10 +2388,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -2423,16 +2406,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -2472,17 +2445,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -2509,6 +2481,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageRecursive2(): void
     {
@@ -2589,10 +2562,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -2603,16 +2580,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -2652,17 +2619,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -2686,6 +2652,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageRecursive3(): void
     {
@@ -2765,10 +2732,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -2779,16 +2750,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -2828,17 +2789,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -2886,13 +2846,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -2930,17 +2892,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -2982,13 +2943,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3026,17 +2989,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3078,13 +3040,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3122,17 +3086,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3174,13 +3137,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3218,17 +3183,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3274,13 +3238,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3318,17 +3284,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3370,13 +3335,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3414,17 +3381,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3466,13 +3432,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3510,17 +3478,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3562,13 +3529,15 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3606,17 +3575,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3636,6 +3604,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testDoNotRenderIfNoPageIsActive(): void
     {
@@ -3659,7 +3628,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $container = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
 
         $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
             ->disableOriginalConstructor()
@@ -3669,10 +3638,14 @@ final class MenuTest extends TestCase
             ->with($container, 0, null)
             ->willReturn([]);
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -3683,16 +3656,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(HelperPluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -3732,17 +3695,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3759,6 +3721,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithoutPartial(): void
     {
@@ -3784,13 +3747,15 @@ final class MenuTest extends TestCase
 
         $name = 'Mezzio\\Navigation\\Top';
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $container = new Navigation();
 
@@ -3830,17 +3795,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -3881,6 +3845,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithWrongPartial(): void
     {
@@ -3906,13 +3871,15 @@ final class MenuTest extends TestCase
 
         $name = 'Mezzio\\Navigation\\Top';
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $container = new Navigation();
 
@@ -3952,17 +3919,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4007,6 +3973,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartial(): void
     {
@@ -4067,13 +4034,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -4118,17 +4087,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4163,6 +4131,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialNoActivePage(): void
     {
@@ -4213,13 +4182,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -4264,17 +4235,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4309,6 +4279,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithArrayPartial(): void
     {
@@ -4367,13 +4338,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -4418,17 +4391,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4463,6 +4435,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithArrayPartialRenderingPage(): void
     {
@@ -4527,13 +4500,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -4578,17 +4553,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4621,6 +4595,7 @@ final class MenuTest extends TestCase
     /**
      * @throws \InvalidArgumentException
      * @throws Exception
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testDoNotRenderMenuIfNoPageIsActive(): void
     {
@@ -4644,7 +4619,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $container = $this->createMock(\Mezzio\Navigation\ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
 
         $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
             ->disableOriginalConstructor()
@@ -4654,10 +4629,14 @@ final class MenuTest extends TestCase
             ->with($container, 0, null)
             ->willReturn([]);
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -4668,16 +4647,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(HelperPluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -4717,17 +4686,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4744,6 +4712,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuNoActivePage(): void
     {
@@ -4810,10 +4779,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -4834,16 +4807,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturnOnConsecutiveCalls($findActiveHelper, $acceptHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -4883,17 +4846,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -4927,6 +4889,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu(): void
     {
@@ -5069,10 +5032,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(3))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(3))
             ->method('build')
             ->withConsecutive(
                 [
@@ -5105,16 +5072,6 @@ final class MenuTest extends TestCase
                 $acceptHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(3))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -5170,17 +5127,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -5211,6 +5167,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithhIndent(): void
     {
@@ -5355,10 +5312,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(3))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(3))
             ->method('build')
             ->withConsecutive(
                 [
@@ -5391,16 +5352,6 @@ final class MenuTest extends TestCase
                 $acceptHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(3))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -5456,17 +5407,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -5498,6 +5448,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderVerticalMenuException(): void
     {
@@ -5592,13 +5543,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -5638,17 +5591,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -5683,6 +5635,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderVerticalMenu(): void
     {
@@ -5825,10 +5778,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(3))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(3))
             ->method('build')
             ->withConsecutive(
                 [
@@ -5861,16 +5818,6 @@ final class MenuTest extends TestCase
                 $acceptHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(3))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -5926,17 +5873,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -5967,6 +5913,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderVerticalMenu2(): void
     {
@@ -6109,10 +6056,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(3))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(3))
             ->method('build')
             ->withConsecutive(
                 [
@@ -6145,16 +6096,6 @@ final class MenuTest extends TestCase
                 $acceptHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(3))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -6210,17 +6151,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -6251,6 +6191,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderOlMenuWithMaxDepth(): void
     {
@@ -6394,10 +6335,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(3))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(3))
             ->method('build')
             ->withConsecutive(
                 [
@@ -6430,16 +6375,6 @@ final class MenuTest extends TestCase
                 $acceptHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(3))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -6495,17 +6430,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -6536,6 +6470,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderUlMenuWithTabs(): void
     {
@@ -6678,10 +6613,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(3))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(3))
             ->method('build')
             ->withConsecutive(
                 [
@@ -6714,16 +6653,6 @@ final class MenuTest extends TestCase
                 $acceptHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(3))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -6779,17 +6708,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -6822,6 +6750,7 @@ final class MenuTest extends TestCase
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Mezzio\Navigation\Exception\ExceptionInterface
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithPartialModel(): void
     {
@@ -6916,13 +6845,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -6981,17 +6912,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -7025,6 +6955,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderWithPartialModel(): void
     {
@@ -7119,13 +7050,15 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $serviceLocator->expects(self::never())
             ->method('has');
         $serviceLocator->expects(self::never())
             ->method('get');
+        $serviceLocator->expects(self::never())
+            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -7184,17 +7117,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -7228,6 +7160,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents(): void
     {
@@ -7366,10 +7299,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -7393,16 +7330,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
@@ -7454,17 +7381,16 @@ final class MenuTest extends TestCase
             ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -7495,6 +7421,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParentsWithIndent(): void
     {
@@ -7634,10 +7561,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -7661,16 +7592,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
@@ -7722,17 +7643,16 @@ final class MenuTest extends TestCase
             ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -7764,6 +7684,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents(): void
     {
@@ -7902,10 +7823,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -7929,16 +7854,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
@@ -7990,17 +7905,16 @@ final class MenuTest extends TestCase
             ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -8031,6 +7945,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents2(): void
     {
@@ -8133,10 +8048,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -8147,16 +8066,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -8198,17 +8107,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -8239,6 +8147,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents3(): void
     {
@@ -8342,10 +8251,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -8356,16 +8269,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -8407,17 +8310,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -8449,6 +8351,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents4(): void
     {
@@ -8588,10 +8491,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -8615,16 +8522,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
@@ -8676,17 +8573,16 @@ final class MenuTest extends TestCase
             ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -8718,6 +8614,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents2(): void
     {
@@ -8827,10 +8724,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::once())
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::once())
             ->method('build')
             ->with(
                 FindActiveInterface::class,
@@ -8841,16 +8742,6 @@ final class MenuTest extends TestCase
                 ]
             )
             ->willReturn($findActiveHelper);
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::once())
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -8892,17 +8783,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -8933,6 +8823,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents3(): void
     {
@@ -9071,10 +8962,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -9098,16 +8993,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
@@ -9159,17 +9044,16 @@ final class MenuTest extends TestCase
             ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -9200,6 +9084,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents4(): void
     {
@@ -9318,10 +9203,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -9345,16 +9234,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -9396,17 +9275,16 @@ final class MenuTest extends TestCase
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -9437,6 +9315,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents5(): void
     {
@@ -9575,10 +9454,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(2))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(2))
             ->method('build')
             ->withConsecutive(
                 [
@@ -9602,16 +9485,6 @@ final class MenuTest extends TestCase
                 $findActiveHelper,
                 $acceptHelper
             );
-
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(2))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
 
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
@@ -9663,17 +9536,16 @@ final class MenuTest extends TestCase
             ->with('a', ['aria-current' => 'page', 'class' => 'nav-link', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
             ->willReturn($expected2);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -9704,6 +9576,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu2(): void
     {
@@ -9986,10 +9859,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(10))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(10))
             ->method('build')
             ->withConsecutive(
                 [
@@ -10086,16 +9963,6 @@ final class MenuTest extends TestCase
                 $acceptHelper
             );
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(10))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -10156,17 +10023,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -10197,6 +10063,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu3(): void
     {
@@ -10462,10 +10329,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(10))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(10))
             ->method('build')
             ->withConsecutive(
                 [
@@ -10562,16 +10433,6 @@ final class MenuTest extends TestCase
                 $acceptHelper
             );
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(10))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -10630,17 +10491,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected5);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -10671,6 +10531,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu4(): void
     {
@@ -10936,10 +10797,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(10))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(10))
             ->method('build')
             ->withConsecutive(
                 [
@@ -11036,16 +10901,6 @@ final class MenuTest extends TestCase
                 $acceptHelper
             );
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(10))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -11104,17 +10959,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected5);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -11145,6 +10999,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu5(): void
     {
@@ -11427,10 +11282,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(10))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(10))
             ->method('build')
             ->withConsecutive(
                 [
@@ -11527,16 +11386,6 @@ final class MenuTest extends TestCase
                 $acceptHelper
             );
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(10))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -11597,17 +11446,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -11638,6 +11486,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu6(): void
     {
@@ -11920,10 +11769,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(10))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(10))
             ->method('build')
             ->withConsecutive(
                 [
@@ -12020,16 +11873,6 @@ final class MenuTest extends TestCase
                 $acceptHelper
             );
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(10))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -12090,17 +11933,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,
@@ -12131,6 +11973,7 @@ final class MenuTest extends TestCase
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderMenu7(): void
     {
@@ -12416,10 +12259,14 @@ final class MenuTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
+        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $helperPluginManager->expects(self::exactly(10))
+        $serviceLocator->expects(self::never())
+            ->method('has');
+        $serviceLocator->expects(self::never())
+            ->method('get');
+        $serviceLocator->expects(self::exactly(10))
             ->method('build')
             ->withConsecutive(
                 [
@@ -12516,16 +12363,6 @@ final class MenuTest extends TestCase
                 $acceptHelper
             );
 
-        $serviceLocator = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::exactly(10))
-            ->method('get')
-            ->with(PluginManager::class)
-            ->willReturn($helperPluginManager);
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -12586,17 +12423,16 @@ final class MenuTest extends TestCase
             )
             ->willReturnOnConsecutiveCalls($expected1, $expected2, $expected3, $expected4, $expected5);
 
-        assert($serviceLocator instanceof ContainerInterface);
-        assert($logger instanceof Logger);
-        assert($containerParser instanceof ContainerParserInterface);
-        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($escapeHtml instanceof EscapeHtml);
-        assert($renderer instanceof PartialRendererInterface);
-        assert($translator instanceof Translate);
-        assert($htmlElement instanceof HtmlElementInterface);
+        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $htmlify->expects(self::never())
+            ->method('toHtml');
+
         $helper = new Menu(
             $serviceLocator,
             $logger,
+            $htmlify,
             $containerParser,
             $escapeHtmlAttr,
             $renderer,

@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Mezzio\Navigation\ContainerInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsInterface;
@@ -42,7 +41,7 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
      * @param ContainerInterface|string|null $container [optional] container to render. Default is
      *                                                  to render the container registered in the helper.
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws void
      */
     public function renderStraight($container = null): string
     {
