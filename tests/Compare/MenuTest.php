@@ -12,7 +12,6 @@ declare(strict_types = 1);
 
 namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare;
 
-use ErrorException;
 use Laminas\Config\Exception\RuntimeException;
 use Laminas\Log\Logger;
 use Laminas\View\Exception\ExceptionInterface;
@@ -20,16 +19,14 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
 use Mezzio\GenericAuthorization\AuthorizationInterface;
-use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
-use Mezzio\Navigation\Exception\BadMethodCallException;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\PluginManager as HelperPluginManager;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
 use Mezzio\Navigation\Page\PageFactory;
 use Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
+use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -73,39 +70,21 @@ final class MenuTest extends AbstractTest
      * @throws ContainerExceptionInterface
      * @throws \Laminas\Config\Exception\InvalidArgumentException
      * @throws RuntimeException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $helperPluginManager = $this->serviceManager->get(HelperPluginManager::class);
-        $plugin              = $this->serviceManager->get(ViewHelperPluginManager::class);
-
+        $plugin   = $this->serviceManager->get(ViewHelperPluginManager::class);
         $renderer = $this->serviceManager->get(PartialRendererInterface::class);
-        assert(
-            $renderer instanceof PartialRendererInterface,
-            sprintf(
-                '$renderer should be an Instance of %s, but was %s',
-                PartialRendererInterface::class,
-                get_class($renderer)
-            )
-        );
-
-        $baseUrlHelper = $this->serviceManager->get(BaseServerUrlHelper::class);
-        assert(
-            $baseUrlHelper instanceof BaseServerUrlHelper,
-            sprintf(
-                '$baseUrlHelper should be an Instance of %s, but was %s',
-                BaseServerUrlHelper::class,
-                get_class($baseUrlHelper)
-            )
-        );
 
         // create helper
         $this->helper = new Menu(
             $this->serviceManager,
             $this->serviceManager->get(Logger::class),
-            $helperPluginManager->get(ContainerParserInterface::class),
+            $this->serviceManager->get(HtmlifyInterface::class),
+            $this->serviceManager->get(ContainerParserInterface::class),
             $plugin->get(EscapeHtmlAttr::class),
             $renderer,
             $plugin->get(EscapeHtml::class),
@@ -854,8 +833,6 @@ final class MenuTest extends AbstractTest
 
     /**
      * @throws Exception
-     * @throws BadMethodCallException
-     * @throws ErrorException
      * @throws \InvalidArgumentException
      */
     public function testRenderDeepestMenuWithPageClassToLi(): void

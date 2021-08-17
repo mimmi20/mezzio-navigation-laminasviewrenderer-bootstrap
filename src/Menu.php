@@ -15,18 +15,20 @@ namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 use InvalidArgumentException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Log\Logger;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Mezzio\Navigation\ContainerInterface;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
 use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
 use Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
+use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use RecursiveIteratorIterator;
 
 use function array_diff_key;
@@ -77,10 +79,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     private HtmlElementInterface $htmlElement;
 
     public function __construct(
-        \Interop\Container\ContainerInterface $serviceLocator,
+        ServiceLocatorInterface $serviceLocator,
         Logger $logger,
+        HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
-        EscapeHtmlAttr $escapeHtmlAttr,
+        EscapeHtmlAttr $escaper,
         PartialRendererInterface $renderer,
         EscapeHtml $escapeHtml,
         HtmlElementInterface $htmlElement,
@@ -88,8 +91,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     ) {
         $this->serviceLocator  = $serviceLocator;
         $this->logger          = $logger;
+        $this->htmlify         = $htmlify;
         $this->containerParser = $containerParser;
-        $this->escaper         = $escapeHtmlAttr;
+        $this->escaper         = $escaper;
         $this->renderer        = $renderer;
         $this->escapeHtml      = $escapeHtml;
         $this->translator      = $translator;
@@ -151,6 +155,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         }
 
         $options = $this->normalizeOptions($options);
+
+        assert($container instanceof ContainerInterface);
 
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
             return $this->renderDeepestMenu(
@@ -244,7 +250,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, renderParents: bool, escapeLabels: bool, addClassToListItem: bool, role: string|null, liActiveClass: string} $options
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     private function renderDeepestMenu(
         ContainerInterface $container,
@@ -358,7 +364,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param ContainerInterface                  $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      *
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     private function renderNormalMenu(
         ContainerInterface $container,

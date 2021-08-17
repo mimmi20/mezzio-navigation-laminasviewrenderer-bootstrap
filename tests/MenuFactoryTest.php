@@ -15,16 +15,16 @@ namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Log\Logger;
-use Laminas\ServiceManager\PluginManagerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mezzio\Navigation\Helper\ContainerParserInterface;
-use Mezzio\Navigation\Helper\PluginManager;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
+use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -68,17 +68,10 @@ final class MenuFactoryTest extends TestCase
 
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
+        $htmlify         = $this->createMock(HtmlifyInterface::class);
         $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
         $renderer        = $this->createMock(PartialRendererInterface::class);
-
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $helperPluginManager->expects(self::once())
-            ->method('get')
-            ->with(ContainerParserInterface::class)
-            ->willReturn($containerParser);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -92,13 +85,13 @@ final class MenuFactoryTest extends TestCase
             ->with(Translate::class)
             ->willReturn(false);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
+        $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $container->expects(self::exactly(5))
+        $container->expects(self::exactly(6))
             ->method('get')
-            ->withConsecutive([PluginManager::class], [ViewHelperPluginManager::class], [Logger::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $viewHelperPluginManager, $logger, $renderer, $htmlElement);
+            ->withConsecutive([ViewHelperPluginManager::class], [Logger::class], [HtmlifyInterface::class], [ContainerParserInterface::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
@@ -134,18 +127,11 @@ final class MenuFactoryTest extends TestCase
 
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
+        $htmlify         = $this->createMock(HtmlifyInterface::class);
         $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
         $renderer        = $this->createMock(PartialRendererInterface::class);
         $translator      = $this->createMock(Translate::class);
-
-        $helperPluginManager = $this->getMockBuilder(PluginManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $helperPluginManager->expects(self::once())
-            ->method('get')
-            ->with(ContainerParserInterface::class)
-            ->willReturn($containerParser);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -159,13 +145,13 @@ final class MenuFactoryTest extends TestCase
             ->with(Translate::class)
             ->willReturn(true);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
+        $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $container->expects(self::exactly(5))
+        $container->expects(self::exactly(6))
             ->method('get')
-            ->withConsecutive([PluginManager::class], [ViewHelperPluginManager::class], [Logger::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($helperPluginManager, $viewHelperPluginManager, $logger, $renderer, $htmlElement);
+            ->withConsecutive([ViewHelperPluginManager::class], [Logger::class], [HtmlifyInterface::class], [ContainerParserInterface::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
+            ->willReturnOnConsecutiveCalls($viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement);
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
