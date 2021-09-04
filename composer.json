@@ -29,7 +29,7 @@
   "require-dev": {
     "ext-intl": "*",
     "laminas/laminas-config": "^3.5.0",
-    "laminas/laminas-escaper": "^2.8.0",
+    "laminas/laminas-escaper": "^2.9.0",
     "laminas/laminas-i18n": "^2.11.1",
     "laminas/laminas-servicemanager": "^3.7.0",
     "mezzio/mezzio-authentication": "^1.2.1",
