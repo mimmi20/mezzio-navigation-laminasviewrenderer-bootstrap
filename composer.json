@@ -31,7 +31,7 @@
     "laminas/laminas-config": "^3.5.0",
     "laminas/laminas-escaper": "^2.8.0",
     "laminas/laminas-i18n": "^2.11.1",
-    "laminas/laminas-servicemanager": "^3.7.0",
+    "laminas/laminas-servicemanager": "^3.8.0",
     "mezzio/mezzio-authentication": "^1.2.1",
     "mezzio/mezzio-router": "^3.6.0",
     "mimmi20/coding-standard": "^2.4.2",
