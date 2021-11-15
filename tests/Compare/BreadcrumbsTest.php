@@ -30,9 +30,13 @@ use Psr\Container\ContainerExceptionInterface;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
+use function get_class;
+use function gettype;
+use function is_object;
 use function is_string;
 use function mb_strlen;
 use function mb_substr;
+use function sprintf;
 use function str_replace;
 use function trim;
 
@@ -72,18 +76,46 @@ final class BreadcrumbsTest extends AbstractTest
     {
         parent::setUp();
 
-        $plugin       = $this->serviceManager->get(ViewHelperPluginManager::class);
-        $renderer     = $this->serviceManager->get(PartialRendererInterface::class);
-        $escapeHelper = $plugin->get(EscapeHtml::class);
-        $translator   = null;
+        $plugin = $this->serviceManager->get(ViewHelperPluginManager::class);
+        assert($plugin instanceof ViewHelperPluginManager);
+
+        $renderer = $this->serviceManager->get(PartialRendererInterface::class);
+        assert(
+            $renderer instanceof PartialRendererInterface,
+            sprintf(
+                '$renderer should be an Instance of %s, but was %s',
+                PartialRendererInterface::class,
+                is_object($renderer) ? get_class($renderer) : gettype($renderer)
+            )
+        );
+
+        $escapeHtml = $plugin->get(EscapeHtml::class);
+        assert(
+            $escapeHtml instanceof EscapeHtml,
+            sprintf(
+                '$escapeHelper should be an Instance of %s, but was %s',
+                EscapeHtml::class,
+                is_object($escapeHtml) ? get_class($escapeHtml) : gettype($escapeHtml)
+            )
+        );
+
+        $translator = null;
+
+        $logger          = $this->serviceManager->get(Logger::class);
+        $htmlify         = $this->serviceManager->get(HtmlifyInterface::class);
+        $containerParser = $this->serviceManager->get(ContainerParserInterface::class);
+
+        assert($logger instanceof Logger);
+        assert($htmlify instanceof HtmlifyInterface);
+        assert($containerParser instanceof ContainerParserInterface);
 
         // create helper
         $this->helper = new Breadcrumbs(
             $this->serviceManager,
-            $this->serviceManager->get(Logger::class),
-            $this->serviceManager->get(HtmlifyInterface::class),
-            $this->serviceManager->get(ContainerParserInterface::class),
-            $escapeHelper,
+            $logger,
+            $htmlify,
+            $containerParser,
+            $escapeHtml,
             $renderer,
             $translator
         );
