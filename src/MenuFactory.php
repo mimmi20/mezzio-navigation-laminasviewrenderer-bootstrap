@@ -18,6 +18,7 @@ use Laminas\Log\Logger;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
+use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
 use Laminas\View\HelperPluginManager as ViewPluginManager;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
@@ -26,6 +27,10 @@ use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
+use function get_class;
+use function gettype;
+use function is_object;
+use function sprintf;
 
 final class MenuFactory
 {
@@ -38,22 +43,49 @@ final class MenuFactory
     {
         assert($container instanceof ServiceLocatorInterface);
 
-        $plugin     = $container->get(ViewPluginManager::class);
+        $plugin = $container->get(ViewPluginManager::class);
+        assert(
+            $plugin instanceof ViewHelperPluginManager,
+            sprintf(
+                '$plugin should be an Instance of %s, but was %s',
+                ViewHelperPluginManager::class,
+                is_object($plugin) ? get_class($plugin) : gettype($plugin)
+            )
+        );
+
         $translator = null;
 
         if ($plugin->has(Translate::class)) {
             $translator = $plugin->get(Translate::class);
+
+            assert($translator instanceof Translate);
         }
+
+        $logger          = $container->get(Logger::class);
+        $htmlify         = $container->get(HtmlifyInterface::class);
+        $containerParser = $container->get(ContainerParserInterface::class);
+        $escapeHtmlAttr  = $plugin->get(EscapeHtmlAttr::class);
+        $renderer        = $container->get(PartialRendererInterface::class);
+        $escapeHtml      = $plugin->get(EscapeHtml::class);
+        $htmlElement     = $container->get(HtmlElementInterface::class);
+
+        assert($logger instanceof Logger);
+        assert($htmlify instanceof HtmlifyInterface);
+        assert($containerParser instanceof ContainerParserInterface);
+        assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
+        assert($renderer instanceof PartialRendererInterface);
+        assert($escapeHtml instanceof EscapeHtml);
+        assert($htmlElement instanceof HtmlElementInterface);
 
         return new Menu(
             $container,
-            $container->get(Logger::class),
-            $container->get(HtmlifyInterface::class),
-            $container->get(ContainerParserInterface::class),
-            $plugin->get(EscapeHtmlAttr::class),
-            $container->get(PartialRendererInterface::class),
-            $plugin->get(EscapeHtml::class),
-            $container->get(HtmlElementInterface::class),
+            $logger,
+            $htmlify,
+            $containerParser,
+            $escapeHtmlAttr,
+            $renderer,
+            $escapeHtml,
+            $htmlElement,
             $translator
         );
     }

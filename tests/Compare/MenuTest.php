@@ -34,6 +34,8 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function get_class;
+use function gettype;
+use function is_object;
 use function is_string;
 use function rtrim;
 use function sprintf;
@@ -76,19 +78,60 @@ final class MenuTest extends AbstractTest
     {
         parent::setUp();
 
-        $plugin   = $this->serviceManager->get(ViewHelperPluginManager::class);
+        $plugin = $this->serviceManager->get(ViewHelperPluginManager::class);
+        assert($plugin instanceof ViewHelperPluginManager);
+
         $renderer = $this->serviceManager->get(PartialRendererInterface::class);
+        assert(
+            $renderer instanceof PartialRendererInterface,
+            sprintf(
+                '$renderer should be an Instance of %s, but was %s',
+                PartialRendererInterface::class,
+                is_object($renderer) ? get_class($renderer) : gettype($renderer)
+            )
+        );
+
+        $escapeHtmlAttr = $plugin->get(EscapeHtmlAttr::class);
+        assert(
+            $escapeHtmlAttr instanceof EscapeHtmlAttr,
+            sprintf(
+                '$escapeHtmlAttr should be an Instance of %s, but was %s',
+                EscapeHtmlAttr::class,
+                is_object($escapeHtmlAttr) ? get_class($escapeHtmlAttr) : gettype($escapeHtmlAttr)
+            )
+        );
+
+        $logger          = $this->serviceManager->get(Logger::class);
+        $htmlify         = $this->serviceManager->get(HtmlifyInterface::class);
+        $containerParser = $this->serviceManager->get(ContainerParserInterface::class);
+
+        assert($logger instanceof Logger);
+        assert($htmlify instanceof HtmlifyInterface);
+        assert($containerParser instanceof ContainerParserInterface);
+
+        $escapeHtml = $plugin->get(EscapeHtml::class);
+        assert(
+            $escapeHtml instanceof EscapeHtml,
+            sprintf(
+                '$escapeHelper should be an Instance of %s, but was %s',
+                EscapeHtml::class,
+                is_object($escapeHtml) ? get_class($escapeHtml) : gettype($escapeHtml)
+            )
+        );
+
+        $htmlElement = $this->serviceManager->get(HtmlElementInterface::class);
+        assert($htmlElement instanceof HtmlElementInterface);
 
         // create helper
         $this->helper = new Menu(
             $this->serviceManager,
-            $this->serviceManager->get(Logger::class),
-            $this->serviceManager->get(HtmlifyInterface::class),
-            $this->serviceManager->get(ContainerParserInterface::class),
-            $plugin->get(EscapeHtmlAttr::class),
+            $logger,
+            $htmlify,
+            $containerParser,
+            $escapeHtmlAttr,
             $renderer,
-            $plugin->get(EscapeHtml::class),
-            $this->serviceManager->get(HtmlElementInterface::class),
+            $escapeHtml,
+            $htmlElement,
             null
         );
 

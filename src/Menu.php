@@ -248,7 +248,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *
      * @param ContainerInterface                  $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, renderParents: bool, escapeLabels: bool, addClassToListItem: bool, role: string|null, liActiveClass: string} $options
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, renderParents: bool, escapeLabels: bool, addClassToListItem: bool, role: string|null, liActiveClass: string, liRole?: string|null, ulRole?: string|null} $options
      *
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
@@ -836,6 +836,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         if ($options['escapeLabels']) {
             $label = ($this->escapeHtml)($label);
+            assert(is_string($label));
         }
 
         return $this->htmlElement->toHtml($element, $attributes, $label);
