@@ -3757,8 +3757,6 @@ final class MenuTest extends TestCase
         $serviceLocator->expects(self::never())
             ->method('build');
 
-        $container = new Navigation();
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -3880,8 +3878,6 @@ final class MenuTest extends TestCase
             ->method('get');
         $serviceLocator->expects(self::never())
             ->method('build');
-
-        $container = new Navigation();
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
