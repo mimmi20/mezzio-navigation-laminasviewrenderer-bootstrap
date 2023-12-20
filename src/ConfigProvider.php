@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -10,7 +10,7 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 final class ConfigProvider
 {
@@ -18,6 +18,8 @@ final class ConfigProvider
      * Return general-purpose laminas-navigation configuration.
      *
      * @return array<string, array<string, array<string, string>>>
+     *
+     * @throws void
      */
     public function __invoke(): array
     {
@@ -28,6 +30,8 @@ final class ConfigProvider
 
     /**
      * @return array<string, array<string, string>>
+     *
+     * @throws void
      */
     public function getNavigationHelperConfig(): array
     {
