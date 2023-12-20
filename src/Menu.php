@@ -10,21 +10,21 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use InvalidArgumentException;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
-use Mezzio\Navigation\ContainerInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
-use Mezzio\Navigation\Page\PageInterface;
+use Mimmi20\Mezzio\Navigation\ContainerInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
+use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
@@ -80,7 +80,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
     public function __construct(
         ServiceLocatorInterface $serviceLocator,
-        Logger $logger,
+        LoggerInterface $logger,
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
         EscapeHtmlAttr $escaper,

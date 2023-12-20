@@ -10,13 +10,13 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare;
+namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare;
 
 use Laminas\Config\Config;
 use Laminas\Config\Exception\RuntimeException;
 use Laminas\Config\Factory as ConfigFactory;
 use Laminas\I18n\Translator\Translator;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole;
@@ -24,7 +24,7 @@ use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mezzio\GenericAuthorization\Acl\LaminasAcl;
+use Mimmi20\Mezzio\GenericAuthorization\Acl\LaminasAcl;
 use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
 use Mezzio\Helper\UrlHelper as BaseUrlHelper;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
@@ -32,17 +32,17 @@ use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\LaminasView\LaminasViewRendererFactory;
 use Mezzio\LaminasView\ServerUrlHelper;
 use Mezzio\LaminasView\UrlHelper;
-use Mezzio\Navigation\Config\NavigationConfig;
-use Mezzio\Navigation\Config\NavigationConfigInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\NavigationFactory;
-use Mezzio\Navigation\LaminasView\View\Helper\ServerUrlHelperFactory;
-use Mezzio\Navigation\LaminasView\View\Helper\UrlHelperFactory;
-use Mezzio\Navigation\Navigation;
-use Mezzio\Navigation\Page\PageFactory;
-use Mezzio\Navigation\Page\PageFactoryInterface;
-use Mezzio\Navigation\Service\ConstructedNavigationFactory;
-use Mezzio\Navigation\Service\DefaultNavigationFactory;
+use Mimmi20\Mezzio\Navigation\Config\NavigationConfig;
+use Mimmi20\Mezzio\Navigation\Config\NavigationConfigInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\NavigationFactory;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\ServerUrlHelperFactory;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\UrlHelperFactory;
+use Mimmi20\Mezzio\Navigation\Navigation;
+use Mimmi20\Mezzio\Navigation\Page\PageFactory;
+use Mimmi20\Mezzio\Navigation\Page\PageFactoryInterface;
+use Mimmi20\Mezzio\Navigation\Service\ConstructedNavigationFactory;
+use Mimmi20\Mezzio\Navigation\Service\DefaultNavigationFactory;
 use Mezzio\Router\Route;
 use Mezzio\Router\RouteResult;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementFactory;
@@ -67,7 +67,6 @@ use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Server\MiddlewareInterface;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function file_get_contents;
@@ -79,7 +78,7 @@ use function sprintf;
 /**
  * Base class for navigation view helper tests
  */
-abstract class AbstractTest extends TestCase
+abstract class AbstractTestCase extends TestCase
 {
     protected ServiceManager $serviceManager;
 
@@ -117,7 +116,6 @@ abstract class AbstractTest extends TestCase
      * Prepares the environment before running a test
      *
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws ContainerExceptionInterface
      * @throws \Laminas\Config\Exception\InvalidArgumentException
      * @throws RuntimeException
@@ -185,7 +183,7 @@ abstract class AbstractTest extends TestCase
                 ],
                 'view_helpers' => [
                     'aliases' => [
-                        'navigation' => \Mezzio\Navigation\LaminasView\View\Helper\Navigation::class,
+                        'navigation' => \Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation::class,
                         'Navigation' => Navigation::class,
                         BaseServerUrlHelper::class => ServerUrlHelper::class,
                         'serverurl' => ServerUrlHelper::class,
@@ -216,19 +214,19 @@ abstract class AbstractTest extends TestCase
         $sm->setFactory(LaminasViewRenderer::class, LaminasViewRendererFactory::class);
         $sm->setFactory(BaseServerUrlHelper::class, InvokableFactory::class);
 
-        $logger = $this->getMockBuilder(Logger::class)
+        $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $logger->expects(static::never())
-            ->method('emerg');
+            ->method('emergency');
         $logger->expects(static::never())
             ->method('alert');
         $logger->expects(static::never())
-            ->method('crit');
+            ->method('critical');
         $logger->expects(static::never())
-            ->method('err');
+            ->method('error');
         $logger->expects(static::never())
-            ->method('warn');
+            ->method('warning');
         $logger->expects(static::never())
             ->method('notice');
         $logger->expects(static::never())
@@ -236,7 +234,7 @@ abstract class AbstractTest extends TestCase
         $logger->expects(static::never())
             ->method('debug');
 
-        $sm->setService(Logger::class, $logger);
+        $sm->setService(LoggerInterface::class, $logger);
 
         // setup containers from config
         $nav1 = $sm->get('nav_test1');
@@ -268,7 +266,6 @@ abstract class AbstractTest extends TestCase
      * Returns the contens of the expected $file
      *
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     protected function getExpected(string $file): string
     {

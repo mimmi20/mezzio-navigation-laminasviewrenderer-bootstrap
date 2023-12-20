@@ -10,11 +10,11 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
@@ -61,7 +61,7 @@ final class MenuFactory
             assert($translator instanceof Translate);
         }
 
-        $logger          = $container->get(Logger::class);
+        $logger          = $container->get(LoggerInterface::class);
         $htmlify         = $container->get(HtmlifyInterface::class);
         $containerParser = $container->get(ContainerParserInterface::class);
         $escapeHtmlAttr  = $plugin->get(EscapeHtmlAttr::class);
@@ -69,7 +69,7 @@ final class MenuFactory
         $escapeHtml      = $plugin->get(EscapeHtml::class);
         $htmlElement     = $container->get(HtmlElementInterface::class);
 
-        assert($logger instanceof Logger);
+        assert($logger instanceof LoggerInterface);
         assert($htmlify instanceof HtmlifyInterface);
         assert($containerParser instanceof ContainerParserInterface);
         assert($escapeHtmlAttr instanceof EscapeHtmlAttr);

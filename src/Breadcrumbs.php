@@ -10,13 +10,13 @@
 
 declare(strict_types = 1);
 
-namespace Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\View\Helper\AbstractHtmlElement;
-use Mezzio\Navigation\ContainerInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsTrait;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
+use Mimmi20\Mezzio\Navigation\ContainerInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsTrait;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
 
 use function implode;
 use function sprintf;

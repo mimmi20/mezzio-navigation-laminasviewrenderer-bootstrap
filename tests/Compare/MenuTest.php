@@ -10,19 +10,19 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare;
+namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare;
 
 use Laminas\Config\Exception\RuntimeException;
-use Laminas\Log\Logger;
+use Psr\Log\LoggerInterface;
 use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mezzio\GenericAuthorization\AuthorizationInterface;
-use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
-use Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
-use Mezzio\Navigation\Page\PageFactory;
-use Mezzio\Navigation\Page\PageInterface;
+use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
+use Mimmi20\Mezzio\Navigation\Page\PageFactory;
+use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
@@ -30,7 +30,6 @@ use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 use function get_class;
@@ -45,13 +44,13 @@ use function trim;
 use const PHP_EOL;
 
 /**
- * Tests Mezzio\Navigation\LaminasView\View\Helper\Navigation\Menu.
+ * Tests Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\Menu.
  *
  * @group Laminas_View
  * @group Laminas_View_Helper
  * @group Compare
  */
-final class MenuTest extends AbstractTest
+final class MenuTest extends AbstractTestCase
 {
     /**
      * Class name for view helper to test.
@@ -67,7 +66,6 @@ final class MenuTest extends AbstractTest
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      * @throws ExceptionInterface
      * @throws ContainerExceptionInterface
      * @throws \Laminas\Config\Exception\InvalidArgumentException
@@ -101,11 +99,11 @@ final class MenuTest extends AbstractTest
             )
         );
 
-        $logger          = $this->serviceManager->get(Logger::class);
+        $logger          = $this->serviceManager->get(LoggerInterface::class);
         $htmlify         = $this->serviceManager->get(HtmlifyInterface::class);
         $containerParser = $this->serviceManager->get(ContainerParserInterface::class);
 
-        assert($logger instanceof Logger);
+        assert($logger instanceof LoggerInterface);
         assert($htmlify instanceof HtmlifyInterface);
         assert($containerParser instanceof ContainerParserInterface);
 

@@ -10,24 +10,24 @@
 
 declare(strict_types = 1);
 
-namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation;
+namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\Log\Logger;
+use Laminas\View\Helper\HelperInterface;
+use Psr\Log\LoggerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
-use Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 use function assert;
 
@@ -42,23 +42,22 @@ final class MenuFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testInvocation(): void
     {
-        $logger = $this->getMockBuilder(Logger::class)
+        $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $logger->expects(self::never())
-            ->method('emerg');
+            ->method('emergency');
         $logger->expects(self::never())
             ->method('alert');
         $logger->expects(self::never())
-            ->method('crit');
+            ->method('critical');
         $logger->expects(self::never())
-            ->method('err');
+            ->method('error');
         $logger->expects(self::never())
-            ->method('warn');
+            ->method('warning');
         $logger->expects(self::never())
             ->method('notice');
         $logger->expects(self::never())
@@ -76,10 +75,25 @@ final class MenuFactoryTest extends TestCase
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $viewHelperPluginManager->expects(self::exactly(2))
+        $matcher = self::exactly(2);
+        $viewHelperPluginManager->expects($matcher)
             ->method('get')
-            ->withConsecutive([EscapeHtmlAttr::class], [EscapeHtml::class])
-            ->willReturnOnConsecutiveCalls($escapeHtmlAttr, $escapeHtml);
+            ->willReturnCallback(
+                function (string $name, ?array $options = null) use ($matcher, $escapeHtmlAttr, $escapeHtml): HelperInterface
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(EscapeHtmlAttr::class, $name),
+                        default => self::assertSame(EscapeHtml::class, $name),
+                    };
+
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $escapeHtmlAttr,
+                        default => $escapeHtml,
+                    };
+                }
+            );
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
@@ -88,10 +102,31 @@ final class MenuFactoryTest extends TestCase
         $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $container->expects(self::exactly(6))
+        $matcher = self::exactly(6);
+        $container->expects($matcher)
             ->method('get')
-            ->withConsecutive([ViewHelperPluginManager::class], [Logger::class], [HtmlifyInterface::class], [ContainerParserInterface::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement);
+            ->willReturnCallback(
+                function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(ViewHelperPluginManager::class, $id),
+                        2 => self::assertSame(LoggerInterface::class, $id),
+                        3 => self::assertSame(HtmlifyInterface::class, $id),
+                        4 => self::assertSame(ContainerParserInterface::class, $id),
+                        5 => self::assertSame(PartialRendererInterface::class, $id),
+                        default => self::assertSame(HtmlElementInterface::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $viewHelperPluginManager,
+                        2 => $logger,
+                        3 => $htmlify,
+                        4 => $containerParser,
+                        5 => $renderer,
+                        default => $htmlElement,
+                    };
+                }
+            );
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);
@@ -101,23 +136,22 @@ final class MenuFactoryTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws InvalidArgumentException
      */
     public function testInvocationWithTranslator(): void
     {
-        $logger = $this->getMockBuilder(Logger::class)
+        $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $logger->expects(self::never())
-            ->method('emerg');
+            ->method('emergency');
         $logger->expects(self::never())
             ->method('alert');
         $logger->expects(self::never())
-            ->method('crit');
+            ->method('critical');
         $logger->expects(self::never())
-            ->method('err');
+            ->method('error');
         $logger->expects(self::never())
-            ->method('warn');
+            ->method('warning');
         $logger->expects(self::never())
             ->method('notice');
         $logger->expects(self::never())
@@ -136,10 +170,27 @@ final class MenuFactoryTest extends TestCase
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $viewHelperPluginManager->expects(self::exactly(3))
+        $matcher = self::exactly(3);
+        $viewHelperPluginManager->expects($matcher)
             ->method('get')
-            ->withConsecutive([Translate::class], [EscapeHtmlAttr::class], [EscapeHtml::class])
-            ->willReturnOnConsecutiveCalls($translator, $escapeHtmlAttr, $escapeHtml);
+            ->willReturnCallback(
+                function (string $name, ?array $options = null) use ($matcher, $translator, $escapeHtmlAttr, $escapeHtml): HelperInterface
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(Translate::class, $name),
+                        2 => self::assertSame(EscapeHtmlAttr::class, $name),
+                        default => self::assertSame(EscapeHtml::class, $name),
+                    };
+
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $translator,
+                        2 => $escapeHtmlAttr,
+                        default => $escapeHtml,
+                    };
+                }
+            );
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
@@ -148,10 +199,31 @@ final class MenuFactoryTest extends TestCase
         $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $container->expects(self::exactly(6))
+        $matcher = self::exactly(6);
+        $container->expects($matcher)
             ->method('get')
-            ->withConsecutive([ViewHelperPluginManager::class], [Logger::class], [HtmlifyInterface::class], [ContainerParserInterface::class], [PartialRendererInterface::class], [HtmlElementInterface::class])
-            ->willReturnOnConsecutiveCalls($viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement);
+            ->willReturnCallback(
+                function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement): mixed
+                {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(ViewHelperPluginManager::class, $id),
+                        2 => self::assertSame(LoggerInterface::class, $id),
+                        3 => self::assertSame(HtmlifyInterface::class, $id),
+                        4 => self::assertSame(ContainerParserInterface::class, $id),
+                        5 => self::assertSame(PartialRendererInterface::class, $id),
+                        default => self::assertSame(HtmlElementInterface::class, $id),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $viewHelperPluginManager,
+                        2 => $logger,
+                        3 => $htmlify,
+                        4 => $containerParser,
+                        5 => $renderer,
+                        default => $htmlElement,
+                    };
+                }
+            );
 
         assert($container instanceof ContainerInterface);
         $helper = ($this->factory)($container);

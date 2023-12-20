@@ -14,7 +14,7 @@ declare(strict_types = 1);
  * @see       https://github.com/laminas/laminas-view for the canonical source repository
  */
 
-namespace MezzioTest\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare\TestAsset;
+namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare\TestAsset;
 
 use Laminas\I18n\Translator;
 use Laminas\I18n\Translator\TextDomain;

@@ -7,15 +7,15 @@
 ## Code Status
 
 [![codecov](https://codecov.io/gh/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap/branch/master/graph/badge.svg)](https://codecov.io/gh/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap.svg)](http://isitmaintained.com/project/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap.svg)](http://isitmaintained.com/project/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap "Percentage of issues still open")
+[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap.svg)](https://isitmaintained.com/project/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap "Average time to resolve an issue")
+[![Percentage of issues still open](https://isitmaintained.com/badge/open/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap.svg)](https://isitmaintained.com/project/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap "Percentage of issues still open")
 
 ## Installation
 
 Run
 
-```
-$ composer require mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap
+```shell
+composer require mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap
 ```
 
 ### Render the navigation
@@ -112,11 +112,11 @@ The following example demonstrates rendering the navigation menus for the named
 <!-- ... -->
 
 <body>
-    <?= $this->navigation('Mezzio\Navigation\Default')->menu() ?>
+    <?= $this->navigation('Mimmi20\Mezzio\Navigation\Default')->menu() ?>
 
-    <?= $this->navigation('Mezzio\Navigation\Special')->menu() ?>
+    <?= $this->navigation('Mimmi20\Mezzio\Navigation\Special')->menu() ?>
 
-    <?= $this->navigation('Mezzio\Navigation\Sitemap')->menu() ?>
+    <?= $this->navigation('Mimmi20\Mezzio\Navigation\Sitemap')->menu() ?>
 </body>
 <!-- ... -->
 ```
@@ -124,7 +124,7 @@ The following example demonstrates rendering the navigation menus for the named
 # View Helpers
 
 The navigation helpers are used for rendering navigational elements from
-`Mezzio\Navigation\Navigation` instances for the use with Bootstrap.
+`Mimmi20\Mezzio\Navigation\Navigation` instances for the use with Bootstrap.
 
 There are 2 built-in helpers:
 
@@ -132,7 +132,7 @@ There are 2 built-in helpers:
   active page.
 - Menu, used for rendering menus.
 
-All built-in helpers implements the interface `Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface`, which
+All built-in helpers implements the interface `Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface`, which
 adds integration with
 [laminas-acl](https://docs.laminas.dev/laminas-permissions-acl/) or [laminas-rbac](https://docs.laminas.dev/laminas-permissions-rbac/) and
 [laminas-i18n](https://docs.laminas.dev/laminas-i18n/).
