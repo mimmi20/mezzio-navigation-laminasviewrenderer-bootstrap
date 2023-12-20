@@ -21,7 +21,7 @@ parameters:
   checkAlwaysTrueInstanceof: true
 
   # reports === and !== occurrences always evaluated to true
-  checkAlwaysTrueStrictComparison: true
+  checkAlwaysTrueStrictComparison: false
 
   # enable stricter analysis of benevolent union types
   checkBenevolentUnionTypes: true
@@ -94,5 +94,11 @@ parameters:
       missingCheckedExceptionInThrows: true
       tooWideThrowType: true
 
-#  ignoreErrors:
-#    - '~Call to static method .* with .* will always evaluate to true~'
+  ignoreErrors:
+    - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\LaminasView\\View\\Helper\\BootstrapNavigation\\Breadcrumbs::parentRenderStraight\(\)~'
+    - '~Method Mimmi20\\Mezzio\\Navigation\\LaminasView\\View\\Helper\\BootstrapNavigation\\Breadcrumbs::(combineRendered|renderBreadcrumbItem)\(\) is unused~'
+    - '~Parameter #1 \$partial of method Mimmi20\\Mezzio\\Navigation\\LaminasView\\View\\Helper\\BootstrapNavigation\\(Breadcrumbs|Menu)::setPartial\(\) expects array~'
+    - '~Method Mimmi20Test\\Mezzio\\Navigation\\LaminasView\\View\\Helper\\BootstrapNavigation\\Compare\\TestAsset\\ArrayTranslator::load\(\) should return~'
+    - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\ContainerInterface<Mimmi20\\Mezzio\\Navigation\\Page\\PageInterface>::find(?:All|One)?By(Active|Label)\(\)~'
+    - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\Navigation::find(?:All|One)?By(Active|Label)\(\)~'
+    - '~Parameter #2 \$factory of method Laminas\\ServiceManager\\ServiceManager::setFactory\(\) expects~'

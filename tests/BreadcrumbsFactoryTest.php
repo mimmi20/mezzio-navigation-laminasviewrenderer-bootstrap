@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,18 +14,19 @@ namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigat
 
 use Interop\Container\ContainerInterface;
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\View\Helper\HelperInterface;
-use Psr\Log\LoggerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\EscapeHtml;
+use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\BreadcrumbsFactory;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 use function assert;
 
@@ -33,6 +34,7 @@ final class BreadcrumbsFactoryTest extends TestCase
 {
     private BreadcrumbsFactory $factory;
 
+    /** @throws void */
     protected function setUp(): void
     {
         $this->factory = new BreadcrumbsFactory();
@@ -40,6 +42,7 @@ final class BreadcrumbsFactoryTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws ContainerExceptionInterface
      */
     public function testInvocationWithTranslator(): void
     {
@@ -80,8 +83,7 @@ final class BreadcrumbsFactoryTest extends TestCase
         $viewHelperPluginManager->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function (string $name, ?array $options = null) use ($matcher, $translatePlugin, $escapePlugin): HelperInterface
-                {
+                static function (string $name, array | null $options = null) use ($matcher, $translatePlugin, $escapePlugin): HelperInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(Translate::class, $name),
                         default => self::assertSame(EscapeHtml::class, $name),
@@ -93,18 +95,17 @@ final class BreadcrumbsFactoryTest extends TestCase
                         1 => $translatePlugin,
                         default => $escapePlugin,
                     };
-                }
+                },
             );
 
         $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher   = self::exactly(5);
         $container->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer): mixed
-                {
+                static function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(LoggerInterface::class, $id),
@@ -120,7 +121,7 @@ final class BreadcrumbsFactoryTest extends TestCase
                         4 => $containerParser,
                         default => $renderer,
                     };
-                }
+                },
             );
 
         assert($container instanceof ContainerInterface);
@@ -131,6 +132,7 @@ final class BreadcrumbsFactoryTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws ContainerExceptionInterface
      */
     public function testInvocationWithoutTranslator(): void
     {
@@ -174,12 +176,11 @@ final class BreadcrumbsFactoryTest extends TestCase
         $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher   = self::exactly(5);
         $container->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer): mixed
-                {
+                static function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(LoggerInterface::class, $id),
@@ -195,7 +196,7 @@ final class BreadcrumbsFactoryTest extends TestCase
                         4 => $containerParser,
                         default => $renderer,
                     };
-                }
+                },
             );
 
         assert($container instanceof ContainerInterface);

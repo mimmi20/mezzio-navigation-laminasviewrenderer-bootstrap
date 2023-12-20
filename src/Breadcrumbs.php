@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,6 +17,7 @@ use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsTrait;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
+use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 
 use function implode;
 use function sprintf;
@@ -26,6 +27,8 @@ use const PHP_EOL;
 
 /**
  * Helper for printing breadcrumbs.
+ *
+ * phpcs:disable SlevomatCodingStandard.Classes.TraitUseDeclaration.MultipleTraitsPerDeclaration
  */
 final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterface
 {
@@ -38,16 +41,16 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
      * Renders breadcrumbs by chaining 'a' elements with the separator
      * registered in the helper.
      *
-     * @param ContainerInterface|string|null $container [optional] container to render. Default is
+     * @param ContainerInterface<PageInterface>|string|null $container [optional] container to render. Default is
      *                                                  to render the container registered in the helper.
      *
      * @throws void
      */
-    public function renderStraight($container = null): string
+    public function renderStraight(ContainerInterface | string | null $container = null): string
     {
         $content = $this->parentRenderStraight($container);
 
-        if ('' === $content) {
+        if ($content === '') {
             return '';
         }
 
@@ -55,11 +58,11 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
         $html .= str_repeat($this->getIndent(), 2) . '<ul class="breadcrumb">' . PHP_EOL;
         $html .= $content;
         $html .= str_repeat($this->getIndent(), 2) . '</ul>' . PHP_EOL;
-        $html .= $this->getIndent() . '</nav>' . PHP_EOL;
 
-        return $html;
+        return $html . ($this->getIndent() . '</nav>' . PHP_EOL);
     }
 
+    /** @throws void */
     private function renderBreadcrumbItem(string $content, string $liClass, bool $active): string
     {
         $classes = ['breadcrumb-item'];
@@ -74,13 +77,17 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
             $aria      = ' aria-current="page"';
         }
 
-        $html  = str_repeat($this->getIndent(), 3) . sprintf('<li class="%s"%s>', implode(' ', $classes), $aria) . PHP_EOL;
+        $html  = str_repeat($this->getIndent(), 3) . sprintf(
+            '<li class="%s"%s>',
+            implode(' ', $classes),
+            $aria,
+        ) . PHP_EOL;
         $html .= str_repeat($this->getIndent(), 4) . $content . PHP_EOL;
-        $html .= str_repeat($this->getIndent(), 3) . '</li>' . PHP_EOL;
 
-        return $html;
+        return $html . (str_repeat($this->getIndent(), 3) . '</li>' . PHP_EOL);
     }
 
+    /** @throws void */
     private function renderSeparator(): string
     {
         return str_repeat($this->getIndent(), 3) . $this->getSeparator() . PHP_EOL;
@@ -88,9 +95,11 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
 
     /**
      * @param array<string> $html
+     *
+     * @throws void
      */
     private function combineRendered(array $html): string
     {
-        return [] !== $html ? implode($this->renderSeparator(), $html) : '';
+        return $html !== [] ? implode($this->renderSeparator(), $html) : '';
     }
 }

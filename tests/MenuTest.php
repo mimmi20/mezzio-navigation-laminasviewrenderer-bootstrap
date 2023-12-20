@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,25 +13,24 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\View\Helper\Escaper\AbstractHelper;
-use Psr\Log\LoggerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
+use Laminas\View\Helper\Escaper\AbstractHelper;
 use Laminas\View\Model\ModelInterface;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Renderer\RendererInterface;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\Mezzio\Navigation\Page\Uri;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\Accept\AcceptHelperInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\FindActive\FindActiveInterface;
@@ -39,28 +38,23 @@ use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 use function assert;
-use function get_class;
 use function sprintf;
 
 use const PHP_EOL;
 
 final class MenuTest extends TestCase
 {
-    /**
-     * @throws void
-     */
+    /** @throws void */
     protected function tearDown(): void
     {
         Menu::setDefaultAuthorization(null);
         Menu::setDefaultRole(null);
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetMaxDepth(): void
     {
         $maxDepth = 4;
@@ -146,7 +140,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertNull($helper->getMaxDepth());
@@ -156,10 +150,7 @@ final class MenuTest extends TestCase
         self::assertSame($maxDepth, $helper->getMaxDepth());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetMinDepth(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -243,7 +234,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertSame(0, $helper->getMinDepth());
@@ -269,10 +260,7 @@ final class MenuTest extends TestCase
         self::assertSame(4, $helper->getMinDepth());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetRenderInvisible(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -356,7 +344,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertFalse($helper->getRenderInvisible());
@@ -366,10 +354,7 @@ final class MenuTest extends TestCase
         self::assertTrue($helper->getRenderInvisible());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetRole(): void
     {
         $role        = 'testRole';
@@ -456,7 +441,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertNull($helper->getRole());
@@ -473,10 +458,7 @@ final class MenuTest extends TestCase
         self::assertTrue($helper->hasRole());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetUseAuthorization(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -560,7 +542,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertTrue($helper->getUseAuthorization());
@@ -574,10 +556,7 @@ final class MenuTest extends TestCase
         self::assertTrue($helper->getUseAuthorization());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetAuthorization(): void
     {
         $auth        = $this->createMock(AuthorizationInterface::class);
@@ -664,7 +643,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertNull($helper->getAuthorization());
@@ -683,10 +662,7 @@ final class MenuTest extends TestCase
         self::assertTrue($helper->hasAuthorization());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetView(): void
     {
         $view = $this->createMock(RendererInterface::class);
@@ -772,7 +748,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertNull($helper->getView());
@@ -786,7 +762,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
@@ -827,12 +802,11 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertNull($containerParam),
                         default => self::assertSame($container, $containerParam),
@@ -842,7 +816,7 @@ final class MenuTest extends TestCase
                         1 => null,
                         default => $container,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -890,7 +864,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $container1 = $helper->getContainer();
@@ -1001,7 +975,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $this->expectException(InvalidArgumentException::class);
@@ -1013,7 +987,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
@@ -1105,7 +1078,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setContainer($name);
@@ -1115,7 +1088,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
@@ -1183,7 +1155,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($acceptHelper);
 
@@ -1240,7 +1212,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setContainer($name);
@@ -1255,9 +1227,9 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testHtmlify(): void
     {
@@ -1378,12 +1350,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -1396,7 +1367,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
@@ -1404,7 +1375,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -1422,7 +1397,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setContainer($name);
@@ -1442,10 +1417,7 @@ final class MenuTest extends TestCase
         self::assertSame($expected, $helper->htmlify($page));
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetIndent(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -1529,7 +1501,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertSame('', $helper->getIndent());
@@ -1545,7 +1517,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -1638,7 +1609,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -1695,7 +1666,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -1708,7 +1679,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -1782,7 +1752,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 0,
-                ]
+                ],
             );
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
@@ -1806,7 +1776,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -1863,7 +1833,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -1881,7 +1851,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
@@ -1940,7 +1909,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -1997,7 +1966,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -2012,7 +1981,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -2086,7 +2054,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 0,
-                ]
+                ],
             );
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
@@ -2110,7 +2078,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -2167,7 +2135,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -2188,7 +2156,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -2267,7 +2234,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -2324,7 +2291,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -2339,7 +2306,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -2409,7 +2375,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $parentPage,
                     'depth' => 0,
-                ]
+                ],
             );
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
@@ -2433,7 +2399,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -2490,7 +2456,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -2508,7 +2474,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -2607,7 +2572,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -2664,7 +2629,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -2679,7 +2644,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -2777,7 +2741,7 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
@@ -2834,7 +2798,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -2850,10 +2814,7 @@ final class MenuTest extends TestCase
         self::assertSame($expected, $helper->findActive($name));
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testEscapeLabels(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -2937,7 +2898,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertTrue($helper->getEscapeLabels());
@@ -2947,10 +2908,7 @@ final class MenuTest extends TestCase
         self::assertFalse($helper->getEscapeLabels());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetAddClassToListItem(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3034,7 +2992,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertFalse($helper->getAddClassToListItem());
@@ -3044,10 +3002,7 @@ final class MenuTest extends TestCase
         self::assertTrue($helper->getAddClassToListItem());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetOnlyActiveBranch(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3131,7 +3086,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertFalse($helper->getOnlyActiveBranch());
@@ -3141,10 +3096,7 @@ final class MenuTest extends TestCase
         self::assertTrue($helper->getOnlyActiveBranch());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetPartial(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3228,7 +3180,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertNull($helper->getPartial());
@@ -3242,10 +3194,7 @@ final class MenuTest extends TestCase
         self::assertSame('test', $helper->getPartial());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetRenderParents(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3329,7 +3278,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertTrue($helper->getRenderParents());
@@ -3339,10 +3288,7 @@ final class MenuTest extends TestCase
         self::assertFalse($helper->getRenderParents());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetUlClass(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3426,7 +3372,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertSame('navigation', $helper->getUlClass());
@@ -3436,10 +3382,7 @@ final class MenuTest extends TestCase
         self::assertSame('test', $helper->getUlClass());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetLiClass(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3523,7 +3466,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertSame('', $helper->getLiClass());
@@ -3533,10 +3476,7 @@ final class MenuTest extends TestCase
         self::assertSame('test', $helper->getLiClass());
     }
 
-    /**
-     * @throws Exception
-     *
-     */
+    /** @throws Exception */
     public function testSetLiActiveClass(): void
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
@@ -3620,7 +3560,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         self::assertSame('active', $helper->getLiActiveClass());
@@ -3635,6 +3575,7 @@ final class MenuTest extends TestCase
      * @throws \InvalidArgumentException
      * @throws ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testDoNotRenderIfNoPageIsActive(): void
     {
@@ -3683,19 +3624,18 @@ final class MenuTest extends TestCase
                     'authorization' => null,
                     'renderInvisible' => false,
                     'role' => null,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(3);
+        $matcher         = self::exactly(3);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($container, $containerParam),
@@ -3705,7 +3645,7 @@ final class MenuTest extends TestCase
                         2 => null,
                         default => $container,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -3753,7 +3693,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setContainer($container);
@@ -3851,7 +3791,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $role = 'testRole';
@@ -3973,7 +3913,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $role = 'testRole';
@@ -4001,7 +3941,9 @@ final class MenuTest extends TestCase
         $helper->setPartial(['a', 'b', 'c']);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unable to render menu: A view partial supplied as an array must contain one value: the partial view script');
+        $this->expectExceptionMessage(
+            'Unable to render menu: A view partial supplied as an array must contain one value: the partial view script',
+        );
         $this->expectExceptionCode(0);
 
         $helper->renderPartial($name);
@@ -4009,7 +3951,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -4141,7 +4082,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -4167,7 +4108,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -4289,7 +4229,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -4315,7 +4255,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -4390,12 +4329,11 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($container, $containerParam),
@@ -4405,7 +4343,7 @@ final class MenuTest extends TestCase
                         2 => null,
                         default => $container,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -4458,7 +4396,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -4484,7 +4422,6 @@ final class MenuTest extends TestCase
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -4565,12 +4502,11 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($parentPage, $containerParam),
@@ -4580,7 +4516,7 @@ final class MenuTest extends TestCase
                         2 => null,
                         default => $parentPage,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -4633,7 +4569,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -4661,6 +4597,7 @@ final class MenuTest extends TestCase
      * @throws \InvalidArgumentException
      * @throws Exception
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testDoNotRenderMenuIfNoPageIsActive(): void
     {
@@ -4709,19 +4646,18 @@ final class MenuTest extends TestCase
                     'authorization' => null,
                     'renderInvisible' => false,
                     'role' => null,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(3);
+        $matcher         = self::exactly(3);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($container, $containerParam),
@@ -4731,7 +4667,7 @@ final class MenuTest extends TestCase
                         2 => null,
                         default => $container,
                     };
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -4779,7 +4715,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setContainer($container);
@@ -4791,6 +4727,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuNoActivePage(): void
     {
@@ -4893,19 +4830,18 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -4953,7 +4889,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -4982,6 +4918,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu(): void
     {
@@ -5083,15 +5020,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -5117,7 +5053,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -5184,30 +5120,28 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher        = self::exactly(5);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('nav navigation', $value),
                         2 => self::assertSame('nav-item active', $value),
@@ -5225,13 +5159,13 @@ final class MenuTest extends TestCase
                         4 => 'parent-id-escaped',
                         default => 'active-escaped',
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -5259,16 +5193,15 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher    = self::exactly(4);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentLabel, $message),
                         2 => self::assertSame($parentTitle, $message),
-                        3=> self::assertSame($pageLabel, $message),
+                        3 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
                     };
 
@@ -5285,7 +5218,7 @@ final class MenuTest extends TestCase
                         3 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -5293,17 +5226,22 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
+                        1 => self::assertSame(
+                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
@@ -5315,7 +5253,7 @@ final class MenuTest extends TestCase
                         1 => $expected1,
                         default => $expected2,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -5333,7 +5271,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -5359,6 +5297,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithhIndent(): void
     {
@@ -5462,15 +5401,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -5496,7 +5434,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -5563,30 +5501,28 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher        = self::exactly(5);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('nav navigation', $value),
                         2 => self::assertSame('nav-item active', $value),
@@ -5604,13 +5540,13 @@ final class MenuTest extends TestCase
                         4 => 'parent-id-escaped',
                         default => 'active-escaped',
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -5638,16 +5574,15 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher    = self::exactly(4);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentLabel, $message),
                         2 => self::assertSame($parentTitle, $message),
-                        3=> self::assertSame($pageLabel, $message),
+                        3 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
                     };
 
@@ -5664,7 +5599,7 @@ final class MenuTest extends TestCase
                         3 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = $indent . '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . $indent . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . $indent . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . $indent . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . $indent . '            <li class="active-escaped">' . PHP_EOL . $indent . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '        </ul>' . PHP_EOL . $indent . '    </li>' . PHP_EOL . $indent . '</ul>';
@@ -5672,17 +5607,22 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
+                        1 => self::assertSame(
+                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
@@ -5694,7 +5634,7 @@ final class MenuTest extends TestCase
                         1 => $expected1,
                         default => $expected2,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -5712,7 +5652,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -5739,6 +5679,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderVerticalMenuException(): void
     {
@@ -5896,7 +5837,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -5926,6 +5867,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderVerticalMenu(): void
     {
@@ -6027,15 +5969,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -6061,7 +6002,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -6128,30 +6069,28 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface|null
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher        = self::exactly(5);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('nav navigation flex-column flex-md-row', $value),
                         2 => self::assertSame('nav-item active', $value),
@@ -6169,13 +6108,13 @@ final class MenuTest extends TestCase
                         4 => 'parent-id-escaped',
                         default => 'active-escaped',
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -6203,16 +6142,15 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher    = self::exactly(4);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentLabel, $message),
                         2 => self::assertSame($parentTitle, $message),
-                        3=> self::assertSame($pageLabel, $message),
+                        3 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
                     };
 
@@ -6229,7 +6167,7 @@ final class MenuTest extends TestCase
                         3 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped flex-column-escaped flex-md-row-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -6237,17 +6175,22 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
+                        1 => self::assertSame(
+                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
@@ -6259,7 +6202,7 @@ final class MenuTest extends TestCase
                         1 => $expected1,
                         default => $expected2,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -6277,7 +6220,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -6303,6 +6246,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderVerticalMenu2(): void
     {
@@ -6404,15 +6348,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -6438,7 +6381,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -6505,30 +6448,28 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface|null
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher        = self::exactly(5);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string
-                {
+                static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('nav navigation flex-column flex-md-row', $value),
                         2 => self::assertSame('nav-item active', $value),
@@ -6546,13 +6487,13 @@ final class MenuTest extends TestCase
                         4 => 'parent-id-escaped',
                         default => 'active-escaped',
                     };
-                }
+                },
             );
 
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -6580,16 +6521,15 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher    = self::exactly(4);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentLabel, $message),
                         2 => self::assertSame($parentTitle, $message),
-                        3=> self::assertSame($pageLabel, $message),
+                        3 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
                     };
 
@@ -6606,7 +6546,7 @@ final class MenuTest extends TestCase
                         3 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped flex-column-escaped flex-md-row-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -6614,17 +6554,22 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
+                        1 => self::assertSame(
+                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
@@ -6636,7 +6581,7 @@ final class MenuTest extends TestCase
                         1 => $expected1,
                         default => $expected2,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -6654,7 +6599,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -6673,13 +6618,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['vertical' => 'md', 'direction' => Menu::DROP_ORIENTATION_START]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['vertical' => 'md', 'direction' => Menu::DROP_ORIENTATION_START],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderOlMenuWithMaxDepth(): void
     {
@@ -6782,15 +6734,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::exactly(2))
             ->method('getLiClass')
@@ -6816,7 +6767,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -6883,25 +6834,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher        = self::exactly(5);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -6929,7 +6879,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -6957,16 +6907,15 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher    = self::exactly(4);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentLabel, $message),
                         2 => self::assertSame($parentTitle, $message),
-                        3=> self::assertSame($pageLabel, $message),
+                        3 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
                     };
 
@@ -6983,7 +6932,7 @@ final class MenuTest extends TestCase
                         3 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ol class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ol class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '            <li class="active-escaped li-class-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ol>' . PHP_EOL . '    </li>' . PHP_EOL . '</ol>';
@@ -6991,17 +6940,22 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
+                        1 => self::assertSame(
+                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
@@ -7013,7 +6967,7 @@ final class MenuTest extends TestCase
                         1 => $expected1,
                         default => $expected2,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -7031,7 +6985,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -7050,13 +7004,17 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['style' => Menu::STYLE_OL, 'maxDepth' => $maxDepth]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu($name, ['style' => Menu::STYLE_OL, 'maxDepth' => $maxDepth]),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderUlMenuWithTabs(): void
     {
@@ -7158,15 +7116,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::exactly(2))
             ->method('getLiClass')
@@ -7192,7 +7149,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -7259,25 +7216,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(7);
+        $matcher        = self::exactly(7);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -7309,7 +7265,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher    = self::exactly(2);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -7337,16 +7293,15 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher    = self::exactly(4);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentLabel, $message),
                         2 => self::assertSame($parentTitle, $message),
-                        3=> self::assertSame($pageLabel, $message),
+                        3 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
                     };
 
@@ -7363,7 +7318,7 @@ final class MenuTest extends TestCase
                         3 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="navbar-nav-escaped navigation-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped" role="presentation-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped dropdown-menu-dark-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '            <li class="active-escaped li-class-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -7371,17 +7326,22 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher     = self::exactly(2);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentTranslatedTitle, $pageId, $pageTitleTranslated, $pageHref, $pageTarget, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $expected1, $expected2): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['role' => 'tab', 'aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
+                        1 => self::assertSame(
+                            ['role' => 'tab', 'aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
@@ -7393,7 +7353,7 @@ final class MenuTest extends TestCase
                         1 => $expected1,
                         default => $expected2,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -7411,7 +7371,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -7430,12 +7390,14 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true]),
+        );
     }
 
     /**
      * @throws Exception
-     *
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
@@ -7519,8 +7481,8 @@ final class MenuTest extends TestCase
             sprintf(
                 '$subPage should be an Instance of %s, but was %s',
                 PageInterface::class,
-                get_class($subPage)
-            )
+                $subPage::class,
+            ),
         );
         $page->addPage($subPage);
         $parentPage->addPage($page);
@@ -7546,12 +7508,11 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($parentPage, $containerParam),
@@ -7561,7 +7522,7 @@ final class MenuTest extends TestCase
                         2 => null,
                         default => $parentPage,
                     };
-                }
+                },
             );
 
         $escapePlugin = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -7628,7 +7589,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -7657,6 +7618,7 @@ final class MenuTest extends TestCase
      * @throws ExceptionInterface
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderWithPartialModel(): void
     {
@@ -7737,8 +7699,8 @@ final class MenuTest extends TestCase
             sprintf(
                 '$subPage should be an Instance of %s, but was %s',
                 PageInterface::class,
-                get_class($subPage)
-            )
+                $subPage::class,
+            ),
         );
         $page->addPage($subPage);
         $parentPage->addPage($page);
@@ -7764,12 +7726,11 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface|null
-                {
+                static function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface | null {
                     match ($matcher->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($parentPage, $containerParam),
@@ -7779,7 +7740,7 @@ final class MenuTest extends TestCase
                         2 => null,
                         default => $parentPage,
                     };
-                }
+                },
             );
 
         $escapePlugin = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -7846,7 +7807,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -7875,6 +7836,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents(): void
     {
@@ -7996,7 +7958,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -8051,25 +8013,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(4);
+        $matcher        = self::exactly(4);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -8109,12 +8070,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -8127,7 +8087,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="navbar-nav-escaped navigation-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped" role="presentation-escaped">' . PHP_EOL . '        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -8137,7 +8097,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected2);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -8155,7 +8119,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -8174,13 +8138,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParentsWithIndent(): void
     {
@@ -8303,7 +8274,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -8358,25 +8329,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(4);
+        $matcher        = self::exactly(4);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -8416,12 +8386,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -8434,7 +8403,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = $indent . '<ul class="navbar-nav-escaped navigation-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . $indent . '    <li class="nav-item-escaped active-escaped" role="presentation-escaped">' . PHP_EOL . $indent . '        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '    </li>' . PHP_EOL . $indent . '</ul>';
@@ -8444,7 +8413,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected2);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -8462,7 +8435,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -8482,13 +8455,20 @@ final class MenuTest extends TestCase
         $helper->setView($view);
         $helper->setIndent($indent);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents(): void
     {
@@ -8610,7 +8590,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -8665,25 +8645,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher        = self::exactly(2);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -8719,12 +8698,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -8737,7 +8715,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped li-class-escaped">' . PHP_EOL . '        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -8747,7 +8725,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected2);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -8765,7 +8747,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -8791,6 +8773,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents2(): void
     {
@@ -8908,26 +8891,25 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -8977,7 +8959,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -9003,6 +8985,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents3(): void
     {
@@ -9121,26 +9104,25 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -9190,7 +9172,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -9217,6 +9199,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderSubMenuWithTabsOnlyActiveBranchWithoutParents4(): void
     {
@@ -9339,7 +9322,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -9394,25 +9377,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(2);
+        $matcher        = self::exactly(2);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -9448,12 +9430,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -9466,7 +9447,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = $indent . '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . $indent . '    <li class="nav-item-escaped active-escaped li-class-escaped">' . PHP_EOL . $indent . '        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '    </li>' . PHP_EOL . $indent . '</ul>';
@@ -9476,7 +9457,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected2);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -9494,7 +9479,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -9521,6 +9506,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents2(): void
     {
@@ -9621,7 +9607,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
@@ -9645,26 +9631,25 @@ final class MenuTest extends TestCase
                     'authorization' => $auth,
                     'renderInvisible' => false,
                     'role' => $role,
-                ]
+                ],
             )
             ->willReturn($findActiveHelper);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -9714,7 +9699,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -9733,13 +9718,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false, 'minDepth' => 2]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false, 'minDepth' => 2],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents3(): void
     {
@@ -9861,7 +9853,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -9916,25 +9908,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(4);
+        $matcher        = self::exactly(4);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -9974,12 +9965,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -9992,7 +9982,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="navbar-nav-escaped navigation-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped" role="presentation-escaped">' . PHP_EOL . '        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -10002,7 +9992,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected2);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -10020,7 +10014,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -10039,13 +10033,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false, 'minDepth' => 0, 'maxDepth' => 1]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false, 'minDepth' => 0, 'maxDepth' => 1],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents4(): void
     {
@@ -10147,7 +10148,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -10200,19 +10201,18 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
@@ -10262,7 +10262,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -10281,13 +10281,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenuWithTabsOnlyActiveBranchWithoutParents5(): void
     {
@@ -10409,7 +10416,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -10464,25 +10471,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(4);
+        $matcher        = self::exactly(4);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -10522,12 +10528,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher    = self::exactly(2);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $pageLabel, $pageTitle, $pageTextDomain, $pageLabelTranslated, $pageTitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($pageLabel, $message),
                         default => self::assertSame($pageTitle, $message),
@@ -10540,7 +10545,7 @@ final class MenuTest extends TestCase
                         1 => $pageLabelTranslated,
                         default => $pageTitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="navbar-nav-escaped navigation-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . '    <li class="nav-item-escaped active-escaped li-class-escaped xxxx-escaped" role="presentation-escaped">' . PHP_EOL . '        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -10550,7 +10555,11 @@ final class MenuTest extends TestCase
             ->getMock();
         $htmlElement->expects(self::once())
             ->method('toHtml')
-            ->with('a', ['aria-current' => 'page', 'class' => 'nav-link', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'], $pageLabelTranslatedEscaped)
+            ->with(
+                'a',
+                ['aria-current' => 'page', 'class' => 'nav-link', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                $pageLabelTranslatedEscaped,
+            )
             ->willReturn($expected2);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -10568,7 +10577,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -10587,13 +10596,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false, 'liClass' => 'li-class', 'addClassToListItem' => true]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['tabs' => true, 'dark' => true, 'in-navbar' => true, 'onlyActiveBranch' => true, 'renderParents' => false, 'liClass' => 'li-class', 'addClassToListItem' => true],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu2(): void
     {
@@ -10734,15 +10750,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -10793,15 +10808,14 @@ final class MenuTest extends TestCase
         $page2->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page2->expects(self::once())
             ->method('getLiClass')
@@ -10852,15 +10866,14 @@ final class MenuTest extends TestCase
         $page3->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page3->expects(self::once())
             ->method('getLiClass')
@@ -10889,7 +10902,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -10901,16 +10914,42 @@ final class MenuTest extends TestCase
             ->willReturnCallback(
                 static function (PageInterface $pageParam, bool $recursive = true) use ($matcher, $parentParentPage, $parentPage, $page, $page2, $page3): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        2, 5 => self::assertSame($parentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        6, 7 => self::assertSame($page, $pageParam, (string) $matcher->numberOfInvocations()),
-                        3, 8 => self::assertSame($page2, $pageParam, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3, $pageParam, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2, 5 => self::assertSame(
+                            $parentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        6, 7 => self::assertSame(
+                            $page,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3, 8 => self::assertSame(
+                            $page2,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        2, 3, 4, 6 => self::assertFalse($recursive, (string) $matcher->numberOfInvocations()),
-                        default => self::assertTrue($recursive, (string) $matcher->numberOfInvocations()),
+                        2, 3, 4, 6 => self::assertFalse(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertTrue(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return true;
@@ -10959,25 +10998,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(10);
+        $matcher        = self::exactly(10);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -11009,7 +11047,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher    = self::exactly(5);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -11043,12 +11081,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(10);
+        $matcher    = self::exactly(10);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentParentLabel, $message),
                         2 => self::assertSame($parentParentTitle, $message),
@@ -11084,7 +11121,7 @@ final class MenuTest extends TestCase
                         9 => $page3LabelTranslated,
                         default => $page3TitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropdown-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropdown-escaped active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -11098,28 +11135,62 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(5);
+        $matcher     = self::exactly(5);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string {
                     self::assertSame('a', $element);
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'href' => '###', 'target' => 'self-parent'], $attribs),
-                        2 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'], $attribs),
-                        3 => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
-                        4 => self::assertSame(['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $attribs),
+                        1 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'href' => '###', 'target' => 'self-parent'],
+                            $attribs,
+                        ),
+                        2 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            $attribs,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame($parentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame($pageLabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        4 => self::assertSame($page2LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            $parentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            $pageLabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        4 => self::assertSame(
+                            $page2LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -11129,7 +11200,7 @@ final class MenuTest extends TestCase
                         4 => $expected4,
                         default => $expected5,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -11147,7 +11218,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -11173,6 +11244,7 @@ final class MenuTest extends TestCase
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu3(): void
     {
@@ -11309,15 +11381,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -11404,15 +11475,14 @@ final class MenuTest extends TestCase
         $page3->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page3->expects(self::once())
             ->method('getLiClass')
@@ -11441,7 +11511,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -11453,16 +11523,42 @@ final class MenuTest extends TestCase
             ->willReturnCallback(
                 static function (PageInterface $pageParam, bool $recursive = true) use ($matcher, $parentParentPage, $parentPage, $page, $page2, $page3): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        2, 5 => self::assertSame($parentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        6, 7 => self::assertSame($page, $pageParam, (string) $matcher->numberOfInvocations()),
-                        3, 8 => self::assertSame($page2, $pageParam, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3, $pageParam, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2, 5 => self::assertSame(
+                            $parentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        6, 7 => self::assertSame(
+                            $page,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3, 8 => self::assertSame(
+                            $page2,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        2, 3, 4, 6 => self::assertFalse($recursive, (string) $matcher->numberOfInvocations()),
-                        default => self::assertTrue($recursive, (string) $matcher->numberOfInvocations()),
+                        2, 3, 4, 6 => self::assertFalse(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertTrue(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -11514,25 +11610,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(8);
+        $matcher        = self::exactly(8);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -11566,7 +11661,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(4);
+        $matcher    = self::exactly(4);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -11598,12 +11693,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(8);
+        $matcher    = self::exactly(8);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentParentLabel, $message),
                         2 => self::assertSame($parentParentTitle, $message),
@@ -11634,7 +11728,7 @@ final class MenuTest extends TestCase
                         7 => $page3LabelTranslated,
                         default => $page3TitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropdown-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropdown-escaped active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li>' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -11647,29 +11741,56 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page3Id, $pageTitleTranslated, $page3TitleTranslated, $pageHref, $page3Href, $pageTarget, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected5): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page3Id, $pageTitleTranslated, $page3TitleTranslated, $pageHref, $page3Href, $pageTarget, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected5): string {
                     match ($matcher->numberOfInvocations()) {
                         1, 2 => self::assertSame('span', $element),
                         default => self::assertSame('a', $element),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle], $attribs),
-                        2 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle], $attribs),
-                        3 => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $attribs),
+                        1 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
+                            $attribs,
+                        ),
+                        2 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
+                            $attribs,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame($parentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame($pageLabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            $parentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            $pageLabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -11678,7 +11799,7 @@ final class MenuTest extends TestCase
                         3 => $expected3,
                         default => $expected5,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -11696,7 +11817,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -11715,13 +11836,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['onlyActiveBranch' => true, 'direction' => Menu::DROP_ORIENTATION_START, 'sublink' => Menu::STYLE_SUBLINK_SPAN]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['onlyActiveBranch' => true, 'direction' => Menu::DROP_ORIENTATION_START, 'sublink' => Menu::STYLE_SUBLINK_SPAN],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu4(): void
     {
@@ -11858,15 +11986,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -11953,15 +12080,14 @@ final class MenuTest extends TestCase
         $page3->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page3->expects(self::once())
             ->method('getLiClass')
@@ -11990,7 +12116,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -12002,16 +12128,42 @@ final class MenuTest extends TestCase
             ->willReturnCallback(
                 static function (PageInterface $pageParam, bool $recursive = true) use ($matcher, $parentParentPage, $parentPage, $page, $page2, $page3): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        2, 5 => self::assertSame($parentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        6, 7 => self::assertSame($page, $pageParam, (string) $matcher->numberOfInvocations()),
-                        3, 8 => self::assertSame($page2, $pageParam, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3, $pageParam, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2, 5 => self::assertSame(
+                            $parentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        6, 7 => self::assertSame(
+                            $page,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3, 8 => self::assertSame(
+                            $page2,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        2, 3, 4, 6 => self::assertFalse($recursive, (string) $matcher->numberOfInvocations()),
-                        default => self::assertTrue($recursive, (string) $matcher->numberOfInvocations()),
+                        2, 3, 4, 6 => self::assertFalse(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertTrue(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -12063,38 +12215,69 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(8);
+        $matcher        = self::exactly(8);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
                 static function (string $value, int $recurse = AbstractHelper::RECURSE_NONE) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame('nav navigation', $value, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame('nav-item dropend active', $value, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame('dropdown-menu', $value, (string) $matcher->numberOfInvocations()),
-                        4 => self::assertSame('parent-parent-id', $value, (string) $matcher->numberOfInvocations()),
-                        5 => self::assertSame('dropend active', $value, (string) $matcher->numberOfInvocations()),
-                        6 => self::assertSame('dropdown-menu', $value, (string) $matcher->numberOfInvocations()),
-                        7 => self::assertSame('parent-id', $value, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame('active', $value, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            'nav navigation',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            'nav-item dropend active',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            'dropdown-menu',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        4 => self::assertSame(
+                            'parent-parent-id',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        5 => self::assertSame(
+                            'dropend active',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        6 => self::assertSame(
+                            'dropdown-menu',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        7 => self::assertSame(
+                            'parent-id',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            'active',
+                            $value,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     self::assertSame(0, $recurse, (string) $matcher->numberOfInvocations());
@@ -12115,7 +12298,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(4);
+        $matcher    = self::exactly(4);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -12147,12 +12330,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(8);
+        $matcher    = self::exactly(8);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentParentLabel, $message),
                         2 => self::assertSame($parentParentTitle, $message),
@@ -12183,7 +12365,7 @@ final class MenuTest extends TestCase
                         7 => $page3LabelTranslated,
                         default => $page3TitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropend-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropend-escaped active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li>' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -12196,29 +12378,56 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(4);
+        $matcher     = self::exactly(4);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page3Id, $pageTitleTranslated, $page3TitleTranslated, $pageHref, $page3Href, $pageTarget, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected5): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page3Id, $pageTitleTranslated, $page3TitleTranslated, $pageHref, $page3Href, $pageTarget, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected5): string {
                     match ($matcher->numberOfInvocations()) {
                         1, 2 => self::assertSame('button', $element),
                         default => self::assertSame('a', $element),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'type' => 'button'], $attribs),
-                        2 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'type' => 'button'], $attribs),
-                        3 => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $attribs),
+                        1 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'type' => 'button'],
+                            $attribs,
+                        ),
+                        2 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'type' => 'button'],
+                            $attribs,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame($parentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame($pageLabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            $parentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            $pageLabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -12227,7 +12436,7 @@ final class MenuTest extends TestCase
                         3 => $expected3,
                         default => $expected5,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -12245,7 +12454,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -12264,13 +12473,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['onlyActiveBranch' => true, 'direction' => Menu::DROP_ORIENTATION_END, 'sublink' => Menu::STYLE_SUBLINK_BUTTON]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['onlyActiveBranch' => true, 'direction' => Menu::DROP_ORIENTATION_END, 'sublink' => Menu::STYLE_SUBLINK_BUTTON],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu5(): void
     {
@@ -12411,15 +12627,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -12470,15 +12685,14 @@ final class MenuTest extends TestCase
         $page2->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page2->expects(self::once())
             ->method('getLiClass')
@@ -12529,15 +12743,14 @@ final class MenuTest extends TestCase
         $page3->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page3->expects(self::once())
             ->method('getLiClass')
@@ -12566,7 +12779,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -12578,16 +12791,42 @@ final class MenuTest extends TestCase
             ->willReturnCallback(
                 static function (PageInterface $pageParam, bool $recursive = true) use ($matcher, $parentParentPage, $parentPage, $page, $page2, $page3): bool {
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        2, 5 => self::assertSame($parentPage, $pageParam, (string) $matcher->numberOfInvocations()),
-                        6, 7 => self::assertSame($page, $pageParam, (string) $matcher->numberOfInvocations()),
-                        3, 8 => self::assertSame($page2, $pageParam, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3, $pageParam, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2, 5 => self::assertSame(
+                            $parentPage,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        6, 7 => self::assertSame(
+                            $page,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3, 8 => self::assertSame(
+                            $page2,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3,
+                            $pageParam,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        2, 3, 4, 6 => self::assertFalse($recursive, (string) $matcher->numberOfInvocations()),
-                        default => self::assertTrue($recursive, (string) $matcher->numberOfInvocations()),
+                        2, 3, 4, 6 => self::assertFalse(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertTrue(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return true;
@@ -12636,25 +12875,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(10);
+        $matcher        = self::exactly(10);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -12686,7 +12924,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher    = self::exactly(5);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -12720,12 +12958,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(10);
+        $matcher    = self::exactly(10);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentParentLabel, $message),
                         2 => self::assertSame($parentParentTitle, $message),
@@ -12761,7 +12998,7 @@ final class MenuTest extends TestCase
                         9 => $page3LabelTranslated,
                         default => $page3TitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropend-escaped active-escaped">' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropend-escaped active-escaped">' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -12775,31 +13012,65 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher     = self::exactly(5);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string {
                     match ($matcher->numberOfInvocations()) {
                         1, 2 => self::assertSame('button', $element),
                         default => self::assertSame('a', $element),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'type' => 'button'], $attribs),
-                        2 => self::assertSame(['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'type' => 'button'], $attribs),
-                        3 => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
-                        4 => self::assertSame(['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $attribs),
+                        1 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'type' => 'button'],
+                            $attribs,
+                        ),
+                        2 => self::assertSame(
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'type' => 'button'],
+                            $attribs,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame($parentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame($pageLabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        4 => self::assertSame($page2LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            $parentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            $pageLabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        4 => self::assertSame(
+                            $page2LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -12809,7 +13080,7 @@ final class MenuTest extends TestCase
                         4 => $expected4,
                         default => $expected5,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -12827,7 +13098,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -12846,13 +13117,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['direction' => Menu::DROP_ORIENTATION_END, 'sublink' => Menu::STYLE_SUBLINK_BUTTON]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['direction' => Menu::DROP_ORIENTATION_END, 'sublink' => Menu::STYLE_SUBLINK_BUTTON],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu6(): void
     {
@@ -12993,15 +13271,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -13052,15 +13329,14 @@ final class MenuTest extends TestCase
         $page2->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page2->expects(self::once())
             ->method('getLiClass')
@@ -13111,15 +13387,14 @@ final class MenuTest extends TestCase
         $page3->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page3->expects(self::once())
             ->method('getLiClass')
@@ -13148,7 +13423,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -13168,8 +13443,14 @@ final class MenuTest extends TestCase
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        2, 3, 4, 6 => self::assertFalse($recursive, (string) $matcher->numberOfInvocations()),
-                        default => self::assertTrue($recursive, (string) $matcher->numberOfInvocations()),
+                        2, 3, 4, 6 => self::assertFalse(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertTrue(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return true;
@@ -13218,25 +13499,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(10);
+        $matcher        = self::exactly(10);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -13268,7 +13548,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher    = self::exactly(5);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -13302,12 +13582,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(10);
+        $matcher    = self::exactly(10);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentParentLabel, $message),
                         2 => self::assertSame($parentParentTitle, $message),
@@ -13343,7 +13622,7 @@ final class MenuTest extends TestCase
                         9 => $page3LabelTranslated,
                         default => $page3TitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped navigation-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropup-escaped active-escaped">' . PHP_EOL . '        <details>' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropup-escaped active-escaped">' . PHP_EOL . '                <details>' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '                </details>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '        </details>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -13357,31 +13636,65 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher     = self::exactly(5);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string {
                     match ($matcher->numberOfInvocations()) {
                         1, 2 => self::assertSame('summary', $element),
                         default => self::assertSame('a', $element),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle], $attribs),
-                        2 => self::assertSame(['aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle], $attribs),
-                        3 => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
-                        4 => self::assertSame(['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $attribs),
+                        1 => self::assertSame(
+                            ['aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
+                            $attribs,
+                        ),
+                        2 => self::assertSame(
+                            ['aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
+                            $attribs,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame($parentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame($pageLabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        4 => self::assertSame($page2LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            $parentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            $pageLabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        4 => self::assertSame(
+                            $page2LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -13391,7 +13704,7 @@ final class MenuTest extends TestCase
                         4 => $expected4,
                         default => $expected5,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -13409,7 +13722,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -13428,13 +13741,20 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS],
+            ),
+        );
     }
 
     /**
      * @throws Exception
      * @throws \InvalidArgumentException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderMenu7(): void
     {
@@ -13578,15 +13898,14 @@ final class MenuTest extends TestCase
         $page->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page->expects(self::once())
             ->method('getLiClass')
@@ -13637,15 +13956,14 @@ final class MenuTest extends TestCase
         $page2->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page2->expects(self::once())
             ->method('getLiClass')
@@ -13696,15 +14014,14 @@ final class MenuTest extends TestCase
         $page3->expects($matcher)
             ->method('hasPages')
             ->willReturnCallback(
-                function (bool $onlyVisible = false) use ($matcher): bool
-                {
+                static function (bool $onlyVisible = false) use ($matcher): bool {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertFalse($onlyVisible),
                         default => self::assertTrue($onlyVisible),
                     };
 
                     return false;
-                }
+                },
             );
         $page3->expects(self::once())
             ->method('getLiClass')
@@ -13733,7 +14050,7 @@ final class MenuTest extends TestCase
                 [
                     'page' => $page,
                     'depth' => 1,
-                ]
+                ],
             );
 
         $acceptHelper = $this->getMockBuilder(AcceptHelperInterface::class)
@@ -13753,8 +14070,14 @@ final class MenuTest extends TestCase
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        2, 3, 4, 6 => self::assertFalse($recursive, (string) $matcher->numberOfInvocations()),
-                        default => self::assertTrue($recursive, (string) $matcher->numberOfInvocations()),
+                        2, 3, 4, 6 => self::assertFalse(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertTrue(
+                            $recursive,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return true;
@@ -13803,25 +14126,24 @@ final class MenuTest extends TestCase
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(2);
+        $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface
-                {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
                     return $container;
-                }
+                },
             );
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(10);
+        $matcher        = self::exactly(10);
         $escapeHtmlAttr->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -13853,7 +14175,7 @@ final class MenuTest extends TestCase
         $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher    = self::exactly(5);
         $escapeHtml->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
@@ -13887,12 +14209,11 @@ final class MenuTest extends TestCase
         $translator = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher = self::exactly(10);
+        $matcher    = self::exactly(10);
         $translator->expects($matcher)
             ->method('__invoke')
             ->willReturnCallback(
-                function (string $message, ?string $textDomain = null, ?string $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string
-                {
+                static function (string $message, string | null $textDomain = null, string | null $locale = null) use ($matcher, $parentParentLabel, $parentParentTitle, $parentParentTextDomain, $parentLabel, $parentTitle, $parentTextDomain, $pageLabel, $pageTitle, $pageTextDomain, $page2Label, $page2Title, $page2TextDomain, $page3Label, $page3Title, $page3TextDomain, $parentParentTranslatedLabel, $parentParentTranslatedTitle, $parentTranslatedLabel, $parentTranslatedTitle, $pageLabelTranslated, $pageTitleTranslated, $page2LabelTranslated, $page2TitleTranslated, $page3LabelTranslated, $page3TitleTranslated): string {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($parentParentLabel, $message),
                         2 => self::assertSame($parentParentTitle, $message),
@@ -13928,7 +14249,7 @@ final class MenuTest extends TestCase
                         9 => $page3LabelTranslated,
                         default => $page3TitleTranslated,
                     };
-                }
+                },
             );
 
         $expected = '<ul class="nav-escaped ul-class-escaped ul-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropup-escaped li-active-escaped">' . PHP_EOL . '        <details>' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropup-escaped li-active-escaped">' . PHP_EOL . '                <details>' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="li-active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '                </details>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '        </details>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
@@ -13942,31 +14263,65 @@ final class MenuTest extends TestCase
         $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher      = self::exactly(5);
+        $matcher     = self::exactly(5);
         $htmlElement->expects($matcher)
             ->method('toHtml')
             ->willReturnCallback(
-                function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string
-                {
+                static function (string $element, array $attribs, string $content) use ($matcher, $parentParentTranslatedTitle, $parentTranslatedTitle, $pageId, $page2Id, $page3Id, $pageTitleTranslated, $page2TitleTranslated, $page3TitleTranslated, $pageHref, $page2Href, $page3Href, $pageTarget, $page2Target, $page3Target, $parentParentTranslatedLabelEscaped, $parentTranslatedLabelEscaped, $pageLabelTranslatedEscaped, $page2LabelTranslatedEscaped, $page3LabelTranslatedEscaped, $expected1, $expected2, $expected3, $expected4, $expected5): string {
                     match ($matcher->numberOfInvocations()) {
                         1, 2 => self::assertSame('summary', $element),
                         default => self::assertSame('a', $element),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame(['aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle], $attribs),
-                        2 => self::assertSame(['aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle], $attribs),
-                        3 => self::assertSame(['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget], $attribs),
-                        4 => self::assertSame(['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target], $attribs),
-                        default => self::assertSame(['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target], $attribs),
+                        1 => self::assertSame(
+                            ['aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
+                            $attribs,
+                        ),
+                        2 => self::assertSame(
+                            ['aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
+                            $attribs,
+                        ),
+                        3 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            $attribs,
+                        ),
+                        4 => self::assertSame(
+                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            $attribs,
+                        ),
+                        default => self::assertSame(
+                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            $attribs,
+                        ),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        1 => self::assertSame($parentParentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        2 => self::assertSame($parentTranslatedLabelEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        3 => self::assertSame($pageLabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        4 => self::assertSame($page2LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
-                        default => self::assertSame($page3LabelTranslatedEscaped, $content, (string) $matcher->numberOfInvocations()),
+                        1 => self::assertSame(
+                            $parentParentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        2 => self::assertSame(
+                            $parentTranslatedLabelEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        3 => self::assertSame(
+                            $pageLabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        4 => self::assertSame(
+                            $page2LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
+                        default => self::assertSame(
+                            $page3LabelTranslatedEscaped,
+                            $content,
+                            (string) $matcher->numberOfInvocations(),
+                        ),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -13976,7 +14331,7 @@ final class MenuTest extends TestCase
                         4 => $expected4,
                         default => $expected5,
                     };
-                }
+                },
             );
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
@@ -13994,7 +14349,7 @@ final class MenuTest extends TestCase
             $renderer,
             $escapeHtml,
             $htmlElement,
-            $translator
+            $translator,
         );
 
         $helper->setRole($role);
@@ -14013,6 +14368,12 @@ final class MenuTest extends TestCase
         assert($view instanceof PhpRenderer);
         $helper->setView($view);
 
-        self::assertSame($expected, $helper->renderMenu($name, ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass]));
+        self::assertSame(
+            $expected,
+            $helper->renderMenu(
+                $name,
+                ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass],
+            ),
+        );
     }
 }

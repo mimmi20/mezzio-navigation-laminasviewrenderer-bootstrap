@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,36 +13,36 @@ declare(strict_types = 1);
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use InvalidArgumentException;
+use Laminas\I18n\Exception\RuntimeException;
 use Laminas\I18n\View\Helper\Translate;
-use Psr\Log\LoggerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception;
 use Laminas\View\Helper\AbstractHtmlElement;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Psr\Log\LoggerInterface;
 use RecursiveIteratorIterator;
 
 use function array_diff_key;
+use function array_filter;
 use function array_flip;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
 use function assert;
-use function get_class;
-use function gettype;
+use function get_debug_type;
 use function implode;
 use function is_bool;
 use function is_int;
-use function is_object;
 use function is_string;
 use function rtrim;
 use function sprintf;
@@ -52,6 +52,8 @@ use const PHP_EOL;
 
 /**
  * Helper for rendering menus from navigation containers.
+ *
+ * phpcs:disable SlevomatCodingStandard.Classes.TraitUseDeclaration.MultipleTraitsPerDeclaration
  */
 final class Menu extends AbstractHtmlElement implements MenuInterface
 {
@@ -60,24 +62,30 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     }
 
     public const STYLE_UL = 'ul';
+
     public const STYLE_OL = 'ol';
 
-    public const STYLE_SUBLINK_LINK    = 'link';
-    public const STYLE_SUBLINK_SPAN    = 'span';
-    public const STYLE_SUBLINK_BUTTON  = 'button';
+    public const STYLE_SUBLINK_LINK = 'link';
+
+    public const STYLE_SUBLINK_SPAN = 'span';
+
+    public const STYLE_SUBLINK_BUTTON = 'button';
+
     public const STYLE_SUBLINK_DETAILS = 'details';
 
-    public const DROP_ORIENTATION_DOWN  = 'down';
-    public const DROP_ORIENTATION_UP    = 'up';
+    public const DROP_ORIENTATION_DOWN = 'down';
+
+    public const DROP_ORIENTATION_UP = 'up';
+
     public const DROP_ORIENTATION_START = 'start';
-    public const DROP_ORIENTATION_END   = 'end';
 
-    private ?Translate $translator = null;
+    public const DROP_ORIENTATION_END = 'end';
 
-    private EscapeHtml $escapeHtml;
-
-    private HtmlElementInterface $htmlElement;
-
+    /**
+     * @return void
+     *
+     * @throws void
+     */
     public function __construct(
         ServiceLocatorInterface $serviceLocator,
         LoggerInterface $logger,
@@ -85,9 +93,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         ContainerParserInterface $containerParser,
         EscapeHtmlAttr $escaper,
         PartialRendererInterface $renderer,
-        EscapeHtml $escapeHtml,
-        HtmlElementInterface $htmlElement,
-        ?Translate $translator = null
+        private readonly EscapeHtml $escapeHtml,
+        private readonly HtmlElementInterface $htmlElement,
+        private readonly Translate | null $translator = null,
     ) {
         $this->serviceLocator  = $serviceLocator;
         $this->logger          = $logger;
@@ -95,9 +103,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         $this->containerParser = $containerParser;
         $this->escaper         = $escaper;
         $this->renderer        = $renderer;
-        $this->escapeHtml      = $escapeHtml;
-        $this->translator      = $translator;
-        $this->htmlElement     = $htmlElement;
     }
 
     /**
@@ -109,18 +114,16 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * using the given partial script. If no partial is registered, the menu
      * will be rendered as an 'ul' element by the helper's internal method.
      *
-     * @see renderPartial()
-     * @see renderMenu()
-     *
-     * @param ContainerInterface|string|null $container [optional] container to render.
+     * @param ContainerInterface<PageInterface>|string|null $container [optional] container to render.
      *                                                  Default is null, which indicates
      *                                                  that the helper should render
      *                                                  the container returned by {@link getContainer()}.
      *
      * @throws InvalidArgumentException
      * @throws Exception\RuntimeException
+     * @throws RuntimeException
      */
-    public function render($container = null): string
+    public function render(ContainerInterface | string | null $container = null): string
     {
         $partial = $this->getPartial();
 
@@ -139,18 +142,19 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *
      * Available $options:
      *
-     * @param ContainerInterface|string|null      $container [optional] container to create menu from.
-     *                                                       Default is to use the container retrieved from {@link getContainer()}.
-     * @param array<string, bool|int|string|null> $options   [optional] options for controlling rendering
+     * @param ContainerInterface<PageInterface>|string|null $container [optional] container to create menu from.
+     *                                                  Default is to use the container retrieved from {@link getContainer()}.
+     * @param array<string, bool|int|string|null>           $options   [optional] options for controlling rendering
      * @phpstan-param array{in-navbar?: bool, ulClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, onlyActiveBranch?: bool, renderParents?: bool, indent?: int|string|null} $options
      *
      * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
-    public function renderMenu($container = null, array $options = []): string
+    public function renderMenu(ContainerInterface | string | null $container = null, array $options = []): string
     {
         $container = $this->containerParser->parseContainer($container);
 
-        if (null === $container) {
+        if ($container === null) {
             $container = $this->getContainer();
         }
 
@@ -159,16 +163,10 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         assert($container instanceof ContainerInterface);
 
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
-            return $this->renderDeepestMenu(
-                $container,
-                $options
-            );
+            return $this->renderDeepestMenu($container, $options);
         }
 
-        return $this->renderNormalMenu(
-            $container,
-            $options
-        );
+        return $this->renderNormalMenu($container, $options);
     }
 
     /**
@@ -188,41 +186,43 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * ));
      * </code>
      *
-     * @param ContainerInterface|string|null $container     [optional] container to create menu from.
+     * @param ContainerInterface<PageInterface>|string|null $container     [optional] container to create menu from.
      *                                                      Default is to use the container retrieved from {@link getContainer()}.
-     * @param string|null                    $ulClass       [optional] CSS class to use for UL element.
-     *                                                      Default is to use the value from {@link getUlClass()}.
-     * @param string|null                    $liClass       [optional] CSS class to use for LI elements.
-     *                                                      Default is to use the value from {@link getLiClass()}.
-     * @param int|string|null                $indent        [optional] indentation as a string or number
-     *                                                      of spaces. Default is to use the value retrieved from
-     *                                                      {@link getIndent()}.
-     * @param string|null                    $liActiveClass [optional] CSS class to use for UL
-     *                                                      element. Default is to use the value from {@link getUlClass()}.
+     * @param string|null                                   $ulClass       [optional] CSS class to use for UL element.
+     *                                                                     Default is to use the value from {@link getUlClass()}.
+     * @param string|null                                   $liClass       [optional] CSS class to use for LI elements.
+     *                                                                     Default is to use the value from {@link getLiClass()}.
+     * @param int|string|null                               $indent        [optional] indentation as a string or number
+     *                                                                     of spaces. Default is to use the value retrieved from
+     *                                                                     {@link getIndent()}.
+     * @param string|null                                   $liActiveClass [optional] CSS class to use for UL
+     *                                                                     element. Default is to use the value from {@link getUlClass()}.
      *
      * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function renderSubMenu(
-        $container = null,
-        ?string $ulClass = null,
-        ?string $liClass = null,
-        $indent = null,
-        ?string $liActiveClass = null
+        ContainerInterface | string | null $container = null,
+        string | null $ulClass = null,
+        string | null $liClass = null,
+        int | string | null $indent = null,
+        string | null $liActiveClass = null,
     ): string {
+        $this->setMaxDepth(null);
+        $this->setMinDepth(null);
+        $this->setRenderParents(false);
+        $this->setAddClassToListItem(false);
+
         return $this->renderMenu(
             $container,
             [
                 'indent' => $indent,
                 'ulClass' => $ulClass,
                 'liClass' => $liClass,
-                'minDepth' => null,
-                'maxDepth' => null,
                 'onlyActiveBranch' => true,
-                'renderParents' => false,
                 'escapeLabels' => true,
-                'addClassToListItem' => false,
                 'liActiveClass' => $liActiveClass,
-            ]
+            ],
         );
     }
 
@@ -233,8 +233,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * Overrides {@link AbstractHelper::htmlify()}.
      *
      * @param PageInterface $page               page to generate HTML for
-     * @param bool          $escapeLabel        Whether or not to escape the label
-     * @param bool          $addClassToListItem Whether or not to add the page class to the list item
+     * @param bool          $escapeLabel        Whether to escape the label
+     * @param bool          $addClassToListItem Whether to add the page class to the list item
+     *
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
@@ -246,16 +249,16 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     /**
      * Renders the deepest active menu within [minDepth, maxDepth], (called from {@link renderMenu()}).
      *
-     * @param ContainerInterface                  $container container to render
+     * @param ContainerInterface<PageInterface>   $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, renderParents: bool, escapeLabels: bool, addClassToListItem: bool, role: string|null, liActiveClass: string, liRole?: string|null, ulRole?: string|null} $options
      *
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
-    private function renderDeepestMenu(
-        ContainerInterface $container,
-        array $options
-    ): string {
+    private function renderDeepestMenu(ContainerInterface $container, array $options): string
+    {
         assert(is_string($options['ulClass']));
         assert(is_string($options['liClass']));
         assert(is_string($options['indent']));
@@ -291,8 +294,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             sprintf(
                 '$activePage should be an Instance of %s, but was %s',
                 ContainerInterface::class,
-                is_object($activePage) ? get_class($activePage) : gettype($activePage)
-            )
+                get_debug_type($activePage),
+            ),
         );
 
         $subHtml = '';
@@ -308,18 +311,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $liClasses      = [];
             $pageAttributes = [];
 
-            $this->setAttributes(
-                $subPage,
-                $options,
-                0,
-                false,
-                $isActive,
-                $liClasses,
-                $pageAttributes
-            );
+            $this->setAttributes($subPage, $options, 0, false, $isActive, $liClasses, $pageAttributes);
 
             $subHtml .= $options['indent'] . '    <li';
-            if ([] !== $liClasses) {
+
+            if ($liClasses !== []) {
                 $subHtml .= ' class="' . ($this->escaper)(implode(' ', $liClasses)) . '"';
             }
 
@@ -329,21 +325,17 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
             $subHtml .= '>' . PHP_EOL;
             $subHtml .= $options['indent'] . '        ';
-            $subHtml .= $this->toHtml(
-                $subPage,
-                $options,
-                $pageAttributes,
-                false
-            );
+            $subHtml .= $this->toHtml($subPage, $options, $pageAttributes, false);
             $subHtml .= PHP_EOL;
             $subHtml .= $options['indent'] . '    </li>' . PHP_EOL;
         }
 
-        if ('' === $subHtml) {
+        if ($subHtml === '') {
             return '';
         }
 
         $html = $options['indent'] . '<ul';
+
         if ($options['ulClass']) {
             $html .= ' class="' . ($this->escaper)($options['ulClass']) . '"';
         }
@@ -353,44 +345,40 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         }
 
         $html .= '>' . PHP_EOL;
-        $html .= $subHtml . $options['indent'] . '</ul>';
 
-        return $html;
+        return $html . ($subHtml . $options['indent'] . '</ul>');
     }
 
     /**
      * Renders a normal menu (called from {@link renderMenu()}).
      *
-     * @param ContainerInterface                  $container container to render
+     * @param ContainerInterface<PageInterface>   $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      *
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws RuntimeException
      */
-    private function renderNormalMenu(
-        ContainerInterface $container,
-        array $options
-    ): string {
+    private function renderNormalMenu(ContainerInterface $container, array $options): string
+    {
         $html = '';
 
         assert(is_string($options['ulClass']));
         assert(is_string($options['liClass']));
         assert(is_string($options['indent']));
         assert(is_int($options['minDepth']));
-        assert(is_int($options['maxDepth']) || null === $options['maxDepth']);
+        assert(is_int($options['maxDepth']) || $options['maxDepth'] === null);
         assert(is_bool($options['onlyActiveBranch']));
         assert(is_bool($options['escapeLabels']));
         assert(is_bool($options['addClassToListItem']));
         assert(is_string($options['liActiveClass']));
-        assert(is_string($options['role']) || null === $options['role']);
+        assert(is_string($options['role']) || $options['role'] === null);
 
         // find deepest active
         $found = $this->findActive($container, $options['minDepth'], $options['maxDepth']);
 
         // create iterator
-        $iterator = new RecursiveIteratorIterator(
-            $container,
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+        $iterator = new RecursiveIteratorIterator($container, RecursiveIteratorIterator::SELF_FIRST);
 
         if (is_int($options['maxDepth'])) {
             $iterator->setMaxDepth($options['maxDepth']);
@@ -400,14 +388,10 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         $prevDepth = -1;
         $prevPage  = null;
 
-        switch ($options['style']) {
-            case self::STYLE_OL:
-                $element = 'ol';
-                break;
-            case self::STYLE_UL:
-            default:
-                $element = 'ul';
-        }
+        $element = match ($options['style']) {
+            self::STYLE_OL => 'ol',
+            default => 'ul',
+        };
 
         foreach ($iterator as $page) {
             assert($page instanceof PageInterface);
@@ -430,7 +414,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
             if ($depth > $prevDepth) {
                 // start new ul tag
-                if (0 === $depth) {
+                if ($depth === 0) {
                     $ulClass = ' class="' . ($this->escaper)($options['ulClass']) . '"';
 
                     if (!empty($options['ulRole'])) {
@@ -439,11 +423,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 } else {
                     $ulClasses = [];
 
-                    if (self::STYLE_SUBLINK_DETAILS === $options['sublink']) {
-                        $ulClasses[] = 'dropdown-details-menu';
-                    } else {
-                        $ulClasses[] = 'dropdown-menu';
-                    }
+                    $ulClasses[] = $options['sublink'] === self::STYLE_SUBLINK_DETAILS
+                        ? 'dropdown-details-menu'
+                        : 'dropdown-menu';
 
                     if (array_key_exists('dark', $options)) {
                         $ulClasses[] = 'dropdown-menu-dark';
@@ -451,7 +433,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
                     $ulClass = ' class="' . ($this->escaper)(implode(' ', $ulClasses)) . '"';
 
-                    if (null !== $prevPage && null !== $prevPage->getId()) {
+                    if ($prevPage?->getId() !== null) {
                         $ulClass .= ' aria-labelledby="' . ($this->escaper)($prevPage->getId()) . '"';
                     }
                 }
@@ -464,7 +446,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                     $html .= $ind . '    </li>' . PHP_EOL;
                     $html .= $ind . '</' . $element . '>' . PHP_EOL;
 
-                    if (self::STYLE_SUBLINK_DETAILS !== $options['sublink']) {
+                    if ($options['sublink'] !== self::STYLE_SUBLINK_DETAILS) {
                         continue;
                     }
 
@@ -491,32 +473,28 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $anySubpageAccepted,
                 $isActive,
                 $liClasses,
-                $pageAttributes
+                $pageAttributes,
             );
 
-            if ([] === $liClasses) {
-                $liClass = '';
-            } else {
-                $liClass = ' class="' . ($this->escaper)(implode(' ', array_unique($liClasses))) . '"';
-            }
+            $liClass = $liClasses === []
+                ? ''
+                : ' class="' . ($this->escaper)(implode(
+                    ' ',
+                    array_unique($liClasses),
+                )) . '"';
 
-            if (0 === $depth && !empty($options['liRole'])) {
+            if ($depth === 0 && !empty($options['liRole'])) {
                 $liClass .= ' role="' . ($this->escaper)($options['liRole']) . '"';
             }
 
             $html .= $myIndent . '    <li' . $liClass . '>' . PHP_EOL;
 
-            if ($anySubpageAccepted && self::STYLE_SUBLINK_DETAILS === $options['sublink']) {
+            if ($anySubpageAccepted && $options['sublink'] === self::STYLE_SUBLINK_DETAILS) {
                 $html .= $myIndent . '        <details>' . PHP_EOL;
             }
 
             $html .= $myIndent . '        ';
-            $html .= $this->toHtml(
-                $page,
-                $options,
-                $pageAttributes,
-                $anySubpageAccepted
-            );
+            $html .= $this->toHtml($page, $options, $pageAttributes, $anySubpageAccepted);
             $html .= PHP_EOL;
 
             // store as previous depth for next iteration
@@ -531,7 +509,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $html    .= $myIndent . '    </li>' . PHP_EOL;
                 $html    .= $myIndent . '</' . $element . '>' . PHP_EOL;
 
-                if (1 >= $i || self::STYLE_SUBLINK_DETAILS !== $options['sublink']) {
+                if (1 >= $i || $options['sublink'] !== self::STYLE_SUBLINK_DETAILS) {
                     continue;
                 }
 
@@ -564,29 +542,19 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $options['indent'] = $this->getIndent();
         }
 
-        if (isset($options['liClass']) && null !== $options['liClass']) {
-            $options['liClass'] = (string) $options['liClass'];
-        } else {
+        if (!array_key_exists('liClass', $options) || $options['liClass'] === null) {
             $options['liClass'] = $this->getLiClass();
         }
 
-        if (array_key_exists('minDepth', $options)) {
-            if (null !== $options['minDepth']) {
-                $options['minDepth'] = (int) $options['minDepth'];
-            }
-        } else {
+        if (!array_key_exists('minDepth', $options) || $options['minDepth'] === null) {
             $options['minDepth'] = $this->getMinDepth();
         }
 
-        if (0 > $options['minDepth'] || null === $options['minDepth']) {
+        if ($options['minDepth'] < 0 || $options['minDepth'] === null) {
             $options['minDepth'] = 0;
         }
 
-        if (array_key_exists('maxDepth', $options)) {
-            if (null !== $options['maxDepth']) {
-                $options['maxDepth'] = (int) $options['maxDepth'];
-            }
-        } else {
+        if (!array_key_exists('maxDepth', $options) || $options['maxDepth'] === null) {
             $options['maxDepth'] = $this->getMaxDepth();
         }
 
@@ -606,13 +574,15 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $options['addClassToListItem'] = $this->getAddClassToListItem();
         }
 
-        if (array_key_exists('liActiveClass', $options) && null !== $options['liActiveClass']) {
-            $options['liActiveClass'] = (string) $options['liActiveClass'];
-        } else {
+        if (!array_key_exists('liActiveClass', $options) || $options['liActiveClass'] === null) {
             $options['liActiveClass'] = $this->getLiActiveClass();
         }
 
-        if (array_key_exists('vertical', $options) && is_string($options['vertical']) && !array_key_exists('direction', $options)) {
+        if (
+            array_key_exists('vertical', $options)
+            && is_string($options['vertical'])
+            && !array_key_exists('direction', $options)
+        ) {
             $options['direction'] = self::DROP_ORIENTATION_END;
         } elseif (!array_key_exists('direction', $options)) {
             $options['direction'] = self::DROP_ORIENTATION_DOWN;
@@ -649,15 +619,17 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param PageInterface                       $page    current page to check
      * @param array<string, bool|int|string|null> $options options for controlling rendering
      * @param int                                 $level   current level of rendering
+     *
+     * @throws void
      */
     private function hasAcceptedSubpages(PageInterface $page, array $options, int $level): bool
     {
         $hasVisiblePages    = $page->hasPages(true);
         $anySubpageAccepted = false;
 
-        assert(is_int($options['maxDepth']) || null === $options['maxDepth']);
+        assert(is_int($options['maxDepth']) || $options['maxDepth'] === null);
 
-        if ($hasVisiblePages && (null === $options['maxDepth'] || $level + 1 <= $options['maxDepth'])) {
+        if ($hasVisiblePages && ($options['maxDepth'] === null || $level + 1 <= $options['maxDepth'])) {
             foreach ($page->getPages() as $subpage) {
                 if (!$this->accept($subpage, false)) {
                     continue;
@@ -678,6 +650,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @phpstan-param array{page?: PageInterface|null, depth?: int|null} $found
      *
      * @return array<bool>
+     *
+     * @throws void
      */
     private function isPageAccepted(PageInterface $page, array $options, int $level, array $found): array
     {
@@ -689,7 +663,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         $isActive = $page->isActive(true);
         $accept   = true;
 
-        assert(is_int($options['maxDepth']) || null === $options['maxDepth']);
+        assert(is_int($options['maxDepth']) || $options['maxDepth'] === null);
 
         if ($options['onlyActiveBranch'] && !$isActive) {
             // page is not active itself, but might be in the active branch
@@ -705,6 +679,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param int                                 $level          current level of rendering
      * @param array<int, string>                  $liClasses
      * @param array<string, string>               $pageAttributes
+     *
+     * @throws void
      */
     private function setAttributes(
         PageInterface $page,
@@ -713,11 +689,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         bool $anySubpageAccepted,
         bool $isActive,
         array &$liClasses,
-        array &$pageAttributes
+        array &$pageAttributes,
     ): void {
         $pageClasses = [];
 
-        if (0 === $level) {
+        if ($level === 0) {
             $liClasses[]   = 'nav-item';
             $pageClasses[] = 'nav-link';
 
@@ -729,26 +705,21 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         }
 
         if ($anySubpageAccepted) {
-            switch ($options['direction']) {
-                case self::DROP_ORIENTATION_UP:
-                    $liClasses[] = 'dropup';
-                    break;
-                case self::DROP_ORIENTATION_END:
-                    $liClasses[] = 'dropend';
-                    break;
-                case self::DROP_ORIENTATION_START:
-                    $liClasses[] = 'dropstart';
-                    break;
-                case self::DROP_ORIENTATION_DOWN:
-                default:
-                    $liClasses[] = 'dropdown';
-            }
+            $liClasses[] = match ($options['direction']) {
+                self::DROP_ORIENTATION_UP => 'dropup',
+                self::DROP_ORIENTATION_END => 'dropend',
+                self::DROP_ORIENTATION_START => 'dropstart',
+                default => 'dropdown',
+            };
 
-            if (self::STYLE_SUBLINK_BUTTON === $options['sublink'] || self::STYLE_SUBLINK_DETAILS === $options['sublink']) {
+            if (
+                $options['sublink'] === self::STYLE_SUBLINK_BUTTON
+                || $options['sublink'] === self::STYLE_SUBLINK_DETAILS
+            ) {
                 $pageClasses[] = 'btn';
             }
 
-            if (self::STYLE_SUBLINK_DETAILS !== $options['sublink']) {
+            if ($options['sublink'] !== self::STYLE_SUBLINK_DETAILS) {
                 $pageClasses[]                    = 'dropdown-toggle';
                 $pageAttributes['data-bs-toggle'] = 'dropdown';
             }
@@ -761,7 +732,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         if ($isActive) {
             $liClasses[] = $options['liActiveClass'];
 
-            if (0 === $level) {
+            if ($level === 0) {
                 $pageAttributes['aria-current'] = 'page';
             }
         }
@@ -792,20 +763,19 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param array<string, string>               $attributes
      *
      * @return string HTML string
+     *
+     * @throws RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
-    private function toHtml(
-        PageInterface $page,
-        array $options,
-        array $attributes,
-        bool $anySubpageAccepted
-    ): string {
+    private function toHtml(PageInterface $page, array $options, array $attributes, bool $anySubpageAccepted): string
+    {
         $label = (string) $page->getLabel();
         $title = $page->getTitle();
 
-        if (null !== $this->translator) {
+        if ($this->translator !== null) {
             $label = ($this->translator)($label, $page->getTextDomain());
 
-            if (null !== $title) {
+            if ($title !== null) {
                 $title = ($this->translator)($title, $page->getTextDomain());
             }
         }
@@ -815,12 +785,18 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         $attributes['id']    = $page->getId();
         $attributes['title'] = $title;
 
-        if ($anySubpageAccepted && self::STYLE_SUBLINK_DETAILS === $options['sublink']) {
+        if ($anySubpageAccepted && $options['sublink'] === self::STYLE_SUBLINK_DETAILS) {
             $element = 'summary';
-        } elseif ($anySubpageAccepted && self::STYLE_SUBLINK_BUTTON === $options['sublink']) {
+        } elseif ($anySubpageAccepted && $options['sublink'] === self::STYLE_SUBLINK_BUTTON) {
             $element            = 'button';
             $attributes['type'] = 'button';
-        } elseif (($anySubpageAccepted && self::STYLE_SUBLINK_SPAN === $options['sublink']) || !$page->getHref()) {
+        } elseif (
+            (
+                $anySubpageAccepted
+                && $options['sublink'] === self::STYLE_SUBLINK_SPAN
+            )
+            || !$page->getHref()
+        ) {
             $element = 'span';
         } else {
             $element              = 'a';
@@ -830,8 +806,14 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         // remove sitemap specific attributes
         $attributes = array_diff_key(
-            array_merge($attributes, $page->getCustomProperties()),
-            array_flip(['lastmod', 'changefreq', 'priority'])
+            array_merge(
+                $attributes,
+                array_filter(
+                    $page->getCustomProperties(),
+                    static fn ($propertyValue): bool => is_string($propertyValue),
+                ),
+            ),
+            array_flip(['lastmod', 'changefreq', 'priority']),
         );
 
         if ($options['escapeLabels']) {
@@ -844,22 +826,17 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
     /**
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
      *
      * @throws InvalidArgumentException
      */
     private function normalizeUlClass(array $options): string
     {
-        if (array_key_exists('in-navbar', $options)) {
-            $ulClasses = ['navbar-nav'];
-        } else {
-            $ulClasses = ['nav'];
-        }
+        $ulClasses = array_key_exists('in-navbar', $options) ? ['navbar-nav'] : ['nav'];
 
-        if (isset($options['ulClass']) && null !== $options['ulClass']) {
-            $ulClasses[] = (string) $options['ulClass'];
-        } else {
-            $ulClasses[] = $this->getUlClass();
-        }
+        $ulClasses[] = array_key_exists('ulClass', $options) && $options['ulClass'] !== null
+            ? $options['ulClass']
+            : $this->getUlClass();
 
         foreach (
             [
@@ -888,6 +865,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
     /**
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
      *
      * @throws InvalidArgumentException
      */

@@ -2,7 +2,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2023, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,10 +13,10 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Compare;
 
 use Laminas\Config\Config;
+use Laminas\Config\Exception\InvalidArgumentException;
 use Laminas\Config\Exception\RuntimeException;
 use Laminas\Config\Factory as ConfigFactory;
 use Laminas\I18n\Translator\Translator;
-use Psr\Log\LoggerInterface;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
 use Laminas\Permissions\Acl\Role\GenericRole;
@@ -24,7 +24,6 @@ use Laminas\ServiceManager\Exception\ContainerModificationsNotAllowedException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mimmi20\Mezzio\GenericAuthorization\Acl\LaminasAcl;
 use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
 use Mezzio\Helper\UrlHelper as BaseUrlHelper;
 use Mezzio\LaminasView\HelperPluginManagerFactory;
@@ -32,9 +31,15 @@ use Mezzio\LaminasView\LaminasViewRenderer;
 use Mezzio\LaminasView\LaminasViewRendererFactory;
 use Mezzio\LaminasView\ServerUrlHelper;
 use Mezzio\LaminasView\UrlHelper;
+use Mezzio\Router\Route;
+use Mezzio\Router\RouteResult;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementFactory;
+use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererFactory;
+use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\Mezzio\GenericAuthorization\Acl\LaminasAcl;
 use Mimmi20\Mezzio\Navigation\Config\NavigationConfig;
 use Mimmi20\Mezzio\Navigation\Config\NavigationConfigInterface;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\NavigationFactory;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\ServerUrlHelperFactory;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\UrlHelperFactory;
@@ -43,12 +48,6 @@ use Mimmi20\Mezzio\Navigation\Page\PageFactory;
 use Mimmi20\Mezzio\Navigation\Page\PageFactoryInterface;
 use Mimmi20\Mezzio\Navigation\Service\ConstructedNavigationFactory;
 use Mimmi20\Mezzio\Navigation\Service\DefaultNavigationFactory;
-use Mezzio\Router\Route;
-use Mezzio\Router\RouteResult;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementFactory;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererFactory;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\Accept\AcceptHelperFactory;
 use Mimmi20\NavigationHelper\Accept\AcceptHelperInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserFactory;
@@ -67,12 +66,11 @@ use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use Psr\Log\LoggerInterface;
 
 use function assert;
 use function file_get_contents;
-use function get_class;
-use function gettype;
-use function is_object;
+use function get_debug_type;
 use function sprintf;
 
 /**
@@ -86,16 +84,6 @@ abstract class AbstractTestCase extends TestCase
      * Path to files needed for test
      */
     protected string $files;
-
-    /**
-     * Class name for view helper to test
-     */
-    protected string $helperName;
-
-    /**
-     * View helper
-     */
-    protected ViewHelperInterface $helper;
 
     /**
      * The first container in the config file (files/navigation.xml)
@@ -117,7 +105,7 @@ abstract class AbstractTestCase extends TestCase
      *
      * @throws Exception
      * @throws ContainerExceptionInterface
-     * @throws \Laminas\Config\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws RuntimeException
      */
     protected function setUp(): void
@@ -144,7 +132,7 @@ abstract class AbstractTestCase extends TestCase
             function () use ($config): NavigationConfig {
                 $route = new Route(
                     '/test.html',
-                    $this->createMock(MiddlewareInterface::class)
+                    $this->createMock(MiddlewareInterface::class),
                 );
 
                 $pages            = $config->toArray();
@@ -157,11 +145,11 @@ abstract class AbstractTestCase extends TestCase
                     [
                         'route' => 'post',
                         'id' => '1337',
-                    ]
+                    ],
                 ));
 
                 return $navConfig;
-            }
+            },
         );
         $sm->setFactory(PageFactory::class, InvokableFactory::class);
         $sm->setAlias(PageFactoryInterface::class, PageFactory::class);
@@ -208,7 +196,7 @@ abstract class AbstractTestCase extends TestCase
                         'test::bc-with-partials' => __DIR__ . '/_files/mvc/views/bc_with_partial_params.phtml',
                     ],
                 ],
-            ]
+            ],
         );
         $sm->setFactory(ViewHelperPluginManager::class, HelperPluginManagerFactory::class);
         $sm->setFactory(LaminasViewRenderer::class, LaminasViewRendererFactory::class);
@@ -246,8 +234,8 @@ abstract class AbstractTestCase extends TestCase
             sprintf(
                 '$nav1 should be an Instance of %s, but was %s',
                 Navigation::class,
-                is_object($nav1) ? get_class($nav1) : gettype($nav1)
-            )
+                get_debug_type($nav1),
+            ),
         );
         assert($nav2 instanceof Navigation);
         assert($nav3 instanceof Navigation);
@@ -271,7 +259,10 @@ abstract class AbstractTestCase extends TestCase
     {
         $content = file_get_contents($this->files . '/expected/' . $file);
 
-        static::assertIsString($content, sprintf('could not load file %s', $this->files . '/expected/' . $file));
+        static::assertIsString(
+            $content,
+            sprintf('could not load file %s', $this->files . '/expected/' . $file),
+        );
 
         return $content;
     }
@@ -326,7 +317,7 @@ abstract class AbstractTestCase extends TestCase
 
         $translator = new Translator();
         $translator->getPluginManager()->setService('default', $loader);
-        $translator->addTranslationFile('default', null);
+        $translator->addTranslationFile('default', '');
 
         return $translator;
     }
@@ -361,8 +352,8 @@ abstract class AbstractTestCase extends TestCase
         $translator = new Translator();
         $translator->getPluginManager()->setService('default1', $loader1);
         $translator->getPluginManager()->setService('default2', $loader2);
-        $translator->addTranslationFile('default1', null, 'LaminasTest_1');
-        $translator->addTranslationFile('default2', null, 'LaminasTest_2');
+        $translator->addTranslationFile('default1', '', 'LaminasTest_1');
+        $translator->addTranslationFile('default2', 'null', 'LaminasTest_2');
 
         return $translator;
     }
