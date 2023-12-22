@@ -421,11 +421,12 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                         $ulClass .= ' role="' . ($this->escaper)($options['ulRole']) . '"';
                     }
                 } else {
-                    $ulClasses = [];
+                    $ulClasses = ['dropdown-menu'];
 
-                    $ulClasses[] = $options['sublink'] === self::STYLE_SUBLINK_DETAILS
-                        ? 'dropdown-details-menu'
-                        : 'dropdown-menu';
+                    if ($options['sublink'] === self::STYLE_SUBLINK_DETAILS)  {
+                        $ulClasses[] = 'dropdown-details-menu';
+                    }
+
 
                     if (array_key_exists('dark', $options)) {
                         $ulClasses[] = 'dropdown-menu-dark';
@@ -719,11 +720,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $pageClasses[] = 'btn';
             }
 
-            if ($options['sublink'] !== self::STYLE_SUBLINK_DETAILS) {
-                $pageClasses[]                    = 'dropdown-toggle';
-                $pageAttributes['data-bs-toggle'] = 'dropdown';
-            }
-
+            $pageClasses[]                    = 'dropdown-toggle';
+            $pageAttributes['data-bs-toggle'] = 'dropdown';
             $pageAttributes['aria-expanded'] = 'false';
             $pageAttributes['role']          = 'button';
         }
