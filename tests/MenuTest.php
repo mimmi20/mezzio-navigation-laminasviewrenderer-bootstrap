@@ -13524,7 +13524,7 @@ final class MenuTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('nav navigation', $value),
                         2 => self::assertSame('nav-item dropup active', $value),
-                        3, 6 => self::assertSame('dropdown-details-menu', $value),
+                        3, 6 => self::assertSame('dropdown-menu dropdown-details-menu', $value),
                         4 => self::assertSame('parent-parent-id', $value),
                         5 => self::assertSame('dropup active', $value),
                         7 => self::assertSame('parent-id', $value),
@@ -13648,11 +13648,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
+                            ['data-popper-placement' => 'top-start', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
                             $attribs,
                         ),
                         2 => self::assertSame(
-                            ['aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
+                            ['data-popper-placement' => 'top-start', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
                             $attribs,
                         ),
                         3 => self::assertSame(
@@ -14151,7 +14151,7 @@ final class MenuTest extends TestCase
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame('nav ul-class ul', $value),
                         2 => self::assertSame('nav-item dropup li-active', $value),
-                        3, 6 => self::assertSame('dropdown-details-menu', $value),
+                        3, 6 => self::assertSame('dropdown-menu dropdown-details-menu', $value),
                         4 => self::assertSame('parent-parent-id', $value),
                         5 => self::assertSame('dropup li-active', $value),
                         7 => self::assertSame('parent-id', $value),
@@ -14275,11 +14275,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
+                            ['data-popper-placement' => 'top-start', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
                             $attribs,
                         ),
                         2 => self::assertSame(
-                            ['aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
+                            ['data-popper-placement' => 'top-start', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
                             $attribs,
                         ),
                         3 => self::assertSame(

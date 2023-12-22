@@ -75,7 +75,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
     public const DROP_ORIENTATION_DOWN = 'down';
 
+    public const DROP_ORIENTATION_DOWN_CENTERED = 'down-centered';
+
     public const DROP_ORIENTATION_UP = 'up';
+
+    public const DROP_ORIENTATION_UP_CENTERED = 'up-centered';
 
     public const DROP_ORIENTATION_START = 'start';
 
@@ -423,10 +427,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 } else {
                     $ulClasses = ['dropdown-menu'];
 
-                    if ($options['sublink'] === self::STYLE_SUBLINK_DETAILS)  {
+                    if ($options['sublink'] === self::STYLE_SUBLINK_DETAILS) {
                         $ulClasses[] = 'dropdown-details-menu';
                     }
-
 
                     if (array_key_exists('dark', $options)) {
                         $ulClasses[] = 'dropdown-menu-dark';
@@ -707,11 +710,26 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
 
         if ($anySubpageAccepted) {
             $liClasses[] = match ($options['direction']) {
+                self::DROP_ORIENTATION_UP_CENTERED => $options['sublink'] === self::STYLE_SUBLINK_DETAILS ? 'dropup' : 'dropup-center',
                 self::DROP_ORIENTATION_UP => 'dropup',
                 self::DROP_ORIENTATION_END => 'dropend',
                 self::DROP_ORIENTATION_START => 'dropstart',
                 default => 'dropdown',
             };
+
+            if (
+                $options['sublink'] === self::STYLE_SUBLINK_DETAILS
+                && $options['direction'] !== self::DROP_ORIENTATION_DOWN
+            ) {
+                $pageAttributes['data-popper-placement'] = match ($options['direction']) {
+                    self::DROP_ORIENTATION_UP_CENTERED => 'top',
+                    self::DROP_ORIENTATION_UP => 'top-start',
+                    self::DROP_ORIENTATION_END => 'right-start',
+                    self::DROP_ORIENTATION_START => 'left-start',
+                    self::DROP_ORIENTATION_DOWN_CENTERED => 'bottom',
+                    default => null,
+                };
+            }
 
             if (
                 $options['sublink'] === self::STYLE_SUBLINK_BUTTON
@@ -720,10 +738,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 $pageClasses[] = 'btn';
             }
 
-            $pageClasses[]                    = 'dropdown-toggle';
+            $pageClasses[] = 'dropdown-toggle';
 
             if ($options['sublink'] !== self::STYLE_SUBLINK_DETAILS) {
-
                 $pageAttributes['data-bs-toggle'] = 'dropdown';
             }
 
