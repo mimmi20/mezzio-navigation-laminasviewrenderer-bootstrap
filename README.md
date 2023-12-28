@@ -797,7 +797,6 @@ foreach ($this->container as $page) {
 > See the [example from the HeadStyle documentation](https://github.com/laminas/laminas-view)
 > to see how you can achieve this.
 
-
 ## License
 
 This package is licensed using the MIT License.
