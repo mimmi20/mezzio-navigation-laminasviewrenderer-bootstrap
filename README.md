@@ -20,7 +20,6 @@ composer require mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap
 
 ### Render the navigation
 
-
 Calling the view helper for menus in your layout script:
 
 ```php
@@ -121,7 +120,7 @@ The following example demonstrates rendering the navigation menus for the named
 <!-- ... -->
 ```
 
-# View Helpers
+## View Helpers
 
 The navigation helpers are used for rendering navigational elements from
 `Mimmi20\Mezzio\Navigation\Navigation` instances for the use with Bootstrap.
@@ -174,7 +173,7 @@ rendering.
 The proxy helper will inject its own Permission and role to the helper
 it proxies to if the proxied helper doesn't already have any.
 
-# Breadcrumbs
+## Breadcrumbs
 
 Breadcrumbs are used for indicating where in a sitemap a user is currently browsing, and are
 typically rendered like the following:
@@ -198,7 +197,7 @@ will not be rendered if the deepest active page is a root page. If `maxDepth` is
 specified, the helper will stop rendering when at the specified depth (e.g. stop
 at level 2 even if the deepest active page is on level 3).
 
-## Basic usage
+### Basic usage
 
 This example shows how to render breadcrumbs with default settings.
 
@@ -221,7 +220,7 @@ Output:
 <a href="/products">Products</a> &gt; <a href="/products/server">Foo Server</a> &gt; FAQ
 ```
 
-## Specifying indentation
+### Specifying indentation
 
 This example shows how to render breadcrumbs with initial indentation.
 
@@ -237,7 +236,7 @@ Output:
         <a href="/products">Products</a> &gt; <a href="/products/server">Foo Server</a> &gt; FAQ
 ```
 
-## Customize output
+### Customize output
 
 This example shows how to customize breadcrumbs output by specifying multiple options.
 
@@ -266,13 +265,13 @@ Setting minimum depth required to render breadcrumbs:
 
 Output: Nothing, because the deepest active page is not at level 10 or deeper.
 
-# Menu
+## Menu
 
 The `menu()` helper is used for rendering menus from navigation containers. By
 default, the menu will be rendered using HTML `UL` and `LI` tags, but the helper
 also allows using a partial view script.
 
-## Basic usage
+### Basic usage
 
 This example shows how to render a menu from a container registered/found in the
 view helper. Notice how pages are filtered out based on visibility and ACL.
@@ -359,7 +358,7 @@ Output:
 </ul>
 ```
 
-## Calling renderMenu() directly
+### Calling renderMenu() directly
 
 This example shows how to render a menu that is not registered in the view
 helper by calling `renderMenu()` directly and specifying options.
@@ -391,7 +390,7 @@ Output:
 </ul>
 ```
 
-## Rendering the deepest active menu
+### Rendering the deepest active menu
 
 This example shows how `renderSubMenu()` will render the deepest sub menu of
 the active branch.
@@ -434,7 +433,7 @@ The output will be the same if 'FAQ' or 'Foo Server' is active:
 </ul>
 ```
 
-## Rendering with maximum depth
+### Rendering with maximum depth
 
 ```php
 <?= $this->navigation()
@@ -485,7 +484,7 @@ Output:
 </ul>
 ```
 
-## Rendering with minimum depth
+### Rendering with minimum depth
 
 ```php
 <?= $this->navigation()
@@ -545,7 +544,7 @@ Output:
 </ul>
 ```
 
-## Rendering only the active branch
+### Rendering only the active branch
 
 ```php
 <?= $this->navigation()
@@ -579,7 +578,7 @@ Output:
 </ul>
 ```
 
-## Rendering only the active branch with minimum depth
+### Rendering only the active branch with minimum depth
 
 ```php
 <?= $this->navigation()
@@ -609,7 +608,7 @@ Output:
 </ul>
 ```
 
-## Rendering only the active branch with maximum depth
+### Rendering only the active branch with maximum depth
 
 ```php
 <?= $this->navigation()
@@ -636,7 +635,7 @@ Output:
 </ul>
 ```
 
-## Rendering only the active branch with maximum depth and no parents
+### Rendering only the active branch with maximum depth and no parents
 
 ```php
 <?= $this->navigation()
@@ -659,7 +658,7 @@ Output:
 </ul>
 ```
 
-## Rendering a custom menu using a partial view script
+### Rendering a custom menu using a partial view script
 
 This example shows how to render a custom menu using a partial view script. By
 calling `setPartial()`, you can specify a partial view script that will be used
@@ -693,7 +692,7 @@ Output:
 <a href="/community">Community</a>
 ```
 
-### Using additional parameters in partial view scripts
+#### Using additional parameters in partial view scripts
 
 Starting with version 2.6.0, you can assign custom variables to a
 partial script.
@@ -734,7 +733,7 @@ Output:
 <a href="/community">Community</a>
 ```
 
-### Using menu options in partial view scripts
+#### Using menu options in partial view scripts
 
 In a layout:
 
@@ -771,7 +770,7 @@ Output:
 </div>
 ```
 
-### Using Permissions with partial view scripts
+#### Using Permissions with partial view scripts
 
 If you want to use a Permission within your partial view script, then you will have to
 check the access to a page manually.
@@ -797,7 +796,6 @@ foreach ($this->container as $page) {
 >
 > See the [example from the HeadStyle documentation](https://github.com/laminas/laminas-view)
 > to see how you can achieve this.
-
 
 ## License
 

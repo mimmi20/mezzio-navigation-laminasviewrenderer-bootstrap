@@ -708,6 +708,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
             $pageClasses[] = 'dropdown-item';
         }
 
+        $pageClasses[] = 'btn';
+
         if ($anySubpageAccepted) {
             $liClasses[] = match ($options['direction']) {
                 self::DROP_ORIENTATION_UP_CENTERED => $options['sublink'] === self::STYLE_SUBLINK_DETAILS ? 'dropup' : 'dropup-center',
@@ -729,13 +731,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                     self::DROP_ORIENTATION_DOWN_CENTERED => 'bottom',
                     default => null,
                 };
-            }
-
-            if (
-                $options['sublink'] === self::STYLE_SUBLINK_BUTTON
-                || $options['sublink'] === self::STYLE_SUBLINK_DETAILS
-            ) {
-                $pageClasses[] = 'btn';
             }
 
             $pageClasses[] = 'dropdown-toggle';
