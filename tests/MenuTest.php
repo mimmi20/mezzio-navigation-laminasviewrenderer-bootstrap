@@ -5235,11 +5235,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['aria-current' => 'page', 'class' => 'nav-link btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                     };
@@ -5616,11 +5616,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['aria-current' => 'page', 'class' => 'nav-link btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                     };
@@ -6184,11 +6184,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['aria-current' => 'page', 'class' => 'nav-link btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                     };
@@ -6563,11 +6563,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['aria-current' => 'page', 'class' => 'nav-link btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                     };
@@ -6949,11 +6949,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['aria-current' => 'page', 'class' => 'nav-link btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                     };
@@ -7335,11 +7335,11 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['role' => 'tab', 'aria-current' => 'page', 'class' => 'nav-link parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['role' => 'tab', 'aria-current' => 'page', 'class' => 'nav-link btn parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                     };
@@ -8099,7 +8099,7 @@ final class MenuTest extends TestCase
             ->method('toHtml')
             ->with(
                 'a',
-                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                ['aria-current' => 'page', 'class' => 'nav-link btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
                 $pageLabelTranslatedEscaped,
             )
             ->willReturn($expected2);
@@ -8415,7 +8415,7 @@ final class MenuTest extends TestCase
             ->method('toHtml')
             ->with(
                 'a',
-                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                ['aria-current' => 'page', 'class' => 'nav-link btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
                 $pageLabelTranslatedEscaped,
             )
             ->willReturn($expected2);
@@ -8727,7 +8727,7 @@ final class MenuTest extends TestCase
             ->method('toHtml')
             ->with(
                 'a',
-                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                ['aria-current' => 'page', 'class' => 'nav-link btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                 $pageLabelTranslatedEscaped,
             )
             ->willReturn($expected2);
@@ -9459,7 +9459,7 @@ final class MenuTest extends TestCase
             ->method('toHtml')
             ->with(
                 'a',
-                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                ['aria-current' => 'page', 'class' => 'nav-link btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                 $pageLabelTranslatedEscaped,
             )
             ->willReturn($expected2);
@@ -9994,7 +9994,7 @@ final class MenuTest extends TestCase
             ->method('toHtml')
             ->with(
                 'a',
-                ['aria-current' => 'page', 'class' => 'nav-link xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                ['aria-current' => 'page', 'class' => 'nav-link btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
                 $pageLabelTranslatedEscaped,
             )
             ->willReturn($expected2);
@@ -10557,7 +10557,7 @@ final class MenuTest extends TestCase
             ->method('toHtml')
             ->with(
                 'a',
-                ['aria-current' => 'page', 'class' => 'nav-link', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
+                ['aria-current' => 'page', 'class' => 'nav-link btn', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget, 'role' => 'tab'],
                 $pageLabelTranslatedEscaped,
             )
             ->willReturn($expected2);
@@ -11144,23 +11144,23 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'href' => '###', 'target' => 'self-parent'],
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle, 'href' => '###', 'target' => 'self-parent'],
                             $attribs,
                         ),
                         2 => self::assertSame(
-                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle, 'href' => '##', 'target' => 'self'],
                             $attribs,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            ['class' => 'dropdown-item btn xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            ['class' => 'dropdown-item btn xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
                             $attribs,
                         ),
                     };
@@ -11753,19 +11753,19 @@ final class MenuTest extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(
-                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'aria-current' => 'page', 'class' => 'nav-link btn dropdown-toggle parent-parent-class', 'id' => 'parent-parent-id', 'title' => $parentParentTranslatedTitle],
                             $attribs,
                         ),
                         2 => self::assertSame(
-                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
+                            ['data-bs-toggle' => 'dropdown', 'aria-expanded' => 'false', 'role' => 'button', 'class' => 'dropdown-item btn dropdown-toggle parent-class', 'id' => 'parent-id', 'title' => $parentTranslatedTitle],
                             $attribs,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            ['class' => 'dropdown-item btn xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
                             $attribs,
                         ),
                     };
@@ -12398,11 +12398,11 @@ final class MenuTest extends TestCase
                             $attribs,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            ['class' => 'dropdown-item btn xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
                             $attribs,
                         ),
                     };
@@ -13032,15 +13032,15 @@ final class MenuTest extends TestCase
                             $attribs,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            ['class' => 'dropdown-item btn xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            ['class' => 'dropdown-item btn xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
                             $attribs,
                         ),
                     };
@@ -13656,15 +13656,15 @@ final class MenuTest extends TestCase
                             $attribs,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            ['class' => 'dropdown-item btn xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            ['class' => 'dropdown-item btn xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
                             $attribs,
                         ),
                     };
@@ -14283,15 +14283,15 @@ final class MenuTest extends TestCase
                             $attribs,
                         ),
                         3 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
+                            ['class' => 'dropdown-item btn xxxx', 'id' => $pageId, 'title' => $pageTitleTranslated, 'href' => $pageHref, 'target' => $pageTarget],
                             $attribs,
                         ),
                         4 => self::assertSame(
-                            ['class' => 'dropdown-item xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
+                            ['class' => 'dropdown-item btn xxxx2', 'id' => $page2Id, 'title' => $page2TitleTranslated, 'href' => $page2Href, 'target' => $page2Target],
                             $attribs,
                         ),
                         default => self::assertSame(
-                            ['class' => 'dropdown-item xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
+                            ['class' => 'dropdown-item btn xxxx3', 'id' => $page3Id, 'title' => $page3TitleTranslated, 'href' => $page3Href, 'target' => $page3Target],
                             $attribs,
                         ),
                     };

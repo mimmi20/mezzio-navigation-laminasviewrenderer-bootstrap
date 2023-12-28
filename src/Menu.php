@@ -733,7 +733,6 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
                 };
             }
 
-
             $pageClasses[] = 'dropdown-toggle';
 
             if ($options['sublink'] !== self::STYLE_SUBLINK_DETAILS) {
