@@ -7,8 +7,11 @@
 ## Code Status
 
 [![codecov](https://codecov.io/gh/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap/branch/master/graph/badge.svg)](https://codecov.io/gh/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/3458a6bbf184f425dcfa/test_coverage)](https://codeclimate.com/github/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap/test_coverage)
 [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap.svg)](https://isitmaintained.com/project/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap "Average time to resolve an issue")
 [![Percentage of issues still open](https://isitmaintained.com/badge/open/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap.svg)](https://isitmaintained.com/project/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap "Percentage of issues still open")
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmimmi20%2Fmezzio-navigation-laminasviewrenderer-bootstrap%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap/master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/3458a6bbf184f425dcfa/maintainability)](https://codeclimate.com/github/mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap/maintainability)
 
 ## Installation
 
