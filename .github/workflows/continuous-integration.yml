@@ -205,7 +205,6 @@ jobs:
       - "tests"
       - "code-coverage"
 
-
     steps:
       - name: Successful run
         if: ${{ !(contains(needs.*.result, 'failure')) }}
