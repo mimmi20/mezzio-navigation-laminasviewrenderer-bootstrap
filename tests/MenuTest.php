@@ -1013,7 +1013,7 @@ final class MenuTest extends TestCase
             ->method('debug');
 
         $container = $this->createMock(ContainerInterface::class);
-        $name      = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
@@ -1114,7 +1114,7 @@ final class MenuTest extends TestCase
             ->method('debug');
 
         $container = $this->createMock(ContainerInterface::class);
-        $name      = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -1256,7 +1256,7 @@ final class MenuTest extends TestCase
             ->method('debug');
 
         $container = $this->createMock(ContainerInterface::class);
-        $name      = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
@@ -1543,7 +1543,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $parentPage = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -1705,7 +1705,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $parentPage = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -2007,7 +2007,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $parentPage = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -2182,7 +2182,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -2332,7 +2332,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -2500,7 +2500,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -2670,7 +2670,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -3728,7 +3728,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
@@ -3850,7 +3850,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
@@ -3977,7 +3977,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -4134,7 +4134,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -4751,7 +4751,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
@@ -4942,7 +4942,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -5323,7 +5323,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -5703,7 +5703,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -5891,7 +5891,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -6270,7 +6270,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -6655,7 +6655,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -7038,7 +7038,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -7860,7 +7860,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -8176,7 +8176,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -8492,7 +8492,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -8797,7 +8797,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -9010,7 +9010,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -9224,7 +9224,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -9530,7 +9530,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -9755,7 +9755,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -10070,7 +10070,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -10318,7 +10318,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -10633,7 +10633,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -11268,7 +11268,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -11873,7 +11873,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -12510,7 +12510,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -13154,7 +13154,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -13778,7 +13778,7 @@ final class MenuTest extends TestCase
         $logger->expects(self::never())
             ->method('debug');
 
-        $name = 'Mimmi20\\Mezzio\\Navigation\\Top';
+        $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
         $privilege = 'testPrivilege';

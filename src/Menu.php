@@ -13,13 +13,10 @@ declare(strict_types = 1);
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use InvalidArgumentException;
-use Laminas\I18n\Exception\RuntimeException;
-use Laminas\I18n\View\Helper\Translate;
+use Laminas\I18n;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\View\Exception;
-use Laminas\View\Helper\AbstractHtmlElement;
-use Laminas\View\Helper\EscapeHtml;
-use Laminas\View\Helper\EscapeHtmlAttr;
+use Laminas\Stdlib;
+use Laminas\View;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
@@ -55,7 +52,7 @@ use const PHP_EOL;
  *
  * phpcs:disable SlevomatCodingStandard.Classes.TraitUseDeclaration.MultipleTraitsPerDeclaration
  */
-final class Menu extends AbstractHtmlElement implements MenuInterface
+final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterface
 {
     use BootstrapTrait, HelperTrait, MenuTrait {
         MenuTrait::htmlify insteadof HelperTrait;
@@ -95,11 +92,11 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
         LoggerInterface $logger,
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
-        EscapeHtmlAttr $escaper,
+        View\Helper\EscapeHtmlAttr $escaper,
         PartialRendererInterface $renderer,
-        private readonly EscapeHtml $escapeHtml,
+        private readonly View\Helper\EscapeHtml $escapeHtml,
         private readonly HtmlElementInterface $htmlElement,
-        private readonly Translate | null $translator = null,
+        private readonly I18n\View\Helper\Translate | null $translator = null,
     ) {
         $this->serviceLocator  = $serviceLocator;
         $this->logger          = $logger;
@@ -124,8 +121,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *                                                  the container returned by {@link getContainer()}.
      *
      * @throws InvalidArgumentException
-     * @throws Exception\RuntimeException
-     * @throws RuntimeException
+     * @throws View\Exception\RuntimeException
+     * @throws I18n\Exception\RuntimeException
      */
     public function render(ContainerInterface | string | null $container = null): string
     {
@@ -147,12 +144,12 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * Available $options:
      *
      * @param ContainerInterface<PageInterface>|string|null $container [optional] container to create menu from.
-     *                                                  Default is to use the container retrieved from {@link getContainer()}.
+     *                                                                 Default is to use the container retrieved from {@link getContainer()}.
      * @param array<string, bool|int|string|null>           $options   [optional] options for controlling rendering
      * @phpstan-param array{in-navbar?: bool, ulClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, onlyActiveBranch?: bool, renderParents?: bool, indent?: int|string|null} $options
      *
      * @throws InvalidArgumentException
-     * @throws RuntimeException
+     * @throws I18n\Exception\RuntimeException
      */
     public function renderMenu(ContainerInterface | string | null $container = null, array $options = []): string
     {
@@ -191,7 +188,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * </code>
      *
      * @param ContainerInterface<PageInterface>|string|null $container     [optional] container to create menu from.
-     *                                                      Default is to use the container retrieved from {@link getContainer()}.
+     *                                                                     Default is to use the container retrieved from {@link getContainer()}.
      * @param string|null                                   $ulClass       [optional] CSS class to use for UL element.
      *                                                                     Default is to use the value from {@link getUlClass()}.
      * @param string|null                                   $liClass       [optional] CSS class to use for LI elements.
@@ -203,7 +200,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *                                                                     element. Default is to use the value from {@link getUlClass()}.
      *
      * @throws InvalidArgumentException
-     * @throws RuntimeException
+     * @throws I18n\Exception\RuntimeException
      */
     public function renderSubMenu(
         ContainerInterface | string | null $container = null,
@@ -240,8 +237,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param bool          $escapeLabel        Whether to escape the label
      * @param bool          $addClassToListItem Whether to add the page class to the list item
      *
-     * @throws \Laminas\View\Exception\InvalidArgumentException
-     * @throws RuntimeException
+     * @throws View\Exception\InvalidArgumentException
+     * @throws I18n\Exception\RuntimeException
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
@@ -257,9 +254,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, renderParents: bool, escapeLabels: bool, addClassToListItem: bool, role: string|null, liActiveClass: string, liRole?: string|null, ulRole?: string|null} $options
      *
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
-     * @throws RuntimeException
+     * @throws Stdlib\Exception\InvalidArgumentException
+     * @throws View\Exception\InvalidArgumentException
+     * @throws I18n\Exception\RuntimeException
      */
     private function renderDeepestMenu(ContainerInterface $container, array $options): string
     {
@@ -359,9 +356,9 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      * @param ContainerInterface<PageInterface>   $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      *
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
-     * @throws RuntimeException
+     * @throws Stdlib\Exception\InvalidArgumentException
+     * @throws View\Exception\InvalidArgumentException
+     * @throws I18n\Exception\RuntimeException
      */
     private function renderNormalMenu(ContainerInterface $container, array $options): string
     {
@@ -527,7 +524,7 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
     }
 
     /**
-     * Normalizes given render options.
+     * Normalizes given render options
      *
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
      * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
@@ -779,8 +776,8 @@ final class Menu extends AbstractHtmlElement implements MenuInterface
      *
      * @return string HTML string
      *
-     * @throws RuntimeException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
+     * @throws I18n\Exception\RuntimeException
+     * @throws View\Exception\InvalidArgumentException
      */
     private function toHtml(PageInterface $page, array $options, array $attributes, bool $anySubpageAccepted): string
     {
