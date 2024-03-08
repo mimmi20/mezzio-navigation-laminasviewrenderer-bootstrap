@@ -168,7 +168,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setSeparator('foo');
 
         $expected = $this->getExpected('bc/separator.html');
-        $actual   = $this->helper->render();
+        $actual   = rtrim($this->helper->render(), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
@@ -216,7 +216,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setLinkLast(true);
 
         $expected = $this->getExpected('bc/linklast.html');
-        $actual   = $this->helper->render();
+        $actual   = rtrim($this->helper->render(), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
@@ -383,7 +383,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $container->addPage($page);
 
         $expected = $this->getExpected('bc/escaped.html');
-        $actual   = $this->helper->setMinDepth(0)->render($container);
+        $actual   = rtrim($this->helper->setMinDepth(0)->render($container), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
