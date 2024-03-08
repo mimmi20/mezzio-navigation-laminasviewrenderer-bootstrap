@@ -35,6 +35,7 @@ use function get_debug_type;
 use function is_string;
 use function mb_strlen;
 use function mb_substr;
+use function rtrim;
 use function sprintf;
 use function str_replace;
 use function trim;
@@ -183,7 +184,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setMaxDepth(1);
 
         $expected = $this->getExpected('bc/maxdepth.html');
-        $actual   = $this->helper->render();
+        $actual   = rtrim($this->helper->render(), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
@@ -257,9 +258,9 @@ final class BreadcrumbsTest extends AbstractTestCase
         ];
 
         $actual = [
-            'registered' => $this->helper->render(),
-            'supplied' => $this->helper->render($this->nav2),
-            'registered_again' => $this->helper->render(),
+            'registered' => rtrim($this->helper->render(), PHP_EOL),
+            'supplied' => rtrim($this->helper->render($this->nav2), PHP_EOL),
+            'registered_again' => rtrim($this->helper->render(), PHP_EOL),
         ];
 
         self::assertSame($expected, $actual);
@@ -281,7 +282,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setRole($acl['role']);
 
         $expected = $this->getExpected('bc/acl.html');
-        self::assertSame($expected, $this->helper->render());
+        self::assertSame($expected, rtrim($this->helper->render(), PHP_EOL));
     }
 
     /**
