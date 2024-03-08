@@ -20,5 +20,5 @@ indent_size = 2
 indent_size = 2
 trim_trailing_whitespace = false
 
-[tests/Compare/_files/expected/{bc,menu}/*.html]
+[tests/Compare/_files/expected/menu/*.html]
 insert_final_newline = false
