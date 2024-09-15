@@ -741,6 +741,21 @@ final class MenuTest extends AbstractTestCase
      * @throws \InvalidArgumentException
      * @throws \Laminas\I18n\Exception\RuntimeException
      */
+    public function testOptionMinDepth2(): void
+    {
+        $options = ['minDepth' => -1];
+
+        $expected = $this->getExpected('menu/mindepth2.html');
+        $actual   = $this->helper->renderMenu(null, $options);
+
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \InvalidArgumentException
+     * @throws \Laminas\I18n\Exception\RuntimeException
+     */
     public function testOptionBothDepts(): void
     {
         $options = [
