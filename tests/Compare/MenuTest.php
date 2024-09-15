@@ -748,8 +748,6 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/mindepth2.html');
         $actual   = $this->helper->renderMenu(null, $options);
 
-        //file_put_contents('tests/Compare/_files/expected/menu/mindepth2.html', $actual);
-
         self::assertSame($expected, $actual);
     }
 
