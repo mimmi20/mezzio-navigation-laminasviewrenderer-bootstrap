@@ -15645,7 +15645,7 @@ final class MenuTest extends TestCase
                     match ($invocation) {
                         1 => self::assertSame('nav ul-class ul', $value, (string) $invocation),
                         2 => self::assertSame(
-                            'nav-item dropup li-active',
+                            'nav-item dropup li-active li-class',
                             $value,
                             (string) $invocation,
                         ),
@@ -15655,21 +15655,25 @@ final class MenuTest extends TestCase
                             (string) $invocation,
                         ),
                         4 => self::assertSame('parent-parent-id', $value, (string) $invocation),
-                        5 => self::assertSame('dropup li-active', $value, (string) $invocation),
+                        5 => self::assertSame(
+                            'dropup li-active li-class',
+                            $value,
+                            (string) $invocation,
+                        ),
                         7 => self::assertSame('parent-id', $value, (string) $invocation),
-                        default => self::assertSame('li-active', $value, (string) $invocation),
+                        default => self::assertSame('li-active li-class', $value, (string) $invocation),
                     };
 
                     self::assertSame(0, $recurse, (string) $invocation);
 
                     return match ($invocation) {
                         1 => 'nav-escaped ul-class-escaped ul-escaped',
-                        2 => 'nav-item-escaped dropup-escaped li-active-escaped',
+                        2 => 'nav-item-escaped dropup-escaped li-active-escaped li-class-escaped',
                         3, 6 => 'dropdown-details-menu-escaped',
                         4 => 'parent-parent-id-escaped',
-                        5 => 'dropup-escaped li-active-escaped',
+                        5 => 'dropup-escaped li-active-escaped li-class-escaped',
                         7 => 'parent-id-escaped',
-                        default => 'li-active-escaped',
+                        default => 'li-active-escaped li-class-escaped',
                     };
                 },
             );
@@ -15774,7 +15778,7 @@ final class MenuTest extends TestCase
                 },
             );
 
-        $expected = '<ul class="nav-escaped ul-class-escaped ul-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropup-escaped li-active-escaped">' . PHP_EOL . '        <details>' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropup-escaped li-active-escaped">' . PHP_EOL . '                <details>' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="li-active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '                </details>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '        </details>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
+        $expected = '<ul class="nav-escaped ul-class-escaped ul-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropup-escaped li-active-escaped li-class-escaped">' . PHP_EOL . '        <details>' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropup-escaped li-active-escaped li-class-escaped">' . PHP_EOL . '                <details>' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="li-active-escaped li-class-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '                </details>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped li-class-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped li-class-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '        </details>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -15901,7 +15905,7 @@ final class MenuTest extends TestCase
             $expected,
             $helper->renderMenu(
                 $name,
-                ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass],
+                ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass, 'liClass' => 'li-class'],
             ),
         );
     }
@@ -17046,9 +17050,9 @@ final class MenuTest extends TestCase
                     return false;
                 },
             );
-        $page->expects(self::once())
+        $page->expects(self::exactly(2))
             ->method('getLiClass')
-            ->willReturn(null);
+            ->willReturn('page-li-class');
         $page->expects(self::once())
             ->method('hashCode')
             ->willReturn('page');
@@ -17308,7 +17312,7 @@ final class MenuTest extends TestCase
                         1 => self::assertSame('nav ul-class ul nav-tabs', $value, (string) $invocation),
                         2 => self::assertSame('tablist', $value, (string) $invocation),
                         3 => self::assertSame(
-                            'nav-item dropup li-active',
+                            'nav-item dropup li-active li-class',
                             $value,
                             (string) $invocation,
                         ),
@@ -17319,9 +17323,18 @@ final class MenuTest extends TestCase
                             (string) $invocation,
                         ),
                         6 => self::assertSame('parent-parent-id', $value, (string) $invocation),
-                        7 => self::assertSame('dropup li-active', $value, (string) $invocation),
+                        7 => self::assertSame(
+                            'dropup li-active li-class',
+                            $value,
+                            (string) $invocation,
+                        ),
                         9 => self::assertSame('parent-id', $value, (string) $invocation),
-                        default => self::assertSame('li-active', $value, (string) $invocation),
+                        10 => self::assertSame(
+                            'li-active li-class page-li-class',
+                            $value,
+                            (string) $invocation,
+                        ),
+                        default => self::assertSame('li-active li-class', $value, (string) $invocation),
                     };
 
                     self::assertSame(0, $recurse, (string) $invocation);
@@ -17329,13 +17342,14 @@ final class MenuTest extends TestCase
                     return match ($invocation) {
                         1 => 'nav-escaped ul-class-escaped ul-escaped nav-tabs-escaped',
                         2 => 'tablist-escaped',
-                        3 => 'nav-item-escaped dropup-escaped li-active-escaped',
+                        3 => 'nav-item-escaped dropup-escaped li-active-escaped li-class-escaped',
                         4 => 'presentation-escaped',
                         5, 8 => 'dropdown-details-menu-escaped',
                         6 => 'parent-parent-id-escaped',
-                        7 => 'dropup-escaped li-active-escaped',
+                        7 => 'dropup-escaped li-active-escaped li-class-escaped',
                         9 => 'parent-id-escaped',
-                        default => 'li-active-escaped',
+                        10 => 'li-active-escaped li-class-escaped page-li-class-escaped',
+                        default => 'li-active-escaped li-class-escaped',
                     };
                 },
             );
@@ -17440,7 +17454,7 @@ final class MenuTest extends TestCase
                 },
             );
 
-        $expected = $indent . '<ul class="nav-escaped ul-class-escaped ul-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . $indent . '    <li class="nav-item-escaped dropup-escaped li-active-escaped" role="presentation-escaped">' . PHP_EOL . $indent . '        <details>' . PHP_EOL . $indent . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . $indent . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . $indent . '            <li class="dropup-escaped li-active-escaped">' . PHP_EOL . $indent . '                <details>' . PHP_EOL . $indent . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . $indent . '                    <li class="li-active-escaped">' . PHP_EOL . $indent . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '                    </li>' . PHP_EOL . $indent . '                </ul>' . PHP_EOL . $indent . '                </details>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '            <li class="li-active-escaped">' . PHP_EOL . $indent . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '            <li class="li-active-escaped">' . PHP_EOL . $indent . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '        </ul>' . PHP_EOL . $indent . '        </details>' . PHP_EOL . $indent . '    </li>' . PHP_EOL . $indent . '</ul>';
+        $expected = $indent . '<ul class="nav-escaped ul-class-escaped ul-escaped nav-tabs-escaped" role="tablist-escaped">' . PHP_EOL . $indent . '    <li class="nav-item-escaped dropup-escaped li-active-escaped li-class-escaped" role="presentation-escaped">' . PHP_EOL . $indent . '        <details>' . PHP_EOL . $indent . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . $indent . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . $indent . '            <li class="dropup-escaped li-active-escaped li-class-escaped">' . PHP_EOL . $indent . '                <details>' . PHP_EOL . $indent . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . $indent . '                    <li class="li-active-escaped li-class-escaped page-li-class-escaped">' . PHP_EOL . $indent . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '                    </li>' . PHP_EOL . $indent . '                </ul>' . PHP_EOL . $indent . '                </details>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '            <li class="li-active-escaped li-class-escaped">' . PHP_EOL . $indent . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '            <li class="li-active-escaped li-class-escaped">' . PHP_EOL . $indent . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . $indent . '            </li>' . PHP_EOL . $indent . '        </ul>' . PHP_EOL . $indent . '        </details>' . PHP_EOL . $indent . '    </li>' . PHP_EOL . $indent . '</ul>';
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
@@ -17567,7 +17581,7 @@ final class MenuTest extends TestCase
             $expected,
             $helper->renderMenu(
                 $name,
-                ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass, 'tabs' => true, 'indent' => $indent],
+                ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass, 'tabs' => true, 'indent' => $indent, 'liClass' => 'li-class'],
             ),
         );
     }
