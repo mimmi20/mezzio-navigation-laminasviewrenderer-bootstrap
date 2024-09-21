@@ -21,7 +21,7 @@ parameters:
   checkAlwaysTrueInstanceof: true
 
   # reports === and !== occurrences always evaluated to true
-  checkAlwaysTrueStrictComparison: false # todo: fix
+  checkAlwaysTrueStrictComparison: true
 
   # enable stricter analysis of benevolent union types
   checkBenevolentUnionTypes: true
@@ -72,7 +72,7 @@ parameters:
   reportMaybesInMethodSignatures: true
 
   # reports violations of property type invariance
-  reportMaybesInPropertyPhpDocTypes: false # todo: fix
+  reportMaybesInPropertyPhpDocTypes: true
 
   # reports violations of parameter type contravariance and return type covariance in static methods
   reportStaticMethodSignatures: true
@@ -124,6 +124,7 @@ parameters:
     - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\ContainerInterface<Mimmi20\\Mezzio\\Navigation\\Page\\PageInterface>::find(?:All|One)?By(Active|Label)\(\)~'
     - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\Navigation::find(?:All|One)?By(Active|Label)\(\)~'
     - '~Parameter #2 \$factory of method Laminas\\ServiceManager\\ServiceManager::setFactory\(\) expects~'
+    - '~maxDepth: true\} given~'
 
 rules:
   # code complexity
