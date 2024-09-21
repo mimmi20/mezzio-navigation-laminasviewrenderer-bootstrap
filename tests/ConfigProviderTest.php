@@ -43,6 +43,8 @@ final class ConfigProviderTest extends TestCase
         self::assertArrayHasKey('aliases', $navigationHelperConfig);
         $aliases = $navigationHelperConfig['aliases'];
         self::assertIsArray($aliases);
+        self::assertArrayHasKey('breadcrumbs', $aliases);
+        self::assertArrayHasKey('menu', $aliases);
     }
 
     /** @throws Exception */
@@ -65,5 +67,7 @@ final class ConfigProviderTest extends TestCase
         self::assertArrayHasKey('aliases', $navigationHelperConfig);
         $aliases = $navigationHelperConfig['aliases'];
         self::assertIsArray($aliases);
+        self::assertArrayHasKey('breadcrumbs', $aliases);
+        self::assertArrayHasKey('menu', $aliases);
     }
 }
