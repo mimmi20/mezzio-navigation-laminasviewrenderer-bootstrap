@@ -17052,7 +17052,7 @@ final class MenuTest extends TestCase
             );
         $page->expects(self::exactly(2))
             ->method('getLiClass')
-            ->willReturn('page-li-class');
+            ->willReturn('page-li-class li-class');
         $page->expects(self::once())
             ->method('hashCode')
             ->willReturn('page');
