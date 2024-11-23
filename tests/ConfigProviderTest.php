@@ -15,6 +15,7 @@ namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigat
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\ConfigProvider;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
+use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,7 @@ final class ConfigProviderTest extends TestCase
     private ConfigProvider $provider;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->provider = new ConfigProvider();

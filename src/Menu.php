@@ -20,12 +20,11 @@ use Laminas\View;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuInterface;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\MenuTrait;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\AbstractMenu;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Override;
 use Psr\Log\LoggerInterface;
 use RecursiveIteratorIterator;
 
@@ -55,47 +54,45 @@ use const PHP_EOL;
  *
  * phpcs:disable SlevomatCodingStandard.Classes.TraitUseDeclaration.MultipleTraitsPerDeclaration
  */
-final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterface
+final class Menu extends AbstractMenu
 {
-    use BootstrapTrait, HelperTrait, MenuTrait {
-        MenuTrait::htmlify insteadof HelperTrait;
-    }
+    use BootstrapTrait;
 
     /** @api */
-    public const STYLE_UL = 'ul';
+    public const string STYLE_UL = 'ul';
 
     /** @api */
-    public const STYLE_OL = 'ol';
+    public const string STYLE_OL = 'ol';
 
     /** @api */
-    public const STYLE_SUBLINK_LINK = 'link';
+    public const string STYLE_SUBLINK_LINK = 'link';
 
     /** @api */
-    public const STYLE_SUBLINK_SPAN = 'span';
+    public const string STYLE_SUBLINK_SPAN = 'span';
 
     /** @api */
-    public const STYLE_SUBLINK_BUTTON = 'button';
+    public const string STYLE_SUBLINK_BUTTON = 'button';
 
     /** @api */
-    public const STYLE_SUBLINK_DETAILS = 'details';
+    public const string STYLE_SUBLINK_DETAILS = 'details';
 
     /** @api */
-    public const DROP_ORIENTATION_DOWN = 'down';
+    public const string DROP_ORIENTATION_DOWN = 'down';
 
     /** @api */
-    public const DROP_ORIENTATION_DOWN_CENTERED = 'down-centered';
+    public const string DROP_ORIENTATION_DOWN_CENTERED = 'down-centered';
 
     /** @api */
-    public const DROP_ORIENTATION_UP = 'up';
+    public const string DROP_ORIENTATION_UP = 'up';
 
     /** @api */
-    public const DROP_ORIENTATION_UP_CENTERED = 'up-centered';
+    public const string DROP_ORIENTATION_UP_CENTERED = 'up-centered';
 
     /** @api */
-    public const DROP_ORIENTATION_START = 'start';
+    public const string DROP_ORIENTATION_START = 'start';
 
     /** @api */
-    public const DROP_ORIENTATION_END = 'end';
+    public const string DROP_ORIENTATION_END = 'end';
 
     /**
      * @return void
@@ -113,12 +110,7 @@ final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterfac
         private readonly HtmlElementInterface $htmlElement,
         private readonly I18n\View\Helper\Translate | null $translator = null,
     ) {
-        $this->serviceLocator  = $serviceLocator;
-        $this->logger          = $logger;
-        $this->htmlify         = $htmlify;
-        $this->containerParser = $containerParser;
-        $this->escaper         = $escaper;
-        $this->renderer        = $renderer;
+        parent::__construct($serviceLocator, $logger, $htmlify, $containerParser, $escaper, $renderer);
     }
 
     /**
@@ -139,6 +131,7 @@ final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterfac
      * @throws View\Exception\RuntimeException
      * @throws I18n\Exception\RuntimeException
      */
+    #[Override]
     public function render(ContainerInterface | string | null $container = null): string
     {
         $partial = $this->getPartial();
@@ -166,6 +159,7 @@ final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterfac
      * @throws InvalidArgumentException
      * @throws I18n\Exception\RuntimeException
      */
+    #[Override]
     public function renderMenu(ContainerInterface | string | null $container = null, array $options = []): string
     {
         $container = $this->containerParser->parseContainer($container);
@@ -217,6 +211,7 @@ final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterfac
      * @throws InvalidArgumentException
      * @throws I18n\Exception\RuntimeException
      */
+    #[Override]
     public function renderSubMenu(
         ContainerInterface | string | null $container = null,
         string | null $ulClass = null,
@@ -257,9 +252,104 @@ final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterfac
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
+    #[Override]
     public function htmlify(PageInterface $page, bool $escapeLabel = true, bool $addClassToListItem = false): string
     {
         return $this->toHtml($page, ['escapeLabels' => $escapeLabel, 'sublink' => null], [], true);
+    }
+
+    /**
+     * Normalizes given render options
+     *
+     * @param array<string, bool|int|string|null> $options [optional] options to normalize
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
+     *
+     * @return array<string, bool|int|string|null>
+     * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
+     *
+     * @throws InvalidArgumentException
+     */
+    #[Override]
+    protected function normalizeOptions(array $options = []): array
+    {
+        if (isset($options['indent'])) {
+            assert(is_int($options['indent']) || is_string($options['indent']));
+            $options['indent'] = $this->getWhitespace($options['indent']);
+        } else {
+            $options['indent'] = $this->getIndent();
+        }
+
+        if (!array_key_exists('liClass', $options) || $options['liClass'] === null) {
+            $options['liClass'] = $this->getLiClass();
+        }
+
+        if (!array_key_exists('minDepth', $options) || $options['minDepth'] === null) {
+            $options['minDepth'] = $this->getMinDepth();
+        }
+
+        if ($options['minDepth'] < 0 || $options['minDepth'] === null) {
+            $options['minDepth'] = 0;
+        }
+
+        if (!array_key_exists('maxDepth', $options) || $options['maxDepth'] === null) {
+            $options['maxDepth'] = $this->getMaxDepth();
+        }
+
+        if (!array_key_exists('onlyActiveBranch', $options)) {
+            $options['onlyActiveBranch'] = $this->getOnlyActiveBranch();
+        }
+
+        if (!array_key_exists('escapeLabels', $options)) {
+            $options['escapeLabels'] = $this->getEscapeLabels();
+        }
+
+        if (!array_key_exists('renderParents', $options)) {
+            $options['renderParents'] = $this->getRenderParents();
+        }
+
+        if (!array_key_exists('addClassToListItem', $options)) {
+            $options['addClassToListItem'] = $this->getAddClassToListItem();
+        }
+
+        if (!array_key_exists('liActiveClass', $options) || $options['liActiveClass'] === null) {
+            $options['liActiveClass'] = $this->getLiActiveClass();
+        }
+
+        if (
+            array_key_exists('vertical', $options)
+            && is_string($options['vertical'])
+            && !array_key_exists('direction', $options)
+        ) {
+            $options['direction'] = self::DROP_ORIENTATION_END;
+        } elseif (!array_key_exists('direction', $options)) {
+            $options['direction'] = self::DROP_ORIENTATION_DOWN;
+        }
+
+        $options['ulClass'] = $this->normalizeUlClass($options);
+        $options['class']   = $this->normalizeItemClass($options);
+        $options['ulRole']  = null;
+        $options['liRole']  = null;
+        $options['role']    = null;
+
+        if (array_key_exists('tabs', $options) || array_key_exists('pills', $options)) {
+            $options['ulRole'] = 'tablist';
+            $options['liRole'] = 'presentation';
+            $options['role']   = 'tab';
+        }
+
+        if (!array_key_exists('style', $options)) {
+            $options['style'] = self::STYLE_UL;
+        }
+
+        if (!array_key_exists('substyle', $options)) {
+            $options['substyle'] = self::STYLE_UL;
+        }
+
+        if (!array_key_exists('sublink', $options)) {
+            $options['sublink'] = self::STYLE_SUBLINK_LINK;
+        }
+
+        return $options;
     }
 
     /**
@@ -537,99 +627,6 @@ final class Menu extends View\Helper\AbstractHtmlElement implements MenuInterfac
         }
 
         return $html;
-    }
-
-    /**
-     * Normalizes given render options
-     *
-     * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
-     *
-     * @return array<string, bool|int|string|null>
-     * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
-     *
-     * @throws InvalidArgumentException
-     */
-    private function normalizeOptions(array $options = []): array
-    {
-        if (isset($options['indent'])) {
-            assert(is_int($options['indent']) || is_string($options['indent']));
-            $options['indent'] = $this->getWhitespace($options['indent']);
-        } else {
-            $options['indent'] = $this->getIndent();
-        }
-
-        if (!array_key_exists('liClass', $options) || $options['liClass'] === null) {
-            $options['liClass'] = $this->getLiClass();
-        }
-
-        if (!array_key_exists('minDepth', $options) || $options['minDepth'] === null) {
-            $options['minDepth'] = $this->getMinDepth();
-        }
-
-        if ($options['minDepth'] < 0 || $options['minDepth'] === null) {
-            $options['minDepth'] = 0;
-        }
-
-        if (!array_key_exists('maxDepth', $options) || $options['maxDepth'] === null) {
-            $options['maxDepth'] = $this->getMaxDepth();
-        }
-
-        if (!array_key_exists('onlyActiveBranch', $options)) {
-            $options['onlyActiveBranch'] = $this->getOnlyActiveBranch();
-        }
-
-        if (!array_key_exists('escapeLabels', $options)) {
-            $options['escapeLabels'] = $this->getEscapeLabels();
-        }
-
-        if (!array_key_exists('renderParents', $options)) {
-            $options['renderParents'] = $this->getRenderParents();
-        }
-
-        if (!array_key_exists('addClassToListItem', $options)) {
-            $options['addClassToListItem'] = $this->getAddClassToListItem();
-        }
-
-        if (!array_key_exists('liActiveClass', $options) || $options['liActiveClass'] === null) {
-            $options['liActiveClass'] = $this->getLiActiveClass();
-        }
-
-        if (
-            array_key_exists('vertical', $options)
-            && is_string($options['vertical'])
-            && !array_key_exists('direction', $options)
-        ) {
-            $options['direction'] = self::DROP_ORIENTATION_END;
-        } elseif (!array_key_exists('direction', $options)) {
-            $options['direction'] = self::DROP_ORIENTATION_DOWN;
-        }
-
-        $options['ulClass'] = $this->normalizeUlClass($options);
-        $options['class']   = $this->normalizeItemClass($options);
-        $options['ulRole']  = null;
-        $options['liRole']  = null;
-        $options['role']    = null;
-
-        if (array_key_exists('tabs', $options) || array_key_exists('pills', $options)) {
-            $options['ulRole'] = 'tablist';
-            $options['liRole'] = 'presentation';
-            $options['role']   = 'tab';
-        }
-
-        if (!array_key_exists('style', $options)) {
-            $options['style'] = self::STYLE_UL;
-        }
-
-        if (!array_key_exists('substyle', $options)) {
-            $options['substyle'] = self::STYLE_UL;
-        }
-
-        if (!array_key_exists('sublink', $options)) {
-            $options['sublink'] = self::STYLE_SUBLINK_LINK;
-        }
-
-        return $options;
     }
 
     /**
