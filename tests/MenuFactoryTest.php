@@ -25,6 +25,7 @@ use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -37,6 +38,7 @@ final class MenuFactoryTest extends TestCase
     private MenuFactory $factory;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->factory = new MenuFactory();

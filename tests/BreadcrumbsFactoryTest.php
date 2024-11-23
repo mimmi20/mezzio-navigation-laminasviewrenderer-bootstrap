@@ -23,6 +23,7 @@ use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadc
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\BreadcrumbsFactory;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -35,6 +36,7 @@ final class BreadcrumbsFactoryTest extends TestCase
     private BreadcrumbsFactory $factory;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->factory = new BreadcrumbsFactory();

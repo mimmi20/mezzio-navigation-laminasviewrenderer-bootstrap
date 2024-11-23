@@ -12,12 +12,12 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use Laminas\View\Helper\AbstractHtmlElement;
+use Laminas\I18n\Exception\RuntimeException;
+use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsInterface;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\BreadcrumbsTrait;
-use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\HelperTrait;
+use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\AbstractBreadcrumbs;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
+use Override;
 
 use function implode;
 use function sprintf;
@@ -30,13 +30,8 @@ use const PHP_EOL;
  *
  * phpcs:disable SlevomatCodingStandard.Classes.TraitUseDeclaration.MultipleTraitsPerDeclaration
  */
-final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterface
+final class Breadcrumbs extends AbstractBreadcrumbs
 {
-    use BreadcrumbsTrait, HelperTrait{
-        BreadcrumbsTrait::getMinDepth insteadof HelperTrait;
-        renderStraight as parentRenderStraight;
-    }
-
     /**
      * Renders breadcrumbs by chaining 'a' elements with the separator
      * registered in the helper.
@@ -44,11 +39,14 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
      * @param ContainerInterface<PageInterface>|string|null $container [optional] container to render. Default is
      *                                                  to render the container registered in the helper.
      *
-     * @throws void
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
+    #[Override]
     public function renderStraight(ContainerInterface | string | null $container = null): string
     {
-        $content = $this->parentRenderStraight($container);
+        $content = parent::renderStraight($container);
 
         if ($content === '') {
             return '';
@@ -63,7 +61,8 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
     }
 
     /** @throws void */
-    private function renderBreadcrumbItem(string $content, string $liClass, bool $active): string
+    #[Override]
+    protected function renderBreadcrumbItem(string $content, string $liClass = '', bool $active = false): string
     {
         $classes = ['breadcrumb-item'];
         $aria    = '';
@@ -88,7 +87,8 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
     }
 
     /** @throws void */
-    private function renderSeparator(): string
+    #[Override]
+    protected function renderSeparator(): string
     {
         return str_repeat($this->getIndent(), 3) . $this->getSeparator() . PHP_EOL;
     }
@@ -98,7 +98,8 @@ final class Breadcrumbs extends AbstractHtmlElement implements BreadcrumbsInterf
      *
      * @throws void
      */
-    private function combineRendered(array $html): string
+    #[Override]
+    protected function combineRendered(array $html): string
     {
         return $html !== [] ? implode($this->renderSeparator(), $html) : '';
     }

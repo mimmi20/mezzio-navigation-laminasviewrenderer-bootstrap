@@ -25,6 +25,7 @@ use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\Mezzio\Navigation\Page\PageFactory;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Override;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
 use Psr\Container\ContainerExceptionInterface;
@@ -65,6 +66,7 @@ final class BreadcrumbsTest extends AbstractTestCase
      * @throws RuntimeException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -393,6 +395,7 @@ final class BreadcrumbsTest extends AbstractTestCase
      *
      * @throws Exception
      */
+    #[Override]
     protected function getExpected(string $file): string
     {
         return str_replace(

@@ -27,6 +27,7 @@ use Mimmi20\Mezzio\Navigation\Page\PageFactory;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Override;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
@@ -66,6 +67,7 @@ final class MenuTest extends AbstractTestCase
      * @throws RuntimeException
      * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -965,6 +967,7 @@ final class MenuTest extends AbstractTestCase
      *
      * @throws Exception
      */
+    #[Override]
     protected function getExpected(string $file): string
     {
         return str_replace(
