@@ -40,7 +40,7 @@
     "infection/infection": "^0.29.8",
     "laminas/laminas-escaper": "^2.14.0",
     "laminas/laminas-i18n": "^2.29.0",
-    "laminas/laminas-permissions-acl": "^2.16.0",
+    "laminas/laminas-permissions-acl": "^2.17.0",
     "laminas/laminas-servicemanager": "^3.22.1",
     "mezzio/mezzio-authentication": "^1.10.0",
     "mezzio/mezzio-helpers": "^5.17.0",
