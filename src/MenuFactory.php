@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
@@ -24,7 +25,6 @@ use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Log\LoggerInterface;
 
 use function assert;
 use function get_debug_type;
@@ -59,7 +59,6 @@ final class MenuFactory
             assert($translator instanceof Translate);
         }
 
-        $logger          = $container->get(LoggerInterface::class);
         $htmlify         = $container->get(HtmlifyInterface::class);
         $containerParser = $container->get(ContainerParserInterface::class);
         $escapeHtmlAttr  = $plugin->get(EscapeHtmlAttr::class);
@@ -67,7 +66,6 @@ final class MenuFactory
         $escapeHtml      = $plugin->get(EscapeHtml::class);
         $htmlElement     = $container->get(HtmlElementInterface::class);
 
-        assert($logger instanceof LoggerInterface);
         assert($htmlify instanceof HtmlifyInterface);
         assert($containerParser instanceof ContainerParserInterface);
         assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
@@ -77,7 +75,6 @@ final class MenuFactory
 
         return new Menu(
             $container,
-            $logger,
             $htmlify,
             $containerParser,
             $escapeHtmlAttr,
