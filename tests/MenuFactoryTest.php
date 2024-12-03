@@ -29,7 +29,6 @@ use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Log\LoggerInterface;
 
 use function assert;
 
@@ -50,26 +49,6 @@ final class MenuFactoryTest extends TestCase
      */
     public function testInvocation(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
         $htmlify         = $this->createMock(HtmlifyInterface::class);
@@ -106,26 +85,24 @@ final class MenuFactoryTest extends TestCase
         $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher   = self::exactly(6);
+        $matcher   = self::exactly(5);
         $container->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                static function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement): mixed {
+                static function (string $id) use ($matcher, $viewHelperPluginManager, $htmlify, $containerParser, $renderer, $htmlElement): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
-                        2 => self::assertSame(LoggerInterface::class, $id),
-                        3 => self::assertSame(HtmlifyInterface::class, $id),
-                        4 => self::assertSame(ContainerParserInterface::class, $id),
-                        5 => self::assertSame(PartialRendererInterface::class, $id),
+                        2 => self::assertSame(HtmlifyInterface::class, $id),
+                        3 => self::assertSame(ContainerParserInterface::class, $id),
+                        4 => self::assertSame(PartialRendererInterface::class, $id),
                         default => self::assertSame(HtmlElementInterface::class, $id),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => $viewHelperPluginManager,
-                        2 => $logger,
-                        3 => $htmlify,
-                        4 => $containerParser,
-                        5 => $renderer,
+                        2 => $htmlify,
+                        3 => $containerParser,
+                        4 => $renderer,
                         default => $htmlElement,
                     };
                 },
@@ -143,26 +120,6 @@ final class MenuFactoryTest extends TestCase
      */
     public function testInvocationWithTranslator(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $htmlElement     = $this->createMock(HtmlElementInterface::class);
         $htmlify         = $this->createMock(HtmlifyInterface::class);
@@ -202,26 +159,24 @@ final class MenuFactoryTest extends TestCase
         $container = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $matcher   = self::exactly(6);
+        $matcher   = self::exactly(5);
         $container->expects($matcher)
             ->method('get')
             ->willReturnCallback(
-                static function (string $id) use ($matcher, $viewHelperPluginManager, $logger, $htmlify, $containerParser, $renderer, $htmlElement): mixed {
+                static function (string $id) use ($matcher, $viewHelperPluginManager, $htmlify, $containerParser, $renderer, $htmlElement): mixed {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
-                        2 => self::assertSame(LoggerInterface::class, $id),
-                        3 => self::assertSame(HtmlifyInterface::class, $id),
-                        4 => self::assertSame(ContainerParserInterface::class, $id),
-                        5 => self::assertSame(PartialRendererInterface::class, $id),
+                        2 => self::assertSame(HtmlifyInterface::class, $id),
+                        3 => self::assertSame(ContainerParserInterface::class, $id),
+                        4 => self::assertSame(PartialRendererInterface::class, $id),
                         default => self::assertSame(HtmlElementInterface::class, $id),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => $viewHelperPluginManager,
-                        2 => $logger,
-                        3 => $htmlify,
-                        4 => $containerParser,
-                        5 => $renderer,
+                        2 => $htmlify,
+                        3 => $containerParser,
+                        4 => $renderer,
                         default => $htmlElement,
                     };
                 },

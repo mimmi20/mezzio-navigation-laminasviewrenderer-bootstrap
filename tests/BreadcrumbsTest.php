@@ -36,7 +36,6 @@ use Override;
 use PHPUnit\Framework\Constraint\IsInstanceOf;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 use function assert;
 
@@ -57,26 +56,6 @@ final class BreadcrumbsTest extends TestCase
     {
         $maxDepth = 4;
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -119,7 +98,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -137,26 +115,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetMinDepth(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -199,7 +157,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -233,26 +190,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetRenderInvisible(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -295,7 +232,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -316,26 +252,6 @@ final class BreadcrumbsTest extends TestCase
         $role        = 'testRole';
         $defaultRole = 'testDefaultRole';
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -378,7 +294,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -403,26 +318,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetUseAuthorization(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -465,7 +360,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -490,26 +384,6 @@ final class BreadcrumbsTest extends TestCase
         $auth        = $this->createMock(AuthorizationInterface::class);
         $defaultAuth = $this->createMock(AuthorizationInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -552,7 +426,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -581,26 +454,6 @@ final class BreadcrumbsTest extends TestCase
     {
         $view = $this->createMock(RendererInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -643,7 +496,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -663,31 +515,10 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetContainer(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
@@ -745,7 +576,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -772,30 +602,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetContainerWithStringDefaultAndNavigationNotFound(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'default';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
@@ -842,7 +651,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -860,30 +668,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetContainerWithStringFound(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
@@ -931,7 +718,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -947,30 +733,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testDoNotAccept(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
@@ -1051,7 +816,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1072,32 +836,10 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testDoNotAcceptWithException(): void
     {
         $exception = new ServiceNotFoundException('test');
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::once())
-            ->method('error')
-            ->with($exception);
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
 
         $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
@@ -1171,7 +913,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1186,38 +927,21 @@ final class BreadcrumbsTest extends TestCase
         $helper->setAuthorization($auth);
 
         assert($page instanceof PageInterface);
-        self::assertFalse($helper->accept($page));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage('test');
+
+        $helper->accept($page);
     }
 
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
-     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testHtmlify(): void
     {
         $expected = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped" targetEscaped="_blankEscaped">testLabelTranslatedAndEscaped</a>';
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
 
         $container = $this->createMock(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
@@ -1296,7 +1020,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1324,26 +1047,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetIndent(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1386,7 +1089,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1409,30 +1111,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveNoActivePages(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $parentPage = $this->getMockBuilder(PageInterface::class)
@@ -1537,7 +1218,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1557,30 +1237,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePage(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $parentPage = $this->getMockBuilder(PageInterface::class)
@@ -1690,7 +1349,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1714,30 +1372,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveWithoutContainer(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $role     = 'testRole';
         $maxDepth = 42;
         $minDepth = 1;
@@ -1809,7 +1446,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1831,30 +1467,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveNoActivePageWithoutDepth(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -1945,7 +1560,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -1970,30 +1584,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageOutOfRange(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -2084,7 +1677,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2106,30 +1698,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageRecursive(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
@@ -2235,7 +1806,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2260,30 +1830,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageRecursive2(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
@@ -2394,7 +1943,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2416,30 +1964,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testFindActiveOneActivePageRecursive3(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
@@ -2549,7 +2076,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2573,26 +2099,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -2635,7 +2141,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2657,26 +2162,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetLinkLast(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -2719,7 +2204,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2741,26 +2225,6 @@ final class BreadcrumbsTest extends TestCase
     /** @throws Exception */
     public function testSetSeparator(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -2803,7 +2267,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2821,30 +2284,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithParamsWithoutPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
@@ -2889,7 +2331,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -2932,30 +2373,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithParamsWithWrongPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
@@ -3000,7 +2420,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3048,30 +2467,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithParams(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
@@ -3194,7 +2592,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3229,30 +2626,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithParamsAndArrayPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
 
@@ -3376,7 +2752,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3414,30 +2789,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithParamsAndArrayPartialRenderingPage(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
 
@@ -3567,7 +2921,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3605,30 +2958,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithParamsNoActivePage(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -3732,7 +3064,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3766,30 +3097,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithoutPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
@@ -3834,7 +3144,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3877,30 +3186,9 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithWrongPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
@@ -3945,7 +3233,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -3993,30 +3280,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
@@ -4136,7 +3402,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -4171,30 +3436,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialNoActivePage(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -4298,7 +3542,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -4333,30 +3576,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithArrayPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
 
@@ -4477,7 +3699,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -4512,30 +3733,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderPartialWithArrayPartialRenderingPage(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
 
@@ -4662,7 +3862,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -4697,31 +3896,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\I18n\Exception\RuntimeException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderStraightNoActivePage(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -4819,7 +3996,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -4856,31 +4032,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\I18n\Exception\RuntimeException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderStraight(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $resource  = 'testResource';
@@ -5057,7 +4211,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -5105,31 +4258,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\I18n\Exception\RuntimeException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderStraightWithoutLinkAtEnd(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $resource               = 'testResource';
         $privilege              = 'testPrivilege';
         $label                  = 'testLabel';
@@ -5284,7 +4415,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -5333,31 +4463,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\I18n\Exception\RuntimeException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderStraightWithoutLinkAtEndWithLiClass(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $resource               = 'testResource';
         $privilege              = 'testPrivilege';
         $label                  = 'testLabel';
@@ -5512,7 +4620,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -5561,32 +4668,10 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\I18n\Exception\RuntimeException
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testRenderStraightWithoutLinkAtEndWithLiClass2(): void
     {
         $indent = '    ';
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
 
         $resource               = 'testResource';
         $privilege              = 'testPrivilege';
@@ -5742,7 +4827,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -5792,31 +4876,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
-     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderWithoutPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
@@ -5992,7 +5054,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -6040,31 +5101,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
-     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testRenderWithPartial(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
         $page = $this->getMockBuilder(PageInterface::class)
@@ -6168,7 +5207,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -6202,7 +5240,7 @@ final class BreadcrumbsTest extends TestCase
     /**
      * @throws Exception
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testToStringWithPartial(): void
     {
@@ -6212,26 +5250,6 @@ final class BreadcrumbsTest extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
         assert($auth instanceof AuthorizationInterface);
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
 
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
@@ -6334,7 +5352,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -6364,31 +5381,11 @@ final class BreadcrumbsTest extends TestCase
 
     /**
      * @throws Exception
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testInvoke(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
 
         $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
             ->disableOriginalConstructor()
@@ -6434,7 +5431,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,
@@ -6455,31 +5451,9 @@ final class BreadcrumbsTest extends TestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
-     * @throws \Laminas\Stdlib\Exception\InvalidArgumentException
-     * @throws \Laminas\I18n\Exception\RuntimeException
      */
     public function testDoNotRenderIfNoPageIsActive(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger->expects(self::never())
-            ->method('emergency');
-        $logger->expects(self::never())
-            ->method('alert');
-        $logger->expects(self::never())
-            ->method('critical');
-        $logger->expects(self::never())
-            ->method('error');
-        $logger->expects(self::never())
-            ->method('warning');
-        $logger->expects(self::never())
-            ->method('notice');
-        $logger->expects(self::never())
-            ->method('info');
-        $logger->expects(self::never())
-            ->method('debug');
-
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -6570,7 +5544,6 @@ final class BreadcrumbsTest extends TestCase
 
         $helper = new Breadcrumbs(
             $serviceLocator,
-            $logger,
             $htmlify,
             $containerParser,
             $escapePlugin,

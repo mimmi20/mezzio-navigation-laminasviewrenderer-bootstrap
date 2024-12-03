@@ -12,10 +12,10 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use InvalidArgumentException;
 use Laminas\I18n;
+use Laminas\I18n\Exception\RuntimeException;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\Stdlib;
+use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Laminas\View;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
@@ -25,7 +25,6 @@ use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
-use Psr\Log\LoggerInterface;
 use RecursiveIteratorIterator;
 
 use function array_diff_key;
@@ -101,7 +100,6 @@ final class Menu extends AbstractMenu
      */
     public function __construct(
         ServiceLocatorInterface $serviceLocator,
-        LoggerInterface $logger,
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
         View\Helper\EscapeHtmlAttr $escaper,
@@ -110,7 +108,7 @@ final class Menu extends AbstractMenu
         private readonly HtmlElementInterface $htmlElement,
         private readonly I18n\View\Helper\Translate | null $translator = null,
     ) {
-        parent::__construct($serviceLocator, $logger, $htmlify, $containerParser, $escaper, $renderer);
+        parent::__construct($serviceLocator, $htmlify, $containerParser, $escaper, $renderer);
     }
 
     /**
@@ -127,9 +125,8 @@ final class Menu extends AbstractMenu
      *                                                  that the helper should render
      *                                                  the container returned by {@link getContainer()}.
      *
-     * @throws InvalidArgumentException
      * @throws View\Exception\RuntimeException
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     #[Override]
     public function render(ContainerInterface | string | null $container = null): string
@@ -156,13 +153,21 @@ final class Menu extends AbstractMenu
      * @param array<string, bool|int|string|null>           $options   [optional] options for controlling rendering
      * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
      *
-     * @throws InvalidArgumentException
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     #[Override]
     public function renderMenu(ContainerInterface | string | null $container = null, array $options = []): string
     {
-        $container = $this->containerParser->parseContainer($container);
+        try {
+            $container = $this->containerParser->parseContainer($container);
+        } catch (InvalidArgumentException $e) {
+            throw new \Laminas\View\Exception\InvalidArgumentException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e,
+            );
+        }
 
         if ($container === null) {
             $container = $this->getContainer();
@@ -208,8 +213,8 @@ final class Menu extends AbstractMenu
      * @param string|null                                   $liActiveClass [optional] CSS class to use for UL
      *                                                                     element. Default is to use the value from {@link getUlClass()}.
      *
-     * @throws InvalidArgumentException
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     #[Override]
     public function renderSubMenu(
@@ -248,7 +253,7 @@ final class Menu extends AbstractMenu
      * @param bool          $addClassToListItem Whether to add the page class to the list item
      *
      * @throws View\Exception\InvalidArgumentException
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\RuntimeException
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      */
@@ -267,7 +272,7 @@ final class Menu extends AbstractMenu
      * @return array<string, bool|int|string|null>
      * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
      *
-     * @throws InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     #[Override]
     protected function normalizeOptions(array $options = []): array
@@ -359,9 +364,8 @@ final class Menu extends AbstractMenu
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
-     * @throws Stdlib\Exception\InvalidArgumentException
      * @throws View\Exception\InvalidArgumentException
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\RuntimeException
      */
     private function renderDeepestMenu(ContainerInterface $container, array $options): string
     {
@@ -462,9 +466,8 @@ final class Menu extends AbstractMenu
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
      * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
-     * @throws Stdlib\Exception\InvalidArgumentException
      * @throws View\Exception\InvalidArgumentException
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\RuntimeException
      */
     private function renderNormalMenu(ContainerInterface $container, array $options): string
     {
@@ -635,7 +638,7 @@ final class Menu extends AbstractMenu
      * @param int                                 $level   current level of rendering
      * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
-     * @throws void
+     * @throws \Laminas\View\Exception\RuntimeException
      */
     private function hasAcceptedSubpages(PageInterface $page, array $options, int $level): bool
     {
@@ -667,7 +670,7 @@ final class Menu extends AbstractMenu
      *
      * @return array<bool>
      *
-     * @throws void
+     * @throws \Laminas\View\Exception\RuntimeException
      */
     private function isPageAccepted(PageInterface $page, array $options, int $level, array $found): array
     {
@@ -793,7 +796,7 @@ final class Menu extends AbstractMenu
      *
      * @return string HTML string
      *
-     * @throws I18n\Exception\RuntimeException
+     * @throws \Laminas\View\Exception\RuntimeException
      * @throws View\Exception\InvalidArgumentException
      */
     private function toHtml(PageInterface $page, array $options, array $attributes, bool $anySubpageAccepted): string
@@ -802,10 +805,14 @@ final class Menu extends AbstractMenu
         $title = $page->getTitle();
 
         if ($this->translator !== null) {
-            $label = ($this->translator)($label, $page->getTextDomain());
+            try {
+                $label = ($this->translator)($label, $page->getTextDomain());
 
-            if ($title !== null) {
-                $title = ($this->translator)($title, $page->getTextDomain());
+                if ($title !== null) {
+                    $title = ($this->translator)($title, $page->getTextDomain());
+                }
+            } catch (RuntimeException $e) {
+                throw new View\Exception\RuntimeException($e->getMessage(), $e->getCode(), $e);
             }
         }
 
@@ -857,7 +864,7 @@ final class Menu extends AbstractMenu
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
      * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
      *
-     * @throws InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     private function normalizeUlClass(array $options): string
     {
@@ -901,7 +908,7 @@ final class Menu extends AbstractMenu
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
      * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
      *
-     * @throws InvalidArgumentException
+     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     private function normalizeItemClass(array $options): string
     {

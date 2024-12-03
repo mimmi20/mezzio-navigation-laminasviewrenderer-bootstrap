@@ -12,7 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use InvalidArgumentException;
+use Laminas\View\Exception\InvalidArgumentException;
 
 use function in_array;
 use function sprintf;

@@ -12,8 +12,8 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use Laminas\I18n\Exception\RuntimeException;
-use Laminas\Stdlib\Exception\InvalidArgumentException;
+use Laminas\View\Exception\InvalidArgumentException;
+use Laminas\View\Exception\RuntimeException;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\AbstractBreadcrumbs;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
@@ -41,7 +41,6 @@ final class Breadcrumbs extends AbstractBreadcrumbs
      *
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     * @throws \Laminas\View\Exception\InvalidArgumentException
      */
     #[Override]
     public function renderStraight(ContainerInterface | string | null $container = null): string
