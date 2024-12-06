@@ -858,6 +858,11 @@ final class Menu extends AbstractMenu
             assert(is_string($label));
         }
 
+        $attributes = array_filter(
+            $attributes,
+            static fn (mixed $value): bool => $value !== null && $value !== '',
+        );
+
         return $this->htmlElement->toHtml($element, $attributes, $label);
     }
 
