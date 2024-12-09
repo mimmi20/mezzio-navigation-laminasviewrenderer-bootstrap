@@ -24,7 +24,7 @@
     "mimmi20/mezzio-navigation": "^4.0.3",
     "mimmi20/mezzio-navigation-laminasviewrenderer": "^5.0.2",
     "mimmi20/navigation-helper-containerparser": "^5.1.0",
-    "mimmi20/navigation-helper-htmlify": "^5.0.0",
+    "mimmi20/navigation-helper-htmlify": "^5.0.2",
     "psr/container": "^1.1.2 || ^2.0.2"
   },
   "require-dev": {
