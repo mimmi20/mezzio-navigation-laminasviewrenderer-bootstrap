@@ -100,12 +100,11 @@ final class BreadcrumbsTest extends AbstractTestCase
 
         // create helper
         $this->helper = new Breadcrumbs(
-            $this->serviceManager,
-            $htmlify,
-            $containerParser,
-            $escapeHtml,
-            $renderer,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtml,
+            renderer: $renderer,
+            translator: $translator,
         );
 
         // set nav1 in helper as default
@@ -257,7 +256,8 @@ final class BreadcrumbsTest extends AbstractTestCase
         assert($acl['acl'] instanceof AuthorizationInterface);
         $this->helper->setAuthorization($acl['acl']);
         assert(is_string($acl['role']));
-        $this->helper->setRole($acl['role']);
+        $this->helper->setRoles([$acl['role']]);
+        $this->helper->setUseAuthorization();
 
         $expected = $this->getExpected('bc/acl.html');
         self::assertSame($expected, rtrim($this->helper->render(), PHP_EOL));

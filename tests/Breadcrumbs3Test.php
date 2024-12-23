@@ -14,7 +14,6 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
@@ -28,7 +27,6 @@ use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\Mezzio\Navigation\Page\Uri;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\FindActive\FindActiveInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Framework\Exception;
@@ -96,38 +94,11 @@ final class Breadcrumbs3Test extends TestCase
         $maxDepth = 1;
         $minDepth = 2;
 
-        $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $findActiveHelper->expects(self::once())
-            ->method('find')
-            ->with($container, $minDepth, $maxDepth)
-            ->willReturn([]);
-
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $auth->expects(self::never())
             ->method('isGranted');
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::once())
-            ->method('build')
-            ->with(
-                FindActiveInterface::class,
-                [
-                    'authorization' => $auth,
-                    'renderInvisible' => false,
-                    'role' => $role,
-                ],
-            )
-            ->willReturn($findActiveHelper);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
@@ -162,15 +133,14 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
@@ -229,38 +199,11 @@ final class Breadcrumbs3Test extends TestCase
         $role     = 'testRole';
         $maxDepth = -1;
 
-        $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $findActiveHelper->expects(self::once())
-            ->method('find')
-            ->with($container, 1, $maxDepth)
-            ->willReturn([]);
-
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $auth->expects(self::never())
             ->method('isGranted');
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::once())
-            ->method('build')
-            ->with(
-                FindActiveInterface::class,
-                [
-                    'authorization' => $auth,
-                    'renderInvisible' => false,
-                    'role' => $role,
-                ],
-            )
-            ->willReturn($findActiveHelper);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
@@ -295,15 +238,14 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
@@ -319,16 +261,6 @@ final class Breadcrumbs3Test extends TestCase
     /** @throws Exception */
     public function testSetPartial(): void
     {
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -360,12 +292,11 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
         self::assertNull($helper->getPartial());
@@ -382,16 +313,6 @@ final class Breadcrumbs3Test extends TestCase
     /** @throws Exception */
     public function testSetLinkLast(): void
     {
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -423,12 +344,11 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
         self::assertFalse($helper->getLinkLast());
@@ -445,16 +365,6 @@ final class Breadcrumbs3Test extends TestCase
     /** @throws Exception */
     public function testSetSeparator(): void
     {
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -486,12 +396,11 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
         self::assertSame(' &gt; ', $helper->getSeparator());
@@ -509,16 +418,6 @@ final class Breadcrumbs3Test extends TestCase
     {
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -550,17 +449,16 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
         $role = 'testRole';
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
@@ -598,16 +496,6 @@ final class Breadcrumbs3Test extends TestCase
     {
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -639,17 +527,16 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
         $role = 'testRole';
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
@@ -703,17 +590,23 @@ final class Breadcrumbs3Test extends TestCase
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $page->expects(self::never())
-            ->method('isVisible');
-        $page->expects(self::never())
-            ->method('getResource');
-        $page->expects(self::never())
-            ->method('getPrivilege');
         $page->expects(self::once())
+            ->method('isVisible')
+            ->with(false)
+            ->willReturn(true);
+        $page->expects(self::once())
+            ->method('getResource')
+            ->willReturn(null);
+        $page->expects(self::once())
+            ->method('getPrivilege')
+            ->willReturn(null);
+        $page->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($parentPage);
-        $page->expects(self::never())
-            ->method('isActive');
+        $page->expects(self::once())
+            ->method('isActive')
+            ->with(false)
+            ->willReturn(true);
 
         $parentPage->addPage($page);
 
@@ -722,43 +615,11 @@ final class Breadcrumbs3Test extends TestCase
 
         $role = 'testRole';
 
-        $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $findActiveHelper->expects(self::once())
-            ->method('find')
-            ->with($container, 1, null)
-            ->willReturn(
-                [
-                    'page' => $page,
-                    'depth' => 2,
-                ],
-            );
-
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $auth->expects(self::never())
             ->method('isGranted');
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::once())
-            ->method('build')
-            ->with(
-                FindActiveInterface::class,
-                [
-                    'authorization' => $auth,
-                    'renderInvisible' => false,
-                    'role' => $role,
-                ],
-            )
-            ->willReturn($findActiveHelper);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
@@ -811,15 +672,14 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
@@ -860,17 +720,23 @@ final class Breadcrumbs3Test extends TestCase
         $page = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $page->expects(self::never())
-            ->method('isVisible');
-        $page->expects(self::never())
-            ->method('getResource');
-        $page->expects(self::never())
-            ->method('getPrivilege');
         $page->expects(self::once())
+            ->method('isVisible')
+            ->with(false)
+            ->willReturn(true);
+        $page->expects(self::once())
+            ->method('getResource')
+            ->willReturn(null);
+        $page->expects(self::once())
+            ->method('getPrivilege')
+            ->willReturn(null);
+        $page->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($parentPage);
-        $page->expects(self::never())
-            ->method('isActive');
+        $page->expects(self::once())
+            ->method('isActive')
+            ->with(false)
+            ->willReturn(true);
 
         $parentPage->addPage($page);
 
@@ -879,43 +745,11 @@ final class Breadcrumbs3Test extends TestCase
 
         $role = 'testRole';
 
-        $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $findActiveHelper->expects(self::once())
-            ->method('find')
-            ->with($container, 1, null)
-            ->willReturn(
-                [
-                    'page' => $page,
-                    'depth' => 2,
-                ],
-            );
-
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $auth->expects(self::never())
             ->method('isGranted');
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::once())
-            ->method('build')
-            ->with(
-                FindActiveInterface::class,
-                [
-                    'authorization' => $auth,
-                    'renderInvisible' => false,
-                    'role' => $role,
-                ],
-            )
-            ->willReturn($findActiveHelper);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
@@ -971,15 +805,14 @@ final class Breadcrumbs3Test extends TestCase
             ->method('__invoke');
 
         $helper = new Breadcrumbs(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapePlugin,
-            $renderer,
-            $translatePlugin,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapePlugin,
+            renderer: $renderer,
+            translator: $translatePlugin,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
