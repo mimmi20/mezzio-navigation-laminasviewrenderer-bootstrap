@@ -14,7 +14,6 @@ declare(strict_types = 1);
 namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\I18n\View\Helper\Translate;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Exception\RuntimeException;
@@ -30,7 +29,6 @@ use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\Mezzio\Navigation\Page\Uri;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\FindActive\FindActiveInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Framework\Exception;
@@ -51,16 +49,6 @@ final class Menu4Test extends TestCase
     /** @throws Exception */
     public function testSetLiClass(): void
     {
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -104,14 +92,13 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
         self::assertSame('', $helper->getLiClass());
@@ -124,16 +111,6 @@ final class Menu4Test extends TestCase
     /** @throws Exception */
     public function testSetLiActiveClass(): void
     {
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -177,14 +154,13 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
         self::assertSame('active', $helper->getLiActiveClass());
@@ -201,33 +177,6 @@ final class Menu4Test extends TestCase
     public function testDoNotRenderIfNoPageIsActive(): void
     {
         $container = $this->createMock(ContainerInterface::class);
-
-        $findActiveHelper = $this->getMockBuilder(FindActiveInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $findActiveHelper->expects(self::once())
-            ->method('find')
-            ->with($container, 0, null)
-            ->willReturn([]);
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::once())
-            ->method('build')
-            ->with(
-                FindActiveInterface::class,
-                [
-                    'authorization' => null,
-                    'renderInvisible' => false,
-                    'role' => null,
-                ],
-            )
-            ->willReturn($findActiveHelper);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -288,14 +237,13 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
         $helper->setContainer($container);
@@ -310,16 +258,6 @@ final class Menu4Test extends TestCase
     public function testRenderPartialWithoutPartial(): void
     {
         $name = 'Mimmi20\Mezzio\Navigation\Top';
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -364,19 +302,18 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
         $role = 'testRole';
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
@@ -411,16 +348,6 @@ final class Menu4Test extends TestCase
     {
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -464,19 +391,18 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
         $role = 'testRole';
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
@@ -551,16 +477,6 @@ final class Menu4Test extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -611,17 +527,16 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
@@ -676,16 +591,6 @@ final class Menu4Test extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -736,17 +641,16 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
@@ -808,16 +712,6 @@ final class Menu4Test extends TestCase
             ->getMock();
         $auth->expects(self::never())
             ->method('isGranted');
-
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -883,17 +777,16 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);
@@ -962,16 +855,6 @@ final class Menu4Test extends TestCase
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $serviceLocator = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serviceLocator->expects(self::never())
-            ->method('has');
-        $serviceLocator->expects(self::never())
-            ->method('get');
-        $serviceLocator->expects(self::never())
-            ->method('build');
-
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -1036,17 +919,16 @@ final class Menu4Test extends TestCase
             ->method('toHtml');
 
         $helper = new Menu(
-            $serviceLocator,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
 
-        $helper->setRole($role);
+        $helper->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
         $helper->setAuthorization($auth);

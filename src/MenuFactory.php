@@ -74,14 +74,13 @@ final class MenuFactory
         assert($htmlElement instanceof HtmlElementInterface);
 
         return new Menu(
-            $container,
-            $htmlify,
-            $containerParser,
-            $escapeHtmlAttr,
-            $renderer,
-            $escapeHtml,
-            $htmlElement,
-            $translator,
+            htmlify: $htmlify,
+            containerParser: $containerParser,
+            escaper: $escapeHtmlAttr,
+            renderer: $renderer,
+            escapeHtml: $escapeHtml,
+            htmlElement: $htmlElement,
+            translator: $translator,
         );
     }
 }

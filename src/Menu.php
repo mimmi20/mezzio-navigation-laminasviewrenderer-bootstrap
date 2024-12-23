@@ -15,7 +15,6 @@ namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\I18n;
 use Laminas\I18n\Exception\RuntimeException;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Laminas\View;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
@@ -100,7 +99,6 @@ final class Menu extends AbstractMenu
      * @throws void
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
         View\Helper\EscapeHtmlAttr $escaper,
@@ -109,7 +107,7 @@ final class Menu extends AbstractMenu
         private readonly HtmlElementInterface $htmlElement,
         private readonly I18n\View\Helper\Translate | null $translator = null,
     ) {
-        parent::__construct($serviceLocator, $htmlify, $containerParser, $escaper, $renderer);
+        parent::__construct($htmlify, $containerParser, $escaper, $renderer);
     }
 
     /**
