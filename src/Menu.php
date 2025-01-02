@@ -3,7 +3,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2024, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2025, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -425,11 +425,17 @@ final class Menu extends AbstractMenu
             $subHtml .= $options['indent'] . '    <li';
 
             if ($liClasses !== []) {
-                $subHtml .= ' class="' . ($this->escaper)(implode(' ', $liClasses)) . '"';
+                $liClasses = ($this->escaper)(implode(' ', $liClasses));
+                assert(is_string($liClasses));
+
+                $subHtml .= ' class="' . $liClasses . '"';
             }
 
             if (!empty($options['liRole'])) {
-                $subHtml .= ' role="' . ($this->escaper)($options['liRole']) . '"';
+                $liRole = ($this->escaper)($options['liRole']);
+                assert(is_string($liRole));
+
+                $subHtml .= ' role="' . $liRole . '"';
             }
 
             $subHtml .= '>' . PHP_EOL;
@@ -446,11 +452,17 @@ final class Menu extends AbstractMenu
         $html = $options['indent'] . '<ul';
 
         if ($options['ulClass']) {
-            $html .= ' class="' . ($this->escaper)($options['ulClass']) . '"';
+            $ulClass = ($this->escaper)($options['ulClass']);
+            assert(is_string($ulClass));
+
+            $html .= ' class="' . $ulClass . '"';
         }
 
         if (!empty($options['ulRole'])) {
-            $html .= ' role="' . ($this->escaper)($options['ulRole']) . '"';
+            $ulRole = ($this->escaper)($options['ulRole']);
+            assert(is_string($ulRole));
+
+            $html .= ' role="' . $ulRole . '"';
         }
 
         $html .= '>' . PHP_EOL;
@@ -524,10 +536,16 @@ final class Menu extends AbstractMenu
             if ($depth > $prevDepth) {
                 // start new ul tag
                 if ($depth === 0) {
-                    $ulClass = ' class="' . ($this->escaper)($options['ulClass']) . '"';
+                    $ulClass = ($this->escaper)($options['ulClass']);
+                    assert(is_string($ulClass));
+
+                    $ulClass = ' class="' . $ulClass . '"';
 
                     if (!empty($options['ulRole'])) {
-                        $ulClass .= ' role="' . ($this->escaper)($options['ulRole']) . '"';
+                        $ulRole = ($this->escaper)($options['ulRole']);
+                        assert(is_string($ulRole));
+
+                        $ulClass .= ' role="' . $ulRole . '"';
                     }
                 } else {
                     $ulClasses = ['dropdown-menu'];
@@ -540,10 +558,16 @@ final class Menu extends AbstractMenu
                         $ulClasses[] = 'dropdown-menu-dark';
                     }
 
-                    $ulClass = ' class="' . ($this->escaper)(implode(' ', $ulClasses)) . '"';
+                    $ulClass = ($this->escaper)(implode(' ', $ulClasses));
+                    assert(is_string($ulClass));
+
+                    $ulClass = ' class="' . $ulClass . '"';
 
                     if ($prevPage?->getId() !== null) {
-                        $ulClass .= ' aria-labelledby="' . ($this->escaper)($prevPage->getId()) . '"';
+                        $id = ($this->escaper)($prevPage->getId());
+                        assert(is_string($id));
+
+                        $ulClass .= ' aria-labelledby="' . $id . '"';
                     }
                 }
 
@@ -585,15 +609,20 @@ final class Menu extends AbstractMenu
                 $pageAttributes,
             );
 
-            $liClass = $liClasses === []
-                ? ''
-                : ' class="' . ($this->escaper)(implode(
-                    ' ',
-                    array_unique($liClasses),
-                )) . '"';
+            $liClass = '';
+
+            if ($liClasses !== []) {
+                $liClasses = ($this->escaper)(implode(' ', array_unique($liClasses)));
+                assert(is_string($liClasses));
+
+                $liClass = ' class="' . $liClasses . '"';
+            }
 
             if ($depth === 0 && !empty($options['liRole'])) {
-                $liClass .= ' role="' . ($this->escaper)($options['liRole']) . '"';
+                $liRole = ($this->escaper)($options['liRole']);
+                assert(is_string($liRole));
+
+                $liClass .= ' role="' . $liRole . '"';
             }
 
             $html .= $myIndent . '    <li' . $liClass . '>' . PHP_EOL;
@@ -738,7 +767,7 @@ final class Menu extends AbstractMenu
                 $options['sublink'] === self::STYLE_SUBLINK_DETAILS
                 && $options['direction'] !== self::DROP_ORIENTATION_DOWN
             ) {
-                $pageAttributes['data-popper-placement'] = match ($options['direction']) {
+                $place = match ($options['direction']) {
                     self::DROP_ORIENTATION_UP_CENTERED => 'top',
                     self::DROP_ORIENTATION_UP => 'top-start',
                     self::DROP_ORIENTATION_END => 'right-start',
@@ -746,6 +775,10 @@ final class Menu extends AbstractMenu
                     self::DROP_ORIENTATION_DOWN_CENTERED => 'bottom',
                     default => null,
                 };
+
+                if ($place !== null) {
+                    $pageAttributes['data-popper-placement'] = $place;
+                }
             }
 
             $pageClasses[] = 'dropdown-toggle';
