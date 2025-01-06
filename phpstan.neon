@@ -110,7 +110,6 @@ parameters:
   ignoreErrors:
     - '~will always evaluate to true~'
     - '~Parameter #1 \$partial of method Mimmi20\\Mezzio\\Navigation\\LaminasView\\View\\Helper\\Navigation\\Abstract(Breadcrumbs|Menu)::setPartial\(\) expects array~'
-    - '~Method Mimmi20Test\\Mezzio\\Navigation\\LaminasView\\View\\Helper\\BootstrapNavigation\\Compare\\TestAsset\\ArrayTranslator::load\(\) should return~'
     - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\ContainerInterface<Mimmi20\\Mezzio\\Navigation\\Page\\PageInterface>::find(?:All|One)?By(Active|Label)\(\)~'
     - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\Navigation::find(?:All|One)?By(Active|Label)\(\)~'
     - '~Parameter #2 \$factory of method Laminas\\ServiceManager\\ServiceManager::setFactory\(\) expects~'
