@@ -61,6 +61,7 @@ final class BreadcrumbsTest extends AbstractTestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws ContainerExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Override]
     protected function setUp(): void
