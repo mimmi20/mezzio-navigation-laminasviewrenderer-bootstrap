@@ -27,6 +27,7 @@ use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -271,6 +272,8 @@ final class Breadcrumbs6Test extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvoke(): void
     {

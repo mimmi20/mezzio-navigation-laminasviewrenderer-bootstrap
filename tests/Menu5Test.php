@@ -25,6 +25,7 @@ use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -42,6 +43,8 @@ final class Menu5Test extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws RuntimeException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDoNotRenderMenuIfNoPageIsActive(): void
     {

@@ -28,6 +28,7 @@ use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -385,7 +386,11 @@ final class Menu1Test extends TestCase
         self::assertFalse($helper->getUseAuthorization());
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testSetAuthorization(): void
     {
         $auth        = $this->createMock(AuthorizationInterface::class);
@@ -459,7 +464,11 @@ final class Menu1Test extends TestCase
         self::assertTrue($helper->hasAuthorization());
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testSetView(): void
     {
         $view = $this->createMock(RendererInterface::class);
@@ -527,6 +536,8 @@ final class Menu1Test extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetContainer(): void
     {
@@ -688,6 +699,8 @@ final class Menu1Test extends TestCase
     /**
      * @throws Exception
      * @throws ExceptionInterface
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetContainerWithStringFound(): void
     {
