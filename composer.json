@@ -45,7 +45,7 @@
     "mezzio/mezzio-helpers": "^5.18.0",
     "mezzio/mezzio-laminasviewrenderer": "^2.18.0",
     "mezzio/mezzio-router": "^3.18.0",
-    "mimmi20/coding-standard": "^6.0.29",
+    "mimmi20/coding-standard": "^6.0.30",
     "mimmi20/mezzio-generic-authorization": "^4.0.0",
     "mimmi20/mezzio-generic-authorization-acl": "^4.0.1",
     "mimmi20/navigation-helper-converttopages": "^3.0.0",
