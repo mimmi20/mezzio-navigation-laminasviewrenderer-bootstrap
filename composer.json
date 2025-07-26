@@ -52,7 +52,7 @@
     "mimmi20/navigation-helper-findroot": "^3.0.0",
     "nikic/php-parser": "^5.5.0",
     "phpstan/extension-installer": "^1.4.3",
-    "phpstan/phpstan": "^2.1.18",
+    "phpstan/phpstan": "^2.1.19",
     "phpstan/phpstan-deprecation-rules": "^2.0.3",
     "phpunit/phpunit": "^12.2.7",
     "psr/http-server-middleware": "^1.0.2",
