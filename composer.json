@@ -1,6 +1,6 @@
 {
   "name": "mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap",
-  "description": "Provides viewhelper for Mezzio Navigation to use with Bootstrap",
+  "description": "Provides viewhelper for Mezzio Navigation to use with Bootstrap 5",
   "license": "MIT",
   "type": "library",
   "authors": [
