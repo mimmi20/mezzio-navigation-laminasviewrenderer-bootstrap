@@ -114,6 +114,7 @@ parameters:
     - '~Call to an undefined method Mimmi20\\Mezzio\\Navigation\\Navigation::find(?:All|One)?By(Active|Label)\(\)~'
     - '~Parameter #2 \$factory of method Laminas\\ServiceManager\\ServiceManager::setFactory\(\) expects~'
     - '~maxDepth: true\} given~'
+    - '~of deprecated class~'
     -
       identifier: property.uninitialized
       paths:
