@@ -291,7 +291,7 @@ final class Menu extends AbstractMenu
             $options['minDepth'] = $this->getMinDepth();
         }
 
-        if ($options['minDepth'] < 0 || $options['minDepth'] === null) {
+        if ($options['minDepth'] < 0) {
             $options['minDepth'] = 0;
         }
 
