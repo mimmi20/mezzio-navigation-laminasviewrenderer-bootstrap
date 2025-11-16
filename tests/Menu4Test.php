@@ -43,8 +43,8 @@ final class Menu4Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Menu::setDefaultAuthorization(null);
-        Menu::setDefaultRole(null);
+        Menu::setDefaultAuthorization();
+        Menu::setDefaultRole();
     }
 
     /** @throws Exception */
@@ -508,7 +508,7 @@ final class Menu4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['container' => $container])
+            ->with($partial, ['container' => $container, 'layout' => false])
             ->willReturn($expected);
 
         $translator = $this->getMockBuilder(Translate::class)
@@ -622,7 +622,7 @@ final class Menu4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['container' => $container])
+            ->with($partial, ['container' => $container, 'layout' => false])
             ->willReturn($expected);
 
         $translator = $this->getMockBuilder(Translate::class)
@@ -758,7 +758,7 @@ final class Menu4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['container' => $container])
+            ->with($partial, ['container' => $container, 'layout' => false])
             ->willReturn($expected);
 
         $translator = $this->getMockBuilder(Translate::class)
@@ -900,7 +900,7 @@ final class Menu4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['container' => $parentPage])
+            ->with($partial, ['container' => $parentPage, 'layout' => false])
             ->willReturn($expected);
 
         $translator = $this->getMockBuilder(Translate::class)

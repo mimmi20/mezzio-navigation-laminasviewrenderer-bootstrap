@@ -40,8 +40,8 @@ final class Breadcrumbs4Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Breadcrumbs::setDefaultAuthorization(null);
-        Breadcrumbs::setDefaultRole(null);
+        Breadcrumbs::setDefaultAuthorization();
+        Breadcrumbs::setDefaultRole();
     }
 
     /**
@@ -142,7 +142,7 @@ final class Breadcrumbs4Test extends TestCase
             ->method('render')
             ->with(
                 $partial,
-                ['pages' => [$parentPage, $subPage], 'separator' => $seperator, 'abc' => 'test'],
+                ['pages' => [$parentPage, $subPage], 'separator' => $seperator, 'abc' => 'test', 'layout' => false],
             )
             ->willReturn($expected);
 
@@ -258,7 +258,10 @@ final class Breadcrumbs4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [], 'separator' => $seperator, 'abc' => 'test'])
+            ->with(
+                $partial,
+                ['pages' => [], 'separator' => $seperator, 'abc' => 'test', 'layout' => false],
+            )
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)
@@ -547,7 +550,10 @@ final class Breadcrumbs4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [$parentPage, $page], 'separator' => $seperator])
+            ->with(
+                $partial,
+                ['pages' => [$parentPage, $page], 'separator' => $seperator, 'layout' => false],
+            )
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)
@@ -659,7 +665,7 @@ final class Breadcrumbs4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [], 'separator' => $seperator])
+            ->with($partial, ['pages' => [], 'separator' => $seperator, 'layout' => false])
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)
@@ -789,7 +795,10 @@ final class Breadcrumbs4Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [$parentPage, $page], 'separator' => $seperator])
+            ->with(
+                $partial,
+                ['pages' => [$parentPage, $page], 'separator' => $seperator, 'layout' => false],
+            )
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)

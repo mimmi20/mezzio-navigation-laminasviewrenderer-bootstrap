@@ -40,8 +40,8 @@ final class Menu2Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Menu::setDefaultAuthorization(null);
-        Menu::setDefaultRole(null);
+        Menu::setDefaultAuthorization();
+        Menu::setDefaultRole();
     }
 
     /**

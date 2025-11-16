@@ -39,8 +39,8 @@ final class Breadcrumbs2Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Breadcrumbs::setDefaultAuthorization(null);
-        Breadcrumbs::setDefaultRole(null);
+        Breadcrumbs::setDefaultAuthorization();
+        Breadcrumbs::setDefaultRole();
     }
 
     /**

@@ -120,7 +120,6 @@ final class MenuTest extends AbstractTestCase
             renderer: $renderer,
             escapeHtml: $escapeHtml,
             htmlElement: $htmlElement,
-            translator: null,
         );
 
         // set nav1 in helper as default
