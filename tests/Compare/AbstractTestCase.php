@@ -33,11 +33,13 @@ use Mezzio\Router\Route;
 use Mezzio\Router\RouteResult;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementFactory;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererFactory;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\GenericAuthorization\Acl\LaminasAcl;
 use Mimmi20\Mezzio\Navigation\Config\NavigationConfig;
 use Mimmi20\Mezzio\Navigation\Config\NavigationConfigInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserFactory;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyFactory;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\NavigationFactory;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\ServerUrlHelperFactory;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\UrlHelperFactory;
@@ -46,14 +48,6 @@ use Mimmi20\Mezzio\Navigation\Page\PageFactory;
 use Mimmi20\Mezzio\Navigation\Page\PageFactoryInterface;
 use Mimmi20\Mezzio\Navigation\Service\ConstructedNavigationFactory;
 use Mimmi20\Mezzio\Navigation\Service\DefaultNavigationFactory;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserFactory;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\ConvertToPages\ConvertToPagesFactory;
-use Mimmi20\NavigationHelper\ConvertToPages\ConvertToPagesInterface;
-use Mimmi20\NavigationHelper\FindRoot\FindRoot;
-use Mimmi20\NavigationHelper\FindRoot\FindRootInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyFactory;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -143,13 +137,9 @@ abstract class AbstractTestCase extends TestCase
         );
         $sm->setFactory(PageFactory::class, InvokableFactory::class);
         $sm->setAlias(PageFactoryInterface::class, PageFactory::class);
-        $sm->setFactory(PartialRendererInterface::class, PartialRendererFactory::class);
         $sm->setFactory(HtmlElementInterface::class, HtmlElementFactory::class);
         $sm->setFactory(HtmlifyInterface::class, HtmlifyFactory::class);
         $sm->setFactory(ContainerParserInterface::class, ContainerParserFactory::class);
-        $sm->setAlias(FindRootInterface::class, FindRoot::class);
-        $sm->setFactory(FindRoot::class, InvokableFactory::class);
-        $sm->setFactory(ConvertToPagesInterface::class, ConvertToPagesFactory::class);
         $sm->setFactory(
             'config',
             static fn (): array => [

@@ -19,15 +19,15 @@ use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
 use Mimmi20\Mezzio\Navigation\Page\PageFactory;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Attributes\Group;
@@ -73,12 +73,12 @@ final class MenuTest extends AbstractTestCase
         $plugin = $this->serviceManager->get(ViewHelperPluginManager::class);
         assert($plugin instanceof ViewHelperPluginManager);
 
-        $renderer = $this->serviceManager->get(PartialRendererInterface::class);
+        $renderer = $this->serviceManager->get(LaminasViewRenderer::class);
         assert(
-            $renderer instanceof PartialRendererInterface,
+            $renderer instanceof LaminasViewRenderer,
             sprintf(
                 '$renderer should be an Instance of %s, but was %s',
-                PartialRendererInterface::class,
+                LaminasViewRenderer::class,
                 get_debug_type($renderer),
             ),
         );
@@ -120,7 +120,6 @@ final class MenuTest extends AbstractTestCase
             renderer: $renderer,
             escapeHtml: $escapeHtml,
             htmlElement: $htmlElement,
-            translator: null,
         );
 
         // set nav1 in helper as default

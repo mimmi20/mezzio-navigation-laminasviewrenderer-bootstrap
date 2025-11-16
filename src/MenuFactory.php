@@ -20,10 +20,10 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
 use Laminas\View\HelperPluginManager as ViewPluginManager;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 use function assert;
@@ -62,14 +62,14 @@ final class MenuFactory
         $htmlify         = $container->get(HtmlifyInterface::class);
         $containerParser = $container->get(ContainerParserInterface::class);
         $escapeHtmlAttr  = $plugin->get(EscapeHtmlAttr::class);
-        $renderer        = $container->get(PartialRendererInterface::class);
+        $renderer        = $container->get(LaminasViewRenderer::class);
         $escapeHtml      = $plugin->get(EscapeHtml::class);
         $htmlElement     = $container->get(HtmlElementInterface::class);
 
         assert($htmlify instanceof HtmlifyInterface);
         assert($containerParser instanceof ContainerParserInterface);
         assert($escapeHtmlAttr instanceof EscapeHtmlAttr);
-        assert($renderer instanceof PartialRendererInterface);
+        assert($renderer instanceof LaminasViewRenderer);
         assert($escapeHtml instanceof EscapeHtml);
         assert($htmlElement instanceof HtmlElementInterface);
 

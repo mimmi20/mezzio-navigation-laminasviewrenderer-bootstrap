@@ -18,14 +18,14 @@ use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Renderer\PhpRenderer;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
@@ -39,8 +39,8 @@ final class Breadcrumbs6Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Breadcrumbs::setDefaultAuthorization(null);
-        Breadcrumbs::setDefaultRole(null);
+        Breadcrumbs::setDefaultAuthorization();
+        Breadcrumbs::setDefaultRole();
     }
 
     /**
@@ -110,12 +110,12 @@ final class Breadcrumbs6Test extends TestCase
         $partial   = 'testPartial';
         $seperator = '/';
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [], 'separator' => $seperator])
+            ->with($partial, ['pages' => [], 'separator' => $seperator, 'layout' => false])
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)
@@ -227,12 +227,12 @@ final class Breadcrumbs6Test extends TestCase
         $partial   = 'testPartial';
         $seperator = '/';
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [], 'separator' => $seperator])
+            ->with($partial, ['pages' => [], 'separator' => $seperator, 'layout' => false])
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)
@@ -299,7 +299,7 @@ final class Breadcrumbs6Test extends TestCase
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
@@ -384,7 +384,7 @@ final class Breadcrumbs6Test extends TestCase
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::never())
