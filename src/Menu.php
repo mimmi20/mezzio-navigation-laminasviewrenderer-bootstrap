@@ -878,7 +878,7 @@ final class Menu extends AbstractMenu
                 $attributes,
                 array_filter(
                     $page->getCustomProperties(),
-                    static fn ($propertyValue): bool => is_string($propertyValue),
+                    is_string(...),
                 ),
             ),
             array_flip(['lastmod', 'changefreq', 'priority']),

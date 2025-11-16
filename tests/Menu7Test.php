@@ -41,8 +41,8 @@ final class Menu7Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Menu::setDefaultAuthorization(null);
-        Menu::setDefaultRole(null);
+        Menu::setDefaultAuthorization();
+        Menu::setDefaultRole();
     }
 
     /**
@@ -152,7 +152,7 @@ final class Menu7Test extends TestCase
             ->method('__invoke');
 
         $expected = 'renderedPartial';
-        $data     = ['container' => $parentPage];
+        $data     = ['container' => $parentPage, 'layout' => false];
 
         $model = $this->getMockBuilder(ModelInterface::class)
             ->disableOriginalConstructor()

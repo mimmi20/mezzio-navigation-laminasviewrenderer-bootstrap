@@ -40,8 +40,8 @@ final class Breadcrumbs5Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Breadcrumbs::setDefaultAuthorization(null);
-        Breadcrumbs::setDefaultRole(null);
+        Breadcrumbs::setDefaultAuthorization();
+        Breadcrumbs::setDefaultRole();
     }
 
     /**
@@ -140,7 +140,10 @@ final class Breadcrumbs5Test extends TestCase
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($partial, ['pages' => [$parentPage, $subPage], 'separator' => $seperator])
+            ->with(
+                $partial,
+                ['pages' => [$parentPage, $subPage], 'separator' => $seperator, 'layout' => false],
+            )
             ->willReturn($expected);
 
         $translatePlugin = $this->getMockBuilder(Translate::class)

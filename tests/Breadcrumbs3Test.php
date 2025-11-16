@@ -40,8 +40,8 @@ final class Breadcrumbs3Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Breadcrumbs::setDefaultAuthorization(null);
-        Breadcrumbs::setDefaultRole(null);
+        Breadcrumbs::setDefaultAuthorization();
+        Breadcrumbs::setDefaultRole();
     }
 
     /**
@@ -661,7 +661,7 @@ final class Breadcrumbs3Test extends TestCase
             ->method('render')
             ->with(
                 $partial,
-                ['abc' => 'test', 'pages' => [$parentPage, $page], 'separator' => $seperator],
+                ['abc' => 'test', 'pages' => [$parentPage, $page], 'separator' => $seperator, 'layout' => false],
             )
             ->willReturn($expected);
 
@@ -794,7 +794,7 @@ final class Breadcrumbs3Test extends TestCase
             ->method('render')
             ->with(
                 $partial,
-                ['pages' => [$parentPage, $page], 'separator' => $seperator, 'abc' => 'test'],
+                ['pages' => [$parentPage, $page], 'separator' => $seperator, 'abc' => 'test', 'layout' => false],
             )
             ->willReturn($expected);
 
