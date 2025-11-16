@@ -17,14 +17,14 @@ use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\ViewHelperInterface;
 use Mimmi20\Mezzio\Navigation\Navigation;
 use Mimmi20\Mezzio\Navigation\Page\PageFactory;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Exception;
@@ -71,12 +71,12 @@ final class BreadcrumbsTest extends AbstractTestCase
         $plugin = $this->serviceManager->get(ViewHelperPluginManager::class);
         assert($plugin instanceof ViewHelperPluginManager);
 
-        $renderer = $this->serviceManager->get(PartialRendererInterface::class);
+        $renderer = $this->serviceManager->get(LaminasViewRenderer::class);
         assert(
-            $renderer instanceof PartialRendererInterface,
+            $renderer instanceof LaminasViewRenderer,
             sprintf(
                 '$renderer should be an Instance of %s, but was %s',
-                PartialRendererInterface::class,
+                LaminasViewRenderer::class,
                 get_debug_type($renderer),
             ),
         );

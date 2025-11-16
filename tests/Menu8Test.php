@@ -19,16 +19,16 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\Model\ModelInterface;
 use Laminas\View\Renderer\PhpRenderer;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\Exception\InvalidArgumentException;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Mimmi20\Mezzio\Navigation\Page\Uri;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -42,8 +42,8 @@ final class Menu8Test extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        Menu::setDefaultAuthorization(null);
-        Menu::setDefaultRole(null);
+        Menu::setDefaultAuthorization();
+        Menu::setDefaultRole();
     }
 
     /**
@@ -55,6 +55,7 @@ final class Menu8Test extends TestCase
     {
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
+        $template  = 'test-template';
 
         $parentPage = new Uri();
         $parentPage->setVisible(true);
@@ -153,15 +154,21 @@ final class Menu8Test extends TestCase
             ->method('__invoke');
 
         $expected = 'renderedPartial';
-        $data     = ['container' => $parentPage];
 
         $model = $this->getMockBuilder(ModelInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $model->expects(self::never())
-            ->method('setVariables');
-        $model->expects(self::never())
-            ->method('getTemplate');
+        $model->expects(self::once())
+            ->method('setVariables')
+            ->with(
+                [
+                    'container' => $parentPage,
+                    'layout' => false,
+                ],
+            );
+        $model->expects(self::once())
+            ->method('getTemplate')
+            ->willReturn($template);
 
         $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
             ->disableOriginalConstructor()
@@ -175,12 +182,12 @@ final class Menu8Test extends TestCase
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
+        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderer->expects(self::once())
             ->method('render')
-            ->with($model, $data)
+            ->with($template, $model)
             ->willReturn($expected);
 
         $translator = $this->getMockBuilder(Translate::class)

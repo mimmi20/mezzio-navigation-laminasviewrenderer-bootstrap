@@ -20,12 +20,12 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
@@ -58,7 +58,7 @@ final class MenuFactoryTest extends TestCase
         $htmlify         = $this->createMock(HtmlifyInterface::class);
         $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(PartialRendererInterface::class);
+        $renderer        = $this->createMock(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -98,7 +98,7 @@ final class MenuFactoryTest extends TestCase
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(HtmlifyInterface::class, $id),
                         3 => self::assertSame(ContainerParserInterface::class, $id),
-                        4 => self::assertSame(PartialRendererInterface::class, $id),
+                        4 => self::assertSame(LaminasViewRenderer::class, $id),
                         default => self::assertSame(HtmlElementInterface::class, $id),
                     };
 
@@ -131,7 +131,7 @@ final class MenuFactoryTest extends TestCase
         $htmlify         = $this->createMock(HtmlifyInterface::class);
         $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtml      = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(PartialRendererInterface::class);
+        $renderer        = $this->createMock(LaminasViewRenderer::class);
         $translator      = $this->createMock(Translate::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
@@ -174,7 +174,7 @@ final class MenuFactoryTest extends TestCase
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(HtmlifyInterface::class, $id),
                         3 => self::assertSame(ContainerParserInterface::class, $id),
-                        4 => self::assertSame(PartialRendererInterface::class, $id),
+                        4 => self::assertSame(LaminasViewRenderer::class, $id),
                         default => self::assertSame(HtmlElementInterface::class, $id),
                     };
 

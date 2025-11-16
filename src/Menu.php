@@ -17,13 +17,13 @@ use Laminas\I18n;
 use Laminas\I18n\Exception\RuntimeException;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Laminas\View;
+use Mezzio\LaminasView\LaminasViewRenderer;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\AbstractMenu;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use RecursiveIteratorIterator;
 
@@ -102,7 +102,7 @@ final class Menu extends AbstractMenu
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
         View\Helper\EscapeHtmlAttr $escaper,
-        PartialRendererInterface $renderer,
+        LaminasViewRenderer $renderer,
         private readonly View\Helper\EscapeHtml $escapeHtml,
         private readonly HtmlElementInterface $htmlElement,
         private readonly I18n\View\Helper\Translate | null $translator = null,
@@ -878,7 +878,7 @@ final class Menu extends AbstractMenu
                 $attributes,
                 array_filter(
                     $page->getCustomProperties(),
-                    static fn ($propertyValue): bool => is_string($propertyValue),
+                    is_string(...),
                 ),
             ),
             array_flip(['lastmod', 'changefreq', 'priority']),

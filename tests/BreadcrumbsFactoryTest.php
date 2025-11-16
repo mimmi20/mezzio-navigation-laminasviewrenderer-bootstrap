@@ -19,11 +19,11 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
-use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
+use Mezzio\LaminasView\LaminasViewRenderer;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\BreadcrumbsFactory;
-use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
-use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
@@ -55,7 +55,7 @@ final class BreadcrumbsFactoryTest extends TestCase
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $translatePlugin = $this->createMock(Translate::class);
         $escapePlugin    = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(PartialRendererInterface::class);
+        $renderer        = $this->createMock(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -95,7 +95,7 @@ final class BreadcrumbsFactoryTest extends TestCase
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(HtmlifyInterface::class, $id),
                         3 => self::assertSame(ContainerParserInterface::class, $id),
-                        default => self::assertSame(PartialRendererInterface::class, $id),
+                        default => self::assertSame(LaminasViewRenderer::class, $id),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
@@ -124,7 +124,7 @@ final class BreadcrumbsFactoryTest extends TestCase
         $htmlify         = $this->createMock(HtmlifyInterface::class);
         $containerParser = $this->createMock(ContainerParserInterface::class);
         $escapePlugin    = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(PartialRendererInterface::class);
+        $renderer        = $this->createMock(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -150,7 +150,7 @@ final class BreadcrumbsFactoryTest extends TestCase
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(HtmlifyInterface::class, $id),
                         3 => self::assertSame(ContainerParserInterface::class, $id),
-                        default => self::assertSame(PartialRendererInterface::class, $id),
+                        default => self::assertSame(LaminasViewRenderer::class, $id),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
