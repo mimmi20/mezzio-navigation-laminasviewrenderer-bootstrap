@@ -42,7 +42,7 @@ use function implode;
 use function is_bool;
 use function is_int;
 use function is_string;
-use function mb_rtrim;
+use function rtrim;
 use function sprintf;
 use function str_repeat;
 
@@ -654,7 +654,7 @@ final class Menu extends AbstractMenu
                 $html .= $myIndent . '</details>' . PHP_EOL;
             }
 
-            $html = mb_rtrim($html, PHP_EOL);
+            $html = rtrim($html, PHP_EOL);
         }
 
         return $html;
