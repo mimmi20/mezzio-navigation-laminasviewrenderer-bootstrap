@@ -3,7 +3,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2025, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2026, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -37,10 +37,10 @@ use Psr\Container\ContainerExceptionInterface;
 use function assert;
 use function get_debug_type;
 use function is_string;
-use function rtrim;
+use function mb_rtrim;
 use function sprintf;
 use function str_replace;
-use function trim;
+use function mb_trim;
 
 use const PHP_EOL;
 
@@ -201,8 +201,8 @@ final class MenuTest extends AbstractTestCase
         ];
 
         $actual = [
-            'indent4' => rtrim($this->helper->renderMenu(null, ['indent' => 4]), PHP_EOL),
-            'indent8' => rtrim($this->helper->renderMenu(), PHP_EOL),
+            'indent4' => mb_rtrim($this->helper->renderMenu(null, ['indent' => 4]), PHP_EOL),
+            'indent8' => mb_rtrim($this->helper->renderMenu(), PHP_EOL),
         ];
 
         self::assertSame($expected, $actual);
@@ -313,7 +313,7 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/default1.html');
         $actual   = $this->helper->renderMenu(null, ['style' => Menu::STYLE_UL]);
 
-        self::assertSame($expected, trim($actual));
+        self::assertSame($expected, mb_trim($actual));
     }
 
     /**
@@ -334,7 +334,7 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/default1_ol.html');
         $actual   = $this->helper->renderMenu(null, ['style' => Menu::STYLE_OL]);
 
-        self::assertSame($expected, trim($actual));
+        self::assertSame($expected, mb_trim($actual));
     }
 
     /**
@@ -358,7 +358,7 @@ final class MenuTest extends AbstractTestCase
             ['style' => Menu::STYLE_UL, 'sublink' => Menu::STYLE_SUBLINK_BUTTON],
         );
 
-        self::assertSame($expected, trim($actual));
+        self::assertSame($expected, mb_trim($actual));
     }
 
     /**
@@ -382,7 +382,7 @@ final class MenuTest extends AbstractTestCase
             ['style' => Menu::STYLE_UL, 'sublink' => Menu::STYLE_SUBLINK_DETAILS],
         );
 
-        self::assertSame($expected, trim($actual));
+        self::assertSame($expected, mb_trim($actual));
     }
 
     /**
@@ -412,7 +412,7 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/css2.html');
         $actual   = $this->helper->render($this->nav2);
 
-        self::assertSame(trim($expected), $actual);
+        self::assertSame(mb_trim($expected), $actual);
     }
 
     /**
@@ -899,7 +899,7 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/addclasstolistitem_as_false.html');
         $actual   = $this->helper->renderMenu($nav2);
 
-        self::assertSame(trim($expected), trim($actual));
+        self::assertSame(mb_trim($expected), mb_trim($actual));
     }
 
     /**
@@ -925,7 +925,7 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/addclasstolistitem_as_true.html');
         $actual   = $this->helper->renderMenu($nav2, $options);
 
-        self::assertSame(trim($expected), trim($actual));
+        self::assertSame(mb_trim($expected), mb_trim($actual));
     }
 
     /**
@@ -959,7 +959,7 @@ final class MenuTest extends AbstractTestCase
         $expected = $this->getExpected('menu/onlyactivebranch_addclasstolistitem.html');
         $actual   = $this->helper->renderMenu($nav2, $options);
 
-        self::assertSame(trim($expected), trim($actual));
+        self::assertSame(mb_trim($expected), mb_trim($actual));
     }
 
     /**
