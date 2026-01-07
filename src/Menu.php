@@ -3,7 +3,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2025, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2026, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -42,7 +42,7 @@ use function implode;
 use function is_bool;
 use function is_int;
 use function is_string;
-use function rtrim;
+use function mb_rtrim;
 use function sprintf;
 use function str_repeat;
 
@@ -654,7 +654,7 @@ final class Menu extends AbstractMenu
                 $html .= $myIndent . '</details>' . PHP_EOL;
             }
 
-            $html = rtrim($html, PHP_EOL);
+            $html = mb_rtrim($html, PHP_EOL);
         }
 
         return $html;

@@ -3,7 +3,7 @@
 /**
  * This file is part of the mimmi20/mezzio-navigation-laminasviewrenderer-bootstrap package.
  *
- * Copyright (c) 2021-2025, Thomas Mueller <mimmi20@live.de>
+ * Copyright (c) 2021-2026, Thomas Mueller <mimmi20@live.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,10 +35,10 @@ use function get_debug_type;
 use function is_string;
 use function mb_strlen;
 use function mb_substr;
-use function rtrim;
+use function mb_rtrim;
 use function sprintf;
 use function str_replace;
-use function trim;
+use function mb_trim;
 
 use const PHP_EOL;
 
@@ -158,7 +158,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setSeparator('foo');
 
         $expected = $this->getExpected('bc/separator.html');
-        $actual   = rtrim($this->helper->render(), PHP_EOL);
+        $actual   = mb_rtrim($this->helper->render(), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
@@ -172,7 +172,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setMaxDepth(1);
 
         $expected = $this->getExpected('bc/maxdepth.html');
-        $actual   = rtrim($this->helper->render(), PHP_EOL);
+        $actual   = mb_rtrim($this->helper->render(), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
@@ -200,7 +200,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setLinkLast(true);
 
         $expected = $this->getExpected('bc/linklast.html');
-        $actual   = rtrim($this->helper->render(), PHP_EOL);
+        $actual   = mb_rtrim($this->helper->render(), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
@@ -238,9 +238,9 @@ final class BreadcrumbsTest extends AbstractTestCase
         ];
 
         $actual = [
-            'registered' => rtrim($this->helper->render(), PHP_EOL),
-            'supplied' => rtrim($this->helper->render($this->nav2), PHP_EOL),
-            'registered_again' => rtrim($this->helper->render(), PHP_EOL),
+            'registered' => mb_rtrim($this->helper->render(), PHP_EOL),
+            'supplied' => mb_rtrim($this->helper->render($this->nav2), PHP_EOL),
+            'registered_again' => mb_rtrim($this->helper->render(), PHP_EOL),
         ];
 
         self::assertSame($expected, $actual);
@@ -261,7 +261,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $this->helper->setUseAuthorization();
 
         $expected = $this->getExpected('bc/acl.html');
-        self::assertSame($expected, rtrim($this->helper->render(), PHP_EOL));
+        self::assertSame($expected, mb_rtrim($this->helper->render(), PHP_EOL));
     }
 
     /**
@@ -284,7 +284,7 @@ final class BreadcrumbsTest extends AbstractTestCase
     {
         $this->helper->setPartial('test::bc-separator')->setSeparator(' / ');
 
-        $expected = trim($this->getExpected('bc/partialwithseparator.html'));
+        $expected = mb_trim($this->getExpected('bc/partialwithseparator.html'));
         self::assertSame($expected, $this->helper->render());
     }
 
@@ -355,7 +355,7 @@ final class BreadcrumbsTest extends AbstractTestCase
         $container->addPage($page);
 
         $expected = $this->getExpected('bc/escaped.html');
-        $actual   = rtrim($this->helper->setMinDepth(0)->render($container), PHP_EOL);
+        $actual   = mb_rtrim($this->helper->setMinDepth(0)->render($container), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
