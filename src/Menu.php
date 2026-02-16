@@ -94,8 +94,6 @@ final class Menu extends AbstractMenu
     public const string DROP_ORIENTATION_END = 'end';
 
     /**
-     * @return void
-     *
      * @throws void
      */
     public function __construct(
