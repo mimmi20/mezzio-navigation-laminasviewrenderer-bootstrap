@@ -20,10 +20,10 @@ use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\Renderer\RendererInterface;
 use Mezzio\LaminasView\LaminasViewRenderer;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\GenericAuthorization\AuthorizationInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\Navigation;
@@ -393,8 +393,8 @@ final class Menu1Test extends TestCase
      */
     public function testSetAuthorization(): void
     {
-        $auth        = $this->createMock(AuthorizationInterface::class);
-        $defaultAuth = $this->createMock(AuthorizationInterface::class);
+        $auth        = self::createStub(AuthorizationInterface::class);
+        $defaultAuth = self::createStub(AuthorizationInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -471,7 +471,7 @@ final class Menu1Test extends TestCase
      */
     public function testSetView(): void
     {
-        $view = $this->createMock(RendererInterface::class);
+        $view = self::createStub(RendererInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -541,7 +541,7 @@ final class Menu1Test extends TestCase
      */
     public function testSetContainer(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -704,7 +704,7 @@ final class Menu1Test extends TestCase
      */
     public function testSetContainerWithStringFound(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)

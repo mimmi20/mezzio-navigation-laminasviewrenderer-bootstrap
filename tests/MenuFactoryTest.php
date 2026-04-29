@@ -21,8 +21,8 @@ use Laminas\View\Helper\EscapeHtmlAttr;
 use Laminas\View\Helper\HelperInterface;
 use Laminas\View\HelperPluginManager as ViewHelperPluginManager;
 use Mezzio\LaminasView\LaminasViewRenderer;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
@@ -53,12 +53,12 @@ final class MenuFactoryTest extends TestCase
      */
     public function testInvocation(): void
     {
-        $containerParser = $this->createMock(ContainerParserInterface::class);
-        $htmlElement     = $this->createMock(HtmlElementInterface::class);
-        $htmlify         = $this->createMock(HtmlifyInterface::class);
-        $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
-        $escapeHtml      = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(LaminasViewRenderer::class);
+        $containerParser = self::createStub(ContainerParserInterface::class);
+        $htmlElement     = self::createStub(HtmlElementInterface::class);
+        $htmlify         = self::createStub(HtmlifyInterface::class);
+        $escapeHtmlAttr  = self::createStub(EscapeHtmlAttr::class);
+        $escapeHtml      = self::createStub(EscapeHtml::class);
+        $renderer        = self::createStub(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -126,13 +126,13 @@ final class MenuFactoryTest extends TestCase
      */
     public function testInvocationWithTranslator(): void
     {
-        $containerParser = $this->createMock(ContainerParserInterface::class);
-        $htmlElement     = $this->createMock(HtmlElementInterface::class);
-        $htmlify         = $this->createMock(HtmlifyInterface::class);
-        $escapeHtmlAttr  = $this->createMock(EscapeHtmlAttr::class);
-        $escapeHtml      = $this->createMock(EscapeHtml::class);
-        $renderer        = $this->createMock(LaminasViewRenderer::class);
-        $translator      = $this->createMock(Translate::class);
+        $containerParser = self::createStub(ContainerParserInterface::class);
+        $htmlElement     = self::createStub(HtmlElementInterface::class);
+        $htmlify         = self::createStub(HtmlifyInterface::class);
+        $escapeHtmlAttr  = self::createStub(EscapeHtmlAttr::class);
+        $escapeHtml      = self::createStub(EscapeHtml::class);
+        $renderer        = self::createStub(LaminasViewRenderer::class);
+        $translator      = self::createStub(Translate::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
