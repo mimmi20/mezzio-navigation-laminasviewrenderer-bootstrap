@@ -279,7 +279,7 @@ final class Breadcrumbs6Test extends TestCase
      */
     public function testInvoke(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()

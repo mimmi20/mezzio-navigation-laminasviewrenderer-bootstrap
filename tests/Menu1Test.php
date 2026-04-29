@@ -393,8 +393,8 @@ final class Menu1Test extends TestCase
      */
     public function testSetAuthorization(): void
     {
-        $auth        = $this->createStub(AuthorizationInterface::class);
-        $defaultAuth = $this->createStub(AuthorizationInterface::class);
+        $auth        = self::createStub(AuthorizationInterface::class);
+        $defaultAuth = self::createStub(AuthorizationInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -471,7 +471,7 @@ final class Menu1Test extends TestCase
      */
     public function testSetView(): void
     {
-        $view = $this->createStub(RendererInterface::class);
+        $view = self::createStub(RendererInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -541,7 +541,7 @@ final class Menu1Test extends TestCase
      */
     public function testSetContainer(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
@@ -704,7 +704,7 @@ final class Menu1Test extends TestCase
      */
     public function testSetContainerWithStringFound(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)

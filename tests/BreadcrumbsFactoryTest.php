@@ -51,11 +51,11 @@ final class BreadcrumbsFactoryTest extends TestCase
      */
     public function testInvocationWithTranslator(): void
     {
-        $htmlify         = $this->createStub(HtmlifyInterface::class);
-        $containerParser = $this->createStub(ContainerParserInterface::class);
-        $translatePlugin = $this->createStub(Translate::class);
-        $escapePlugin    = $this->createStub(EscapeHtml::class);
-        $renderer        = $this->createStub(LaminasViewRenderer::class);
+        $htmlify         = self::createStub(HtmlifyInterface::class);
+        $containerParser = self::createStub(ContainerParserInterface::class);
+        $translatePlugin = self::createStub(Translate::class);
+        $escapePlugin    = self::createStub(EscapeHtml::class);
+        $renderer        = self::createStub(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -121,10 +121,10 @@ final class BreadcrumbsFactoryTest extends TestCase
      */
     public function testInvocationWithoutTranslator(): void
     {
-        $htmlify         = $this->createStub(HtmlifyInterface::class);
-        $containerParser = $this->createStub(ContainerParserInterface::class);
-        $escapePlugin    = $this->createStub(EscapeHtml::class);
-        $renderer        = $this->createStub(LaminasViewRenderer::class);
+        $htmlify         = self::createStub(HtmlifyInterface::class);
+        $containerParser = self::createStub(ContainerParserInterface::class);
+        $escapePlugin    = self::createStub(EscapeHtml::class);
+        $renderer        = self::createStub(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()

@@ -53,12 +53,12 @@ final class MenuFactoryTest extends TestCase
      */
     public function testInvocation(): void
     {
-        $containerParser = $this->createStub(ContainerParserInterface::class);
-        $htmlElement     = $this->createStub(HtmlElementInterface::class);
-        $htmlify         = $this->createStub(HtmlifyInterface::class);
-        $escapeHtmlAttr  = $this->createStub(EscapeHtmlAttr::class);
-        $escapeHtml      = $this->createStub(EscapeHtml::class);
-        $renderer        = $this->createStub(LaminasViewRenderer::class);
+        $containerParser = self::createStub(ContainerParserInterface::class);
+        $htmlElement     = self::createStub(HtmlElementInterface::class);
+        $htmlify         = self::createStub(HtmlifyInterface::class);
+        $escapeHtmlAttr  = self::createStub(EscapeHtmlAttr::class);
+        $escapeHtml      = self::createStub(EscapeHtml::class);
+        $renderer        = self::createStub(LaminasViewRenderer::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()
@@ -126,13 +126,13 @@ final class MenuFactoryTest extends TestCase
      */
     public function testInvocationWithTranslator(): void
     {
-        $containerParser = $this->createStub(ContainerParserInterface::class);
-        $htmlElement     = $this->createStub(HtmlElementInterface::class);
-        $htmlify         = $this->createStub(HtmlifyInterface::class);
-        $escapeHtmlAttr  = $this->createStub(EscapeHtmlAttr::class);
-        $escapeHtml      = $this->createStub(EscapeHtml::class);
-        $renderer        = $this->createStub(LaminasViewRenderer::class);
-        $translator      = $this->createStub(Translate::class);
+        $containerParser = self::createStub(ContainerParserInterface::class);
+        $htmlElement     = self::createStub(HtmlElementInterface::class);
+        $htmlify         = self::createStub(HtmlifyInterface::class);
+        $escapeHtmlAttr  = self::createStub(EscapeHtmlAttr::class);
+        $escapeHtml      = self::createStub(EscapeHtml::class);
+        $renderer        = self::createStub(LaminasViewRenderer::class);
+        $translator      = self::createStub(Translate::class);
 
         $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
             ->disableOriginalConstructor()

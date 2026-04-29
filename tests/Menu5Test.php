@@ -48,7 +48,7 @@ final class Menu5Test extends TestCase
      */
     public function testDoNotRenderMenuIfNoPageIsActive(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
 
         $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
             ->disableOriginalConstructor()
