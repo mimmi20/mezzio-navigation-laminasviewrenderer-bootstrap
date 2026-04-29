@@ -18,9 +18,9 @@ use Laminas\I18n\Exception\RuntimeException;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Laminas\View;
 use Mezzio\LaminasView\LaminasViewRenderer;
-use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\Navigation\ContainerInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\ContainerParserInterface;
+use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\AbstractMenu;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
@@ -93,9 +93,7 @@ final class Menu extends AbstractMenu
     /** @api */
     public const string DROP_ORIENTATION_END = 'end';
 
-    /**
-     * @throws void
-     */
+    /** @throws void */
     public function __construct(
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
