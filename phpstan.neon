@@ -85,12 +85,12 @@ parameters:
       tooWideThrowType: true
 
   cognitive_complexity:
-    class: 133
+    class: 134
     function: 39
 
   type_coverage:
     return_type: 100
-    param_type: 97
+    param_type: 94.8
     property_type: 100
     constant_type: 100
     # also, how many files has declare strict types

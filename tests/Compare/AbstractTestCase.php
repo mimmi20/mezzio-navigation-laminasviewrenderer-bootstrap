@@ -31,6 +31,7 @@ use Mezzio\LaminasView\ServerUrlHelper;
 use Mezzio\LaminasView\UrlHelper;
 use Mezzio\Router\Route;
 use Mezzio\Router\RouteResult;
+use Mezzio\Router\RouterInterface;
 use Mimmi20\Mezzio\GenericAuthorization\Acl\LaminasAcl;
 use Mimmi20\Mezzio\Navigation\Config\NavigationConfig;
 use Mimmi20\Mezzio\Navigation\Config\NavigationConfigInterface;
@@ -52,6 +53,11 @@ use Override;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
 use function assert;
@@ -87,6 +93,11 @@ abstract class AbstractTestCase extends TestCase
     protected Navigation $nav3;
 
     /**
+     * The third container in the config file (files/navigation.xml)
+     */
+    protected Navigation $nav4;
+
+    /**
      * Prepares the environment before running a test
      *
      * @throws Exception
@@ -111,6 +122,7 @@ abstract class AbstractTestCase extends TestCase
         $sm->setFactory('nav_test1', new ConstructedNavigationFactory('nav_test1'));
         $sm->setFactory('nav_test2', new ConstructedNavigationFactory('nav_test2'));
         $sm->setFactory('nav_test3', new ConstructedNavigationFactory('nav_test3'));
+        $sm->setFactory('nav_test4', new ConstructedNavigationFactory('nav_test4'));
         $sm->setFactory(
             NavigationConfigInterface::class,
             function () use ($config): NavigationConfig {
@@ -131,6 +143,509 @@ abstract class AbstractTestCase extends TestCase
                         'id' => '1337',
                     ],
                 ));
+                $navConfig->setRouter(new class () implements RouterInterface {
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function addRoute(Route $route): void
+                    {
+                        // nothing to do
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function match(ServerRequestInterface $request): RouteResult
+                    {
+                        return RouteResult::fromRouteFailure([]);
+                    }
+
+                    /**
+                     * @param array<mixed> $substitutions
+                     * @param array<mixed> $options
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function generateUri(string $name, array $substitutions = [], array $options = []): string
+                    {
+                        return '';
+                    }
+                });
+                $navConfig->setRequest(new class () implements ServerRequestInterface {
+                    /** @throws void */
+                    #[Override]
+                    public function getProtocolVersion(): string
+                    {
+                        return '';
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withProtocolVersion(string $version): MessageInterface
+                    {
+                        return $this;
+                    }
+
+                    /** @throws void */
+                    #[Override]
+                    public function getHeaders(): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function hasHeader(string $name): bool
+                    {
+                        return false;
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function getHeader(string $name): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function getHeaderLine(string $name): string
+                    {
+                        return '';
+                    }
+
+                    /**
+                     * @param array<string>|string $value header value(s)
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withHeader(string $name, $value): MessageInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @param array<string>|string $value header value(s)
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withAddedHeader(string $name, $value): MessageInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withoutHeader(string $name): MessageInterface
+                    {
+                        return $this;
+                    }
+
+                    /** @throws \Exception */
+                    #[Override]
+                    public function getBody(): StreamInterface
+                    {
+                        throw new \Exception('not implemented');
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withBody(StreamInterface $body): MessageInterface
+                    {
+                        return $this;
+                    }
+
+                    /** @throws void */
+                    #[Override]
+                    public function getRequestTarget(): string
+                    {
+                        return '';
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withRequestTarget(string $requestTarget): RequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /** @throws void */
+                    #[Override]
+                    public function getMethod(): string
+                    {
+                        return '';
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withMethod(string $method): RequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /** @throws void */
+                    #[Override]
+                    public function getUri(): UriInterface
+                    {
+                        return new class () implements UriInterface {
+                            /** @throws void */
+                            #[Override]
+                            public function getScheme(): string
+                            {
+                                return '';
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getAuthority(): string
+                            {
+                                return '';
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getUserInfo(): string
+                            {
+                                return '';
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getHost(): string
+                            {
+                                return '';
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getPort(): int | null
+                            {
+                                return null;
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getPath(): string
+                            {
+                                return '/test.html';
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getQuery(): string
+                            {
+                                return '';
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function getFragment(): string
+                            {
+                                return '';
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withScheme(string $scheme): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withUserInfo(string $user, string | null $password = null): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withHost(string $host): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withPort(int | null $port): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withPath(string $path): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withQuery(string $query): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /**
+                             * @throws void
+                             *
+                             * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                             */
+                            #[Override]
+                            public function withFragment(string $fragment): UriInterface
+                            {
+                                return $this;
+                            }
+
+                            /** @throws void */
+                            #[Override]
+                            public function __toString(): string
+                            {
+                                return '';
+                            }
+                        };
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withUri(UriInterface $uri, bool $preserveHost = false): RequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @return array<mixed>
+                     *
+                     * @throws void
+                     */
+                    #[Override]
+                    public function getServerParams(): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @return array<mixed>
+                     *
+                     * @throws void
+                     */
+                    #[Override]
+                    public function getCookieParams(): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @param array<mixed> $cookies array of key/value pairs representing cookies
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withCookieParams(array $cookies): ServerRequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @return array<mixed>
+                     *
+                     * @throws void
+                     */
+                    #[Override]
+                    public function getQueryParams(): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @param array<mixed> $query array of query string arguments, typically from $_GET
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withQueryParams(array $query): ServerRequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @return array<mixed> an array tree of UploadedFileInterface instances; an empty
+                     *      array MUST be returned if no data is present
+                     *
+                     * @throws void
+                     */
+                    #[Override]
+                    public function getUploadedFiles(): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @param array<mixed> $uploadedFiles an array tree of UploadedFileInterface instances
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @return array<mixed>|object|null The deserialized body parameters, if any.
+                     *      These will typically be an array or object.
+                     *
+                     * @throws void
+                     */
+                    #[Override]
+                    public function getParsedBody(): array | object | null
+                    {
+                        return null;
+                    }
+
+                    /**
+                     * @param array<mixed>|object|null $data The deserialized body data. This will
+                     *      typically be in an array or object.
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withParsedBody($data): ServerRequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @return array<mixed> attributes derived from the request
+                     *
+                     * @throws void
+                     */
+                    #[Override]
+                    public function getAttributes(): array
+                    {
+                        return [];
+                    }
+
+                    /**
+                     * @param mixed $default default value to return if the attribute does not exist
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function getAttribute(string $name, $default = null): mixed
+                    {
+                        return null;
+                    }
+
+                    /**
+                     * @param mixed $value the value of the attribute
+                     *
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withAttribute(string $name, $value): ServerRequestInterface
+                    {
+                        return $this;
+                    }
+
+                    /**
+                     * @throws void
+                     *
+                     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+                     */
+                    #[Override]
+                    public function withoutAttribute(string $name): ServerRequestInterface
+                    {
+                        return $this;
+                    }
+                });
 
                 return $navConfig;
             },
@@ -166,11 +681,11 @@ abstract class AbstractTestCase extends TestCase
                 ],
                 'templates' => [
                     'map' => [
-                        'test::menu' => __DIR__ . '/_files/mvc/views/menu.phtml',
-                        'test::menu-with-partials' => __DIR__ . '/_files/mvc/views/menu_with_partial_params.phtml',
-                        'test::bc' => __DIR__ . '/_files/mvc/views/bc.phtml',
-                        'test::bc-separator' => __DIR__ . '/_files/mvc/views/bc_separator.phtml',
-                        'test::bc-with-partials' => __DIR__ . '/_files/mvc/views/bc_with_partial_params.phtml',
+                        'test::menu' => __DIR__ . '/_files/template/views/menu.phtml',
+                        'test::menu-with-partials' => __DIR__ . '/_files/template/views/menu_with_partial_params.phtml',
+                        'test::bc' => __DIR__ . '/_files/template/views/bc.phtml',
+                        'test::bc-separator' => __DIR__ . '/_files/template/views/bc_separator.phtml',
+                        'test::bc-with-partials' => __DIR__ . '/_files/template/views/bc_with_partial_params.phtml',
                     ],
                 ],
             ],
@@ -183,6 +698,7 @@ abstract class AbstractTestCase extends TestCase
         $nav1 = $sm->get('nav_test1');
         $nav2 = $sm->get('nav_test2');
         $nav3 = $sm->get('nav_test3');
+        $nav4 = $sm->get('nav_test4');
 
         assert(
             $nav1 instanceof Navigation,
@@ -192,12 +708,35 @@ abstract class AbstractTestCase extends TestCase
                 get_debug_type($nav1),
             ),
         );
-        assert($nav2 instanceof Navigation);
-        assert($nav3 instanceof Navigation);
+        assert(
+            $nav2 instanceof Navigation,
+            sprintf(
+                '$nav2 should be an Instance of %s, but was %s',
+                Navigation::class,
+                get_debug_type($nav2),
+            ),
+        );
+        assert(
+            $nav3 instanceof Navigation,
+            sprintf(
+                '$nav3 should be an Instance of %s, but was %s',
+                Navigation::class,
+                get_debug_type($nav3),
+            ),
+        );
+        assert(
+            $nav4 instanceof Navigation,
+            sprintf(
+                '$nav4 should be an Instance of %s, but was %s',
+                Navigation::class,
+                get_debug_type($nav4),
+            ),
+        );
 
         $this->nav1 = $nav1;
         $this->nav2 = $nav2;
         $this->nav3 = $nav3;
+        $this->nav4 = $nav4;
 
         $sm->setService('nav1', $nav1);
         $sm->setService('nav2', $nav2);
