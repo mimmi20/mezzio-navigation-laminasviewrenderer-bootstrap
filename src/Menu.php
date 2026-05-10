@@ -94,8 +94,11 @@ final class Menu extends AbstractMenu
     public const string DROP_ORIENTATION_END = 'end';
 
     /**
-     * @throws void
+     * CSS class to use for the active element.
      */
+    protected string $activeClass = 'active';
+
+    /** @throws void */
     public function __construct(
         HtmlifyInterface $htmlify,
         ContainerParserInterface $containerParser,
@@ -148,7 +151,7 @@ final class Menu extends AbstractMenu
      * @param ContainerInterface<PageInterface>|string|null $container [optional] container to create menu from.
      *                                                                 Default is to use the container retrieved from {@link getContainer()}.
      * @param array<string, bool|int|string|null>           $options   [optional] options for controlling rendering
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
      *
      * @throws View\Exception\RuntimeException
      * @throws View\Exception\InvalidArgumentException
@@ -195,6 +198,7 @@ final class Menu extends AbstractMenu
      *     'onlyActiveBranch' => true,
      *     'renderParents'    => false,
      *     'liActiveClass'    => $liActiveClass
+     *     'activeClass'      => $activeClass
      * ));
      * </code>
      *
@@ -207,8 +211,9 @@ final class Menu extends AbstractMenu
      * @param int|string|null                               $indent        [optional] indentation as a string or number
      *                                                                     of spaces. Default is to use the value retrieved from
      *                                                                     {@link getIndent()}.
-     * @param string|null                                   $liActiveClass [optional] CSS class to use for UL
-     *                                                                     element. Default is to use the value from {@link getUlClass()}.
+     * @param string|null                                   $liActiveClass [optional] CSS class to use for LI
+     *                                                                     element. Default is to use the value from {@link getLiActiveClass()}.
+     * @param string|null                                   $activeClass   [optional] CSS class to use for <a> element
      *
      * @throws View\Exception\RuntimeException
      * @throws View\Exception\InvalidArgumentException
@@ -220,6 +225,7 @@ final class Menu extends AbstractMenu
         string | null $liClass = null,
         int | string | null $indent = null,
         string | null $liActiveClass = null,
+        string | null $activeClass = null,
     ): string {
         $this->setMaxDepth(null);
         $this->setMinDepth(null);
@@ -235,6 +241,7 @@ final class Menu extends AbstractMenu
                 'onlyActiveBranch' => true,
                 'escapeLabels' => true,
                 'liActiveClass' => $liActiveClass,
+                'activeClass' => $activeClass,
             ],
         );
     }
@@ -264,10 +271,10 @@ final class Menu extends AbstractMenu
      * Normalizes given render options
      *
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
      *
      * @return array<string, bool|int|string|null>
-     * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
+     * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
      *
      * @throws View\Exception\InvalidArgumentException
      */
@@ -317,6 +324,10 @@ final class Menu extends AbstractMenu
             $options['liActiveClass'] = $this->getLiActiveClass();
         }
 
+        if (!array_key_exists('activeClass', $options) || $options['activeClass'] === null) {
+            $options['activeClass'] = $this->activeClass;
+        }
+
         if (
             array_key_exists('vertical', $options)
             && is_string($options['vertical'])
@@ -359,7 +370,7 @@ final class Menu extends AbstractMenu
      *
      * @param ContainerInterface<PageInterface>   $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
      * @throws View\Exception\InvalidArgumentException
      * @throws View\Exception\RuntimeException
@@ -374,6 +385,7 @@ final class Menu extends AbstractMenu
         assert(is_bool($options['escapeLabels']));
         assert(is_bool($options['addClassToListItem']));
         assert(is_string($options['liActiveClass']));
+        assert(is_string($options['activeClass']));
 
         $active = $this->findActive($container, $options['minDepth'] - 1, $options['maxDepth']);
 
@@ -473,7 +485,7 @@ final class Menu extends AbstractMenu
      *
      * @param ContainerInterface<PageInterface>   $container container to render
      * @param array<string, bool|int|string|null> $options   options for controlling rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
      * @throws View\Exception\InvalidArgumentException
      * @throws View\Exception\RuntimeException
@@ -491,6 +503,7 @@ final class Menu extends AbstractMenu
         assert(is_bool($options['escapeLabels']));
         assert(is_bool($options['addClassToListItem']));
         assert(is_string($options['liActiveClass']));
+        assert(is_string($options['activeClass']));
         assert(is_string($options['role']) || $options['role'] === null);
 
         // find deepest active
@@ -662,7 +675,7 @@ final class Menu extends AbstractMenu
      * @param PageInterface                       $page    current page to check
      * @param array<string, bool|int|string|null> $options options for controlling rendering
      * @param int                                 $level   current level of rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
      * @throws View\Exception\RuntimeException
      */
@@ -691,7 +704,7 @@ final class Menu extends AbstractMenu
      * @param array<string, bool|int|string|null>   $options options for controlling rendering
      * @param int                                   $level   current level of rendering
      * @param array<string, int|PageInterface|null> $found
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      * @phpstan-param array{page?: PageInterface|null, depth?: int|null} $found
      *
      * @return array<bool>
@@ -724,7 +737,7 @@ final class Menu extends AbstractMenu
      * @param int                                 $level          current level of rendering
      * @param array<int, string>                  $liClasses
      * @param array<string, string>               $pageAttributes
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
      *
      * @throws void
      */
@@ -792,6 +805,7 @@ final class Menu extends AbstractMenu
         // Is page active?
         if ($isActive) {
             array_splice($liClasses, count($liClasses), 0, explode(' ', $options['liActiveClass']));
+            array_splice($pageClasses, count($pageClasses), 0, explode(' ', $options['activeClass']));
 
             if ($level === 0) {
                 $pageAttributes['aria-current'] = 'page';
@@ -822,7 +836,7 @@ final class Menu extends AbstractMenu
      * @param PageInterface                       $page       page to generate HTML for
      * @param array<string, bool|int|string|null> $options    options for controlling rendering
      * @param array<string, string>               $attributes
-     * @phpstan-param array{ulClass?: string, liClass?: string, indent?: string, minDepth?: int, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string, role?: string|null, style?: string, substyle?: string, sublink: string|null, class?: string, ulRole?: string|null, liRole?: string|null, direction?: string} $options
+     * @phpstan-param array{ulClass?: string, liClass?: string, indent?: string, minDepth?: int, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string, activeClass?: string, role?: string|null, style?: string, substyle?: string, sublink: string|null, class?: string, ulRole?: string|null, liRole?: string|null, direction?: string} $options
      *
      * @return string HTML string
      *
@@ -897,7 +911,7 @@ final class Menu extends AbstractMenu
 
     /**
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
      *
      * @throws View\Exception\InvalidArgumentException
      */
@@ -941,7 +955,7 @@ final class Menu extends AbstractMenu
 
     /**
      * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
+     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
      *
      * @throws View\Exception\InvalidArgumentException
      */

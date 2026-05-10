@@ -963,6 +963,23 @@ final class MenuTest extends AbstractTestCase
     }
 
     /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
+     */
+    public function testRenderActive(): void
+    {
+        $options = ['in-navbar' => true, 'fill' => true, 'pills' => true, 'style' => 'ul', 'sublink' => 'details', 'onlyActiveBranch' => false, 'renderParents' => true, 'minDepth' => 0, 'ulClass' => 'justify-content-end'];
+
+        $nav4 = clone $this->nav4;
+
+        $expected = $this->getExpected('menu/active.html');
+        $actual   = $this->helper->renderMenu($nav4, $options);
+
+        self::assertSame(trim($expected), trim($actual));
+    }
+
+    /**
      * Returns the contens of the expected $file, normalizes newlines.
      *
      * @throws Exception

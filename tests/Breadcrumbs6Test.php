@@ -16,6 +16,7 @@ namespace Mimmi20Test\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigat
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\View\Exception\ExceptionInterface;
 use Laminas\View\Exception\InvalidArgumentException;
+use Laminas\View\Exception\RuntimeException;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Helper\PartialRenderer\Helper\PartialRendererInterface;
@@ -159,6 +160,7 @@ final class Breadcrumbs6Test extends TestCase
      * @throws Exception
      * @throws \Mimmi20\Mezzio\Navigation\Exception\ExceptionInterface
      * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function testToStringWithPartial(): void
     {
@@ -277,7 +279,7 @@ final class Breadcrumbs6Test extends TestCase
      */
     public function testInvoke(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
 
         $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
             ->disableOriginalConstructor()
