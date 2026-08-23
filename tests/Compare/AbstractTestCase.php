@@ -67,6 +67,8 @@ use function sprintf;
 
 /**
  * Base class for navigation view helper tests
+ *
+ * @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification
  */
 abstract class AbstractTestCase extends TestCase
 {
