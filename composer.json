@@ -22,7 +22,7 @@
     "laminas/laminas-view": "^2.44.0",
     "mezzio/mezzio-laminasviewrenderer": "^2.19.0",
     "mimmi20/mezzio-navigation": "^5.0.0",
-    "mimmi20/mezzio-navigation-laminasviewrenderer": "^7.0.1",
+    "mimmi20/mezzio-navigation-laminasviewrenderer": "^7.0.2",
     "psr/container": "^1.1.2 || ^2.0.2"
   },
   "require-dev": {
