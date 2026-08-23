@@ -37,7 +37,7 @@ trait BootstrapTrait
     /** @throws InvalidArgumentException */
     private function getSizeClass(string $size, string $prefix): string
     {
-        if (!in_array($size, static::$sizes, true)) {
+        if (!in_array($size, static::$sizes, strict: true)) {
             throw new InvalidArgumentException('Size "' . $size . '" does not exist');
         }
 

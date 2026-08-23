@@ -25,7 +25,6 @@ use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlElementInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Override;
-use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -43,22 +42,18 @@ final class Menu5Test extends TestCase
      * @throws Exception
      * @throws InvalidArgumentException
      * @throws RuntimeException
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testDoNotRenderMenuIfNoPageIsActive(): void
     {
         $container = self::createStub(ContainerInterface::class);
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcher         = self::exactly(3);
-        $containerParser->expects($matcher)
+        $containerParser = $this->createMock(ContainerParserInterface::class);
+        $invokedCount    = self::exactly(3);
+        $containerParser->expects($invokedCount)
             ->method('parseContainer')
             ->willReturnCallback(
-                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
-                    $invocation = $matcher->numberOfInvocations();
+                static function (ContainerInterface | null $containerParam = null) use ($invokedCount, $container): ContainerInterface | null {
+                    $invocation = $invokedCount->numberOfInvocations();
 
                     match ($invocation) {
                         2 => self::assertNull($containerParam, (string) $invocation),
@@ -72,43 +67,31 @@ final class Menu5Test extends TestCase
                 },
             );
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -118,8 +101,8 @@ final class Menu5Test extends TestCase
             translator: $translator,
         );
 
-        $helper->setContainer($container);
+        $menu->setContainer($container);
 
-        self::assertSame('', $helper->renderMenu());
+        self::assertSame('', $menu->renderMenu());
     }
 }

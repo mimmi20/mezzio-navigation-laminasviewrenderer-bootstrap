@@ -27,7 +27,6 @@ use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\MenuFactory;
 use Override;
-use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -48,8 +47,6 @@ final class MenuFactoryTest extends TestCase
     /**
      * @throws Exception
      * @throws ContainerExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvocation(): void
     {
@@ -60,9 +57,7 @@ final class MenuFactoryTest extends TestCase
         $escapeHtml      = self::createStub(EscapeHtml::class);
         $renderer        = self::createStub(LaminasViewRenderer::class);
 
-        $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewHelperPluginManager = $this->createMock(ViewHelperPluginManager::class);
         $matcher                 = self::exactly(2);
         $viewHelperPluginManager->expects($matcher)
             ->method('get')
@@ -84,11 +79,9 @@ final class MenuFactoryTest extends TestCase
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
-            ->willReturn(false);
+            ->willReturn(value: false);
 
-        $container = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ServiceLocatorInterface::class);
         $matcher   = self::exactly(5);
         $container->expects($matcher)
             ->method('get')
@@ -113,16 +106,14 @@ final class MenuFactoryTest extends TestCase
             );
 
         assert($container instanceof ContainerInterface);
-        $helper = ($this->factory)($container);
+        $menu = ($this->factory)($container);
 
-        self::assertInstanceOf(Menu::class, $helper);
+        self::assertInstanceOf(Menu::class, $menu);
     }
 
     /**
      * @throws Exception
      * @throws ContainerExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvocationWithTranslator(): void
     {
@@ -134,9 +125,7 @@ final class MenuFactoryTest extends TestCase
         $renderer        = self::createStub(LaminasViewRenderer::class);
         $translator      = self::createStub(Translate::class);
 
-        $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewHelperPluginManager = $this->createMock(ViewHelperPluginManager::class);
         $matcher                 = self::exactly(3);
         $viewHelperPluginManager->expects($matcher)
             ->method('get')
@@ -160,11 +149,9 @@ final class MenuFactoryTest extends TestCase
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
-            ->willReturn(true);
+            ->willReturn(value: true);
 
-        $container = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ServiceLocatorInterface::class);
         $matcher   = self::exactly(5);
         $container->expects($matcher)
             ->method('get')
@@ -189,8 +176,8 @@ final class MenuFactoryTest extends TestCase
             );
 
         assert($container instanceof ContainerInterface);
-        $helper = ($this->factory)($container);
+        $menu = ($this->factory)($container);
 
-        self::assertInstanceOf(Menu::class, $helper);
+        self::assertInstanceOf(Menu::class, $menu);
     }
 }

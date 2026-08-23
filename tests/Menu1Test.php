@@ -28,7 +28,6 @@ use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Menu;
 use Mimmi20\Mezzio\Navigation\Navigation;
 use Override;
-use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -49,49 +48,35 @@ final class Menu1Test extends TestCase
     {
         $maxDepth = 4;
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -101,59 +86,45 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertNull($helper->getMaxDepth());
+        self::assertNull($menu->getMaxDepth());
 
-        $helper->setMaxDepth($maxDepth);
+        $menu->setMaxDepth($maxDepth);
 
-        self::assertSame($maxDepth, $helper->getMaxDepth());
+        self::assertSame($maxDepth, $menu->getMaxDepth());
     }
 
     /** @throws Exception */
     public function testSetMinDepth(): void
     {
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -163,75 +134,61 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertSame(0, $helper->getMinDepth());
+        self::assertSame(0, $menu->getMinDepth());
 
-        $helper->setMinDepth(4);
+        $menu->setMinDepth(4);
 
-        self::assertSame(4, $helper->getMinDepth());
+        self::assertSame(4, $menu->getMinDepth());
 
-        $helper->setMinDepth(-1);
+        $menu->setMinDepth(-1);
 
-        self::assertSame(0, $helper->getMinDepth());
+        self::assertSame(0, $menu->getMinDepth());
 
-        $helper->setMinDepth(0);
+        $menu->setMinDepth(0);
 
-        self::assertSame(0, $helper->getMinDepth());
+        self::assertSame(0, $menu->getMinDepth());
 
-        $helper->setMinDepth(1);
+        $menu->setMinDepth(1);
 
-        self::assertSame(1, $helper->getMinDepth());
+        self::assertSame(1, $menu->getMinDepth());
 
-        $helper->setMinDepth(4);
+        $menu->setMinDepth(4);
 
-        self::assertSame(4, $helper->getMinDepth());
+        self::assertSame(4, $menu->getMinDepth());
     }
 
     /** @throws Exception */
     public function testSetRenderInvisible(): void
     {
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -241,11 +198,11 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertFalse($helper->getRenderInvisible());
+        self::assertFalse($menu->getRenderInvisible());
 
-        $helper->setRenderInvisible(true);
+        $menu->setRenderInvisible(renderInvisible: true);
 
-        self::assertTrue($helper->getRenderInvisible());
+        self::assertTrue($menu->getRenderInvisible());
     }
 
     /** @throws Exception */
@@ -254,49 +211,35 @@ final class Menu1Test extends TestCase
         $role        = 'testRole';
         $defaultRole = 'testDefaultRole';
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -306,66 +249,52 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertSame([], $helper->getRoles());
-        self::assertFalse($helper->hasRoles());
+        self::assertSame([], $menu->getRoles());
+        self::assertFalse($menu->hasRoles());
 
         Menu::setDefaultRole($defaultRole);
 
-        self::assertSame([$defaultRole], $helper->getRoles());
-        self::assertTrue($helper->hasRoles());
+        self::assertSame([$defaultRole], $menu->getRoles());
+        self::assertTrue($menu->hasRoles());
 
-        $helper->setRoles([$role]);
+        $menu->setRoles([$role]);
 
-        self::assertSame([$role], $helper->getRoles());
-        self::assertTrue($helper->hasRoles());
+        self::assertSame([$role], $menu->getRoles());
+        self::assertTrue($menu->hasRoles());
     }
 
     /** @throws Exception */
     public function testSetUseAuthorization(): void
     {
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -375,70 +304,52 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertFalse($helper->getUseAuthorization());
+        self::assertFalse($menu->getUseAuthorization());
 
-        $helper->setUseAuthorization();
+        $menu->setUseAuthorization();
 
-        self::assertTrue($helper->getUseAuthorization());
+        self::assertTrue($menu->getUseAuthorization());
 
-        $helper->setUseAuthorization(false);
+        $menu->setUseAuthorization(useAuthorization: false);
 
-        self::assertFalse($helper->getUseAuthorization());
+        self::assertFalse($menu->getUseAuthorization());
     }
 
-    /**
-     * @throws Exception
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
+    /** @throws Exception */
     public function testSetAuthorization(): void
     {
         $auth        = self::createStub(AuthorizationInterface::class);
         $defaultAuth = self::createStub(AuthorizationInterface::class);
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -448,74 +359,56 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertNull($helper->getAuthorization());
-        self::assertFalse($helper->hasAuthorization());
+        self::assertNull($menu->getAuthorization());
+        self::assertFalse($menu->hasAuthorization());
 
         assert($defaultAuth instanceof AuthorizationInterface);
         Menu::setDefaultAuthorization($defaultAuth);
 
-        self::assertSame($defaultAuth, $helper->getAuthorization());
-        self::assertTrue($helper->hasAuthorization());
+        self::assertSame($defaultAuth, $menu->getAuthorization());
+        self::assertTrue($menu->hasAuthorization());
 
         assert($auth instanceof AuthorizationInterface);
-        $helper->setAuthorization($auth);
+        $menu->setAuthorization($auth);
 
-        self::assertSame($auth, $helper->getAuthorization());
-        self::assertTrue($helper->hasAuthorization());
+        self::assertSame($auth, $menu->getAuthorization());
+        self::assertTrue($menu->hasAuthorization());
     }
 
-    /**
-     * @throws Exception
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
+    /** @throws Exception */
     public function testSetView(): void
     {
         $view = self::createStub(RendererInterface::class);
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -525,33 +418,29 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        self::assertNull($helper->getView());
+        self::assertNull($menu->getView());
 
         assert($view instanceof RendererInterface);
-        $helper->setView($view);
+        $menu->setView($view);
 
-        self::assertSame($view, $helper->getView());
+        self::assertSame($view, $menu->getView());
     }
 
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetContainer(): void
     {
         $container = self::createStub(ContainerInterface::class);
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcher         = self::exactly(2);
-        $containerParser->expects($matcher)
+        $containerParser = $this->createMock(ContainerParserInterface::class);
+        $invokedCount    = self::exactly(2);
+        $containerParser->expects($invokedCount)
             ->method('parseContainer')
             ->willReturnCallback(
-                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
-                    $invocation = $matcher->numberOfInvocations();
+                static function (ContainerInterface | null $containerParam = null) use ($invokedCount, $container): ContainerInterface | null {
+                    $invocation = $invokedCount->numberOfInvocations();
 
                     match ($invocation) {
                         1 => self::assertNull($containerParam, (string) $invocation),
@@ -565,43 +454,31 @@ final class Menu1Test extends TestCase
                 },
             );
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -611,75 +488,58 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        $container1 = $helper->getContainer();
+        $container1 = $menu->getContainer();
 
         self::assertInstanceOf(Navigation::class, $container1);
 
-        $helper->setContainer();
+        $menu->setContainer();
 
-        $container2 = $helper->getContainer();
+        $container2 = $menu->getContainer();
 
         self::assertInstanceOf(Navigation::class, $container2);
         self::assertNotSame($container1, $container2);
 
-        $helper->setContainer($container);
+        $menu->setContainer($container);
 
-        self::assertSame($container, $helper->getContainer());
+        self::assertSame($container, $menu->getContainer());
     }
 
-    /**
-     * @throws Exception
-     * @throws ExceptionInterface
-     */
+    /** @throws ExceptionInterface */
     public function testSetContainerWithStringDefaultAndNavigationNotFound(): void
     {
         $name = 'default';
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with($name)
             ->willThrowException(new InvalidArgumentException('test'));
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -693,65 +553,49 @@ final class Menu1Test extends TestCase
         $this->expectExceptionMessage('test');
         $this->expectExceptionCode(0);
 
-        $helper->setContainer($name);
+        $menu->setContainer($name);
     }
 
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetContainerWithStringFound(): void
     {
         $container = self::createStub(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with($name)
             ->willReturn($container);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -761,8 +605,8 @@ final class Menu1Test extends TestCase
             translator: $translator,
         );
 
-        $helper->setContainer($name);
+        $menu->setContainer($name);
 
-        self::assertSame($container, $helper->getContainer());
+        self::assertSame($container, $menu->getContainer());
     }
 }

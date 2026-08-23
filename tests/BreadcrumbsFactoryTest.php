@@ -25,7 +25,6 @@ use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\BreadcrumbsFactory;
 use Override;
-use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -46,8 +45,6 @@ final class BreadcrumbsFactoryTest extends TestCase
     /**
      * @throws Exception
      * @throws ContainerExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvocationWithTranslator(): void
     {
@@ -57,13 +54,11 @@ final class BreadcrumbsFactoryTest extends TestCase
         $escapePlugin    = self::createStub(EscapeHtml::class);
         $renderer        = self::createStub(LaminasViewRenderer::class);
 
-        $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewHelperPluginManager = $this->createMock(ViewHelperPluginManager::class);
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
-            ->willReturn(true);
+            ->willReturn(value: true);
         $matcher = self::exactly(2);
         $viewHelperPluginManager->expects($matcher)
             ->method('get')
@@ -83,9 +78,7 @@ final class BreadcrumbsFactoryTest extends TestCase
                 },
             );
 
-        $container = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ServiceLocatorInterface::class);
         $matcher   = self::exactly(4);
         $container->expects($matcher)
             ->method('get')
@@ -108,16 +101,14 @@ final class BreadcrumbsFactoryTest extends TestCase
             );
 
         assert($container instanceof ContainerInterface);
-        $helper = ($this->factory)($container);
+        $breadcrumbs = ($this->factory)($container);
 
-        self::assertInstanceOf(Breadcrumbs::class, $helper);
+        self::assertInstanceOf(Breadcrumbs::class, $breadcrumbs);
     }
 
     /**
      * @throws Exception
      * @throws ContainerExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvocationWithoutTranslator(): void
     {
@@ -126,34 +117,30 @@ final class BreadcrumbsFactoryTest extends TestCase
         $escapePlugin    = self::createStub(EscapeHtml::class);
         $renderer        = self::createStub(LaminasViewRenderer::class);
 
-        $viewHelperPluginManager = $this->getMockBuilder(ViewHelperPluginManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $viewHelperPluginManager = $this->createMock(ViewHelperPluginManager::class);
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
-            ->willReturn(false);
+            ->willReturn(value: false);
         $viewHelperPluginManager->expects(self::once())
             ->method('get')
             ->with(EscapeHtml::class)
             ->willReturn($escapePlugin);
 
-        $container = $this->getMockBuilder(ServiceLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcher   = self::exactly(4);
-        $container->expects($matcher)
+        $container    = $this->createMock(ServiceLocatorInterface::class);
+        $invokedCount = self::exactly(4);
+        $container->expects($invokedCount)
             ->method('get')
             ->willReturnCallback(
-                static function (string $id) use ($matcher, $viewHelperPluginManager, $htmlify, $containerParser, $renderer): mixed {
-                    match ($matcher->numberOfInvocations()) {
+                static function (string $id) use ($invokedCount, $viewHelperPluginManager, $htmlify, $containerParser, $renderer): mixed {
+                    match ($invokedCount->numberOfInvocations()) {
                         1 => self::assertSame(ViewHelperPluginManager::class, $id),
                         2 => self::assertSame(HtmlifyInterface::class, $id),
                         3 => self::assertSame(ContainerParserInterface::class, $id),
                         default => self::assertSame(LaminasViewRenderer::class, $id),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invokedCount->numberOfInvocations()) {
                         1 => $viewHelperPluginManager,
                         2 => $htmlify,
                         3 => $containerParser,
@@ -163,8 +150,8 @@ final class BreadcrumbsFactoryTest extends TestCase
             );
 
         assert($container instanceof ContainerInterface);
-        $helper = ($this->factory)($container);
+        $breadcrumbs = ($this->factory)($container);
 
-        self::assertInstanceOf(Breadcrumbs::class, $helper);
+        self::assertInstanceOf(Breadcrumbs::class, $breadcrumbs);
     }
 }
