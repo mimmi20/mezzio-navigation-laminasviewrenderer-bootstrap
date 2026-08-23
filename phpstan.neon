@@ -116,10 +116,7 @@ parameters:
     - '~maxDepth: true\} given~'
     - '~of deprecated class~'
     -
-      identifier: property.uninitialized
-      paths:
-        - tests/*Test.php
-        - tests/Compare/AbstractTestCase.php
+      identifier: argument.named
 
 services:
   errorFormatter.sarif:

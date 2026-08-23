@@ -26,7 +26,6 @@ use Mimmi20\Mezzio\Navigation\LaminasView\Helper\HtmlifyInterface;
 use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation\Breadcrumbs;
 use Mimmi20\Mezzio\Navigation\Navigation;
 use Override;
-use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -47,37 +46,27 @@ final class Breadcrumbs1Test extends TestCase
     {
         $maxDepth = 4;
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -85,47 +74,37 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertNull($helper->getMaxDepth());
+        self::assertNull($breadcrumbs->getMaxDepth());
 
-        $helper->setMaxDepth($maxDepth);
+        $breadcrumbs->setMaxDepth($maxDepth);
 
-        self::assertSame($maxDepth, $helper->getMaxDepth());
+        self::assertSame($maxDepth, $breadcrumbs->getMaxDepth());
     }
 
     /** @throws Exception */
     public function testSetMinDepth(): void
     {
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -133,63 +112,53 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertSame(1, $helper->getMinDepth());
+        self::assertSame(1, $breadcrumbs->getMinDepth());
 
-        $helper->setMinDepth(4);
+        $breadcrumbs->setMinDepth(4);
 
-        self::assertSame(4, $helper->getMinDepth());
+        self::assertSame(4, $breadcrumbs->getMinDepth());
 
-        $helper->setMinDepth(-1);
+        $breadcrumbs->setMinDepth(-1);
 
-        self::assertSame(1, $helper->getMinDepth());
+        self::assertSame(1, $breadcrumbs->getMinDepth());
 
-        $helper->setMinDepth(0);
+        $breadcrumbs->setMinDepth(0);
 
-        self::assertSame(0, $helper->getMinDepth());
+        self::assertSame(0, $breadcrumbs->getMinDepth());
 
-        $helper->setMinDepth(1);
+        $breadcrumbs->setMinDepth(1);
 
-        self::assertSame(1, $helper->getMinDepth());
+        self::assertSame(1, $breadcrumbs->getMinDepth());
 
-        $helper->setMinDepth(4);
+        $breadcrumbs->setMinDepth(4);
 
-        self::assertSame(4, $helper->getMinDepth());
+        self::assertSame(4, $breadcrumbs->getMinDepth());
     }
 
     /** @throws Exception */
     public function testSetRenderInvisible(): void
     {
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -197,11 +166,11 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertFalse($helper->getRenderInvisible());
+        self::assertFalse($breadcrumbs->getRenderInvisible());
 
-        $helper->setRenderInvisible(true);
+        $breadcrumbs->setRenderInvisible(renderInvisible: true);
 
-        self::assertTrue($helper->getRenderInvisible());
+        self::assertTrue($breadcrumbs->getRenderInvisible());
     }
 
     /** @throws Exception */
@@ -210,37 +179,27 @@ final class Breadcrumbs1Test extends TestCase
         $role        = 'testRole';
         $defaultRole = 'testDefaultRole';
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -248,54 +207,44 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertSame([], $helper->getRoles());
-        self::assertFalse($helper->hasRoles());
+        self::assertSame([], $breadcrumbs->getRoles());
+        self::assertFalse($breadcrumbs->hasRoles());
 
         Breadcrumbs::setDefaultRole($defaultRole);
 
-        self::assertSame([$defaultRole], $helper->getRoles());
-        self::assertTrue($helper->hasRoles());
+        self::assertSame([$defaultRole], $breadcrumbs->getRoles());
+        self::assertTrue($breadcrumbs->hasRoles());
 
-        $helper->setRoles([$role]);
+        $breadcrumbs->setRoles([$role]);
 
-        self::assertSame([$role], $helper->getRoles());
-        self::assertTrue($helper->hasRoles());
+        self::assertSame([$role], $breadcrumbs->getRoles());
+        self::assertTrue($breadcrumbs->hasRoles());
     }
 
     /** @throws Exception */
     public function testSetUseAuthorization(): void
     {
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -303,58 +252,44 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertFalse($helper->getUseAuthorization());
+        self::assertFalse($breadcrumbs->getUseAuthorization());
 
-        $helper->setUseAuthorization();
+        $breadcrumbs->setUseAuthorization();
 
-        self::assertTrue($helper->getUseAuthorization());
+        self::assertTrue($breadcrumbs->getUseAuthorization());
 
-        $helper->setUseAuthorization(false);
+        $breadcrumbs->setUseAuthorization(useAuthorization: false);
 
-        self::assertFalse($helper->getUseAuthorization());
+        self::assertFalse($breadcrumbs->getUseAuthorization());
     }
 
-    /**
-     * @throws Exception
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
+    /** @throws Exception */
     public function testSetAuthorization(): void
     {
         $auth        = self::createStub(AuthorizationInterface::class);
         $defaultAuth = self::createStub(AuthorizationInterface::class);
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -362,62 +297,48 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertNull($helper->getAuthorization());
-        self::assertFalse($helper->hasAuthorization());
+        self::assertNull($breadcrumbs->getAuthorization());
+        self::assertFalse($breadcrumbs->hasAuthorization());
 
         assert($defaultAuth instanceof AuthorizationInterface);
         Breadcrumbs::setDefaultAuthorization($defaultAuth);
 
-        self::assertSame($defaultAuth, $helper->getAuthorization());
-        self::assertTrue($helper->hasAuthorization());
+        self::assertSame($defaultAuth, $breadcrumbs->getAuthorization());
+        self::assertTrue($breadcrumbs->hasAuthorization());
 
         assert($auth instanceof AuthorizationInterface);
-        $helper->setAuthorization($auth);
+        $breadcrumbs->setAuthorization($auth);
 
-        self::assertSame($auth, $helper->getAuthorization());
-        self::assertTrue($helper->hasAuthorization());
+        self::assertSame($auth, $breadcrumbs->getAuthorization());
+        self::assertTrue($breadcrumbs->hasAuthorization());
     }
 
-    /**
-     * @throws Exception
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
+    /** @throws Exception */
     public function testSetView(): void
     {
         $view = self::createStub(RendererInterface::class);
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::never())
             ->method('parseContainer');
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -425,69 +346,57 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        self::assertNull($helper->getView());
+        self::assertNull($breadcrumbs->getView());
 
         assert($view instanceof RendererInterface);
-        $helper->setView($view);
+        $breadcrumbs->setView($view);
 
-        self::assertSame($view, $helper->getView());
+        self::assertSame($view, $breadcrumbs->getView());
     }
 
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetContainer(): void
     {
         $container = self::createStub(ContainerInterface::class);
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcher         = self::exactly(2);
-        $containerParser->expects($matcher)
+        $containerParser = $this->createMock(ContainerParserInterface::class);
+        $invokedCount    = self::exactly(2);
+        $containerParser->expects($invokedCount)
             ->method('parseContainer')
             ->willReturnCallback(
-                static function (ContainerInterface | null $containerParam = null) use ($matcher, $container): ContainerInterface | null {
-                    match ($matcher->numberOfInvocations()) {
+                static function (ContainerInterface | null $containerParam = null) use ($invokedCount, $container): ContainerInterface | null {
+                    match ($invokedCount->numberOfInvocations()) {
                         1 => self::assertNull($containerParam),
                         default => self::assertSame($container, $containerParam),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invokedCount->numberOfInvocations()) {
                         1 => null,
                         default => $container,
                     };
                 },
             );
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -495,63 +404,50 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        $container1 = $helper->getContainer();
+        $container1 = $breadcrumbs->getContainer();
 
         self::assertInstanceOf(Navigation::class, $container1);
 
-        $helper->setContainer();
+        $breadcrumbs->setContainer();
 
-        $container2 = $helper->getContainer();
+        $container2 = $breadcrumbs->getContainer();
 
         self::assertInstanceOf(Navigation::class, $container2);
         self::assertNotSame($container1, $container2);
 
-        $helper->setContainer($container);
+        $breadcrumbs->setContainer($container);
 
-        self::assertSame($container, $helper->getContainer());
+        self::assertSame($container, $breadcrumbs->getContainer());
     }
 
-    /**
-     * @throws Exception
-     * @throws ExceptionInterface
-     */
+    /** @throws ExceptionInterface */
     public function testSetContainerWithStringDefaultAndNavigationNotFound(): void
     {
         $name = 'default';
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with($name)
             ->willThrowException(new InvalidArgumentException('test'));
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -563,53 +459,41 @@ final class Breadcrumbs1Test extends TestCase
         $this->expectExceptionMessage('test');
         $this->expectExceptionCode(0);
 
-        $helper->setContainer($name);
+        $breadcrumbs->setContainer($name);
     }
 
     /**
      * @throws Exception
      * @throws ExceptionInterface
-     * @throws NoPreviousThrowableException
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testSetContainerWithStringFound(): void
     {
         $container = self::createStub(ContainerInterface::class);
         $name      = 'Mimmi20\Mezzio\Navigation\Top';
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with($name)
             ->willReturn($container);
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -617,8 +501,8 @@ final class Breadcrumbs1Test extends TestCase
             translator: $translatePlugin,
         );
 
-        $helper->setContainer($name);
+        $breadcrumbs->setContainer($name);
 
-        self::assertSame($container, $helper->getContainer());
+        self::assertSame($container, $breadcrumbs->getContainer());
     }
 }

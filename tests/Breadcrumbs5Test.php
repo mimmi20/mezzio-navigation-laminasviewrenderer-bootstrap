@@ -55,37 +55,35 @@ final class Breadcrumbs5Test extends TestCase
         $privilege = 'testPrivilege';
 
         $parentPage = new Uri();
-        $parentPage->setVisible(true);
+        $parentPage->setVisible(visible: true);
         $parentPage->setResource($resource);
         $parentPage->setPrivilege($privilege);
-        $parentPage->setActive(true);
+        $parentPage->setActive(active: true);
 
         $page = new Uri();
-        $page->setVisible(true);
+        $page->setVisible(visible: true);
         $page->setResource($resource);
         $page->setPrivilege($privilege);
-        $page->setActive(true);
+        $page->setActive(active: true);
 
-        $subPage = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subPage = $this->createMock(PageInterface::class);
         $subPage->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(true);
+            ->willReturn(value: true);
         $subPage->expects(self::once())
             ->method('getResource')
-            ->willReturn(null);
+            ->willReturn(value: null);
         $subPage->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(null);
+            ->willReturn(value: null);
         $subPage->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($parentPage);
         $subPage->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(true);
+            ->willReturn(value: true);
 
         assert($subPage instanceof PageInterface);
         $page->addPage($subPage);
@@ -93,41 +91,33 @@ final class Breadcrumbs5Test extends TestCase
 
         $role = 'testRole';
 
-        $auth = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $auth = $this->createMock(AuthorizationInterface::class);
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcher         = self::exactly(3);
-        $containerParser->expects($matcher)
+        $containerParser = $this->createMock(ContainerParserInterface::class);
+        $invokedCount    = self::exactly(3);
+        $containerParser->expects($invokedCount)
             ->method('parseContainer')
             ->willReturnCallback(
-                static function (ContainerInterface | null $containerParam = null) use ($matcher, $parentPage): ContainerInterface | null {
-                    match ($matcher->numberOfInvocations()) {
+                static function (ContainerInterface | null $containerParam = null) use ($invokedCount, $parentPage): ContainerInterface | null {
+                    match ($invokedCount->numberOfInvocations()) {
                         2 => self::assertNull($containerParam),
                         default => self::assertSame($parentPage, $containerParam),
                     };
 
-                    return match ($matcher->numberOfInvocations()) {
+                    return match ($invokedCount->numberOfInvocations()) {
                         2 => null,
                         default => $parentPage,
                     };
                 },
             );
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
@@ -135,9 +125,7 @@ final class Breadcrumbs5Test extends TestCase
         $partial   = 'testPartial';
         $seperator = '/';
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::once())
             ->method('render')
             ->with(
@@ -146,13 +134,11 @@ final class Breadcrumbs5Test extends TestCase
             )
             ->willReturn($expected);
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -160,27 +146,25 @@ final class Breadcrumbs5Test extends TestCase
             translator: $translatePlugin,
         );
 
-        $helper->setRoles([$role]);
+        $breadcrumbs->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
-        $helper->setAuthorization($auth);
+        $breadcrumbs->setAuthorization($auth);
 
-        $helper->setSeparator($seperator);
-        $helper->setLinkLast(true);
-        $helper->setContainer($parentPage);
+        $breadcrumbs->setSeparator($seperator);
+        $breadcrumbs->setLinkLast(linkLast: true);
+        $breadcrumbs->setContainer($parentPage);
 
-        $view = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $view = $this->createMock(PhpRenderer::class);
         $view->expects(self::never())
             ->method('plugin');
         $view->expects(self::never())
             ->method('getHelperPluginManager');
 
         assert($view instanceof PhpRenderer);
-        $helper->setView($view);
+        $breadcrumbs->setView($view);
 
-        self::assertSame($expected, $helper->renderPartial(null, [$partial, 'test']));
+        self::assertSame($expected, $breadcrumbs->renderPartial(partial: [$partial, 'test']));
     }
 
     /**
@@ -192,9 +176,7 @@ final class Breadcrumbs5Test extends TestCase
     {
         $name = 'Mimmi20\Mezzio\Navigation\Top';
 
-        $page = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $page = $this->createMock(PageInterface::class);
         $page->expects(self::never())
             ->method('isVisible');
         $page->expects(self::never())
@@ -206,59 +188,47 @@ final class Breadcrumbs5Test extends TestCase
         $page->expects(self::never())
             ->method('getParent');
 
-        $container = new Navigation();
-        $container->addPage($page);
+        $navigation = new Navigation();
+        $navigation->addPage($page);
 
         $role = 'testRole';
 
-        $auth = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $auth = $this->createMock(AuthorizationInterface::class);
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $matcher         = self::exactly(2);
-        $containerParser->expects($matcher)
+        $containerParser = $this->createMock(ContainerParserInterface::class);
+        $invokedCount    = self::exactly(2);
+        $containerParser->expects($invokedCount)
             ->method('parseContainer')
             ->willReturnCallback(
-                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
-                    match ($matcher->numberOfInvocations()) {
+                static function (ContainerInterface | string | null $containerParam = null) use ($invokedCount, $name, $navigation): ContainerInterface {
+                    match ($invokedCount->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
-                        default => self::assertSame($container, $containerParam),
+                        default => self::assertSame($navigation, $containerParam),
                     };
 
-                    return $container;
+                    return $navigation;
                 },
             );
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -266,29 +236,27 @@ final class Breadcrumbs5Test extends TestCase
             translator: $translatePlugin,
         );
 
-        $helper->setRoles([$role]);
+        $breadcrumbs->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
-        $helper->setAuthorization($auth);
+        $breadcrumbs->setAuthorization($auth);
 
         $expected  = '';
         $partial   = 'testPartial';
         $seperator = '/';
 
-        $helper->setSeparator($seperator);
-        $helper->setLinkLast(true);
-        $helper->setPartial($partial);
+        $breadcrumbs->setSeparator($seperator);
+        $breadcrumbs->setLinkLast(linkLast: true);
+        $breadcrumbs->setPartial($partial);
 
-        $view = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $view = $this->createMock(PhpRenderer::class);
         $view->expects(self::never())
             ->method('plugin');
 
         assert($view instanceof PhpRenderer);
-        $helper->setView($view);
+        $breadcrumbs->setView($view);
 
-        self::assertSame($expected, $helper->renderStraight($name));
+        self::assertSame($expected, $breadcrumbs->renderStraight($name));
     }
 
     /**
@@ -303,38 +271,36 @@ final class Breadcrumbs5Test extends TestCase
         $resource  = 'testResource';
         $privilege = 'testPrivilege';
 
-        $parentPage = new Uri();
-        $parentPage->setVisible(true);
-        $parentPage->setResource($resource);
-        $parentPage->setPrivilege($privilege);
-        $parentPage->setId('parent-id');
-        $parentPage->setClass('parent-class');
-        $parentPage->setUri('##');
-        $parentPage->setTarget('self');
-        $parentPage->setLabel('parent-label');
-        $parentPage->setTitle('parent-title');
-        $parentPage->setTextDomain('parent-text-domain');
+        $uri = new Uri();
+        $uri->setVisible(visible: true);
+        $uri->setResource($resource);
+        $uri->setPrivilege($privilege);
+        $uri->setId('parent-id');
+        $uri->setClass('parent-class');
+        $uri->setUri('##');
+        $uri->setTarget('self');
+        $uri->setLabel('parent-label');
+        $uri->setTitle('parent-title');
+        $uri->setTextDomain('parent-text-domain');
 
-        $page = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $page = $this->createMock(PageInterface::class);
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(true);
+            ->willReturn(value: true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(null);
+            ->willReturn(value: null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(null);
+            ->willReturn(value: null);
         $page->expects(self::exactly(2))
             ->method('getParent')
-            ->willReturn($parentPage);
+            ->willReturn($uri);
         $page->expects(self::exactly(2))
             ->method('isActive')
             ->with(false)
-            ->willReturn(true);
+            ->willReturn(value: true);
         $page->expects(self::never())
             ->method('getLabel');
         $page->expects(self::never())
@@ -351,27 +317,23 @@ final class Breadcrumbs5Test extends TestCase
             ->method('getTarget');
         $page->expects(self::once())
             ->method('getLiClass')
-            ->willReturn(null);
+            ->willReturn(value: null);
 
-        $parentPage->addPage($page);
+        $uri->addPage($page);
 
-        $container = new Navigation();
-        $container->addPage($parentPage);
+        $navigation = new Navigation();
+        $navigation->addPage($uri);
 
         $role = 'testRole';
 
-        $auth = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $auth = $this->createMock(AuthorizationInterface::class);
         $auth->expects(self::never())
             ->method('isGranted');
 
         $expected1 = '<a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>';
         $expected2 = '<a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>';
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $matcher = self::exactly(2);
         $htmlify->expects($matcher)
             ->method('toHtml')
@@ -386,7 +348,7 @@ final class Breadcrumbs5Test extends TestCase
                 ) use (
                     $matcher,
                     $page,
-                    $parentPage,
+                    $uri,
                     $expected2,
                     $expected1,
                 ): string {
@@ -394,7 +356,7 @@ final class Breadcrumbs5Test extends TestCase
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($page, $pageParam),
-                        default => self::assertSame($parentPage, $pageParam),
+                        default => self::assertSame($uri, $pageParam),
                     };
 
                     self::assertTrue($escapeLabel);
@@ -409,42 +371,34 @@ final class Breadcrumbs5Test extends TestCase
                 },
             );
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $matcher         = self::exactly(2);
         $containerParser->expects($matcher)
             ->method('parseContainer')
             ->willReturnCallback(
-                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $container): ContainerInterface {
+                static function (ContainerInterface | string | null $containerParam = null) use ($matcher, $name, $navigation): ContainerInterface {
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame($name, $containerParam),
-                        default => self::assertSame($container, $containerParam),
+                        default => self::assertSame($navigation, $containerParam),
                     };
 
-                    return $container;
+                    return $navigation;
                 },
             );
 
-        $escapePlugin = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(LaminasViewRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(LaminasViewRenderer::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translatePlugin = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translatePlugin = $this->createMock(Translate::class);
         $translatePlugin->expects(self::never())
             ->method('__invoke');
 
-        $helper = new Breadcrumbs(
+        $breadcrumbs = new Breadcrumbs(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapePlugin,
@@ -452,10 +406,10 @@ final class Breadcrumbs5Test extends TestCase
             translator: $translatePlugin,
         );
 
-        $helper->setRoles([$role]);
+        $breadcrumbs->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
-        $helper->setAuthorization($auth);
+        $breadcrumbs->setAuthorization($auth);
 
         $expected  = '<nav aria-label="breadcrumb">'
             . PHP_EOL . '<ul class="breadcrumb">'
@@ -471,20 +425,18 @@ final class Breadcrumbs5Test extends TestCase
             . PHP_EOL;
         $seperator = '/';
 
-        $helper->setSeparator($seperator);
-        $helper->setLinkLast(true);
+        $breadcrumbs->setSeparator($seperator);
+        $breadcrumbs->setLinkLast(linkLast: true);
 
-        $view = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $view = $this->createMock(PhpRenderer::class);
         $view->expects(self::never())
             ->method('plugin');
         $view->expects(self::never())
             ->method('getHelperPluginManager');
 
         assert($view instanceof PhpRenderer);
-        $helper->setView($view);
+        $breadcrumbs->setView($view);
 
-        self::assertSame($expected, $helper->renderStraight($name));
+        self::assertSame($expected, $breadcrumbs->renderStraight($name));
     }
 }
