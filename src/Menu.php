@@ -13,7 +13,6 @@ declare(strict_types = 1);
 
 namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
-use Laminas\I18n;
 use Laminas\I18n\Exception\RuntimeException;
 use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
@@ -107,7 +106,7 @@ final class Menu extends AbstractMenu
         LaminasViewRenderer $renderer,
         private readonly View\Helper\EscapeHtml $escapeHtml,
         private readonly HtmlElementInterface $htmlElement,
-        private readonly I18n\View\Helper\Translate | null $translator = null,
+        private readonly Translate | null $translator = null,
     ) {
         parent::__construct($htmlify, $containerParser, $escaper, $renderer);
     }
