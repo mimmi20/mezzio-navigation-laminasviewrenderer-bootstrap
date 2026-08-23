@@ -15,6 +15,7 @@ namespace Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\BootstrapNavigation;
 
 use Laminas\I18n;
 use Laminas\I18n\Exception\RuntimeException;
+use Laminas\I18n\View\Helper\Translate;
 use Laminas\Stdlib\Exception\InvalidArgumentException;
 use Laminas\View;
 use Mimmi20\LaminasView\Helper\HtmlElement\Helper\HtmlElementInterface;
@@ -227,10 +228,10 @@ final class Menu extends AbstractMenu
         string | null $liActiveClass = null,
         string | null $activeClass = null,
     ): string {
-        $this->setMaxDepth(null);
-        $this->setMinDepth(null);
-        $this->setRenderParents(false);
-        $this->setAddClassToListItem(false);
+        $this->setMaxDepth(maxDepth: null);
+        $this->setMinDepth(minDepth: null);
+        $this->setRenderParents(flag: false);
+        $this->setAddClassToListItem(flag: false);
 
         return $this->renderMenu(
             $container,
@@ -264,7 +265,12 @@ final class Menu extends AbstractMenu
     #[Override]
     public function htmlify(PageInterface $page, bool $escapeLabel = true, bool $addClassToListItem = false): string
     {
-        return $this->toHtml($page, ['escapeLabels' => $escapeLabel, 'sublink' => null], [], true);
+        return $this->toHtml(
+            $page,
+            ['escapeLabels' => $escapeLabel, 'sublink' => null],
+            [],
+            anySubpageAccepted: true,
+        );
     }
 
     /**
@@ -424,13 +430,21 @@ final class Menu extends AbstractMenu
                 continue;
             }
 
-            $isActive = $subPage->isActive(true);
+            $isActive = $subPage->isActive(recursive: true);
 
             // render li tag and page
             $liClasses      = [];
             $pageAttributes = [];
 
-            $this->setAttributes($subPage, $options, 0, false, $isActive, $liClasses, $pageAttributes);
+            $this->setAttributes(
+                $subPage,
+                $options,
+                0,
+                anySubpageAccepted: false,
+                isActive: $isActive,
+                liClasses: $liClasses,
+                pageAttributes: $pageAttributes,
+            );
 
             $subHtml .= $options['indent'] . '    <li';
 
@@ -450,7 +464,7 @@ final class Menu extends AbstractMenu
 
             $subHtml .= '>' . PHP_EOL;
             $subHtml .= $options['indent'] . '        ';
-            $subHtml .= $this->toHtml($subPage, $options, $pageAttributes, false);
+            $subHtml .= $this->toHtml($subPage, $options, $pageAttributes, anySubpageAccepted: false);
             $subHtml .= PHP_EOL;
             $subHtml .= $options['indent'] . '    </li>' . PHP_EOL;
         }
@@ -681,14 +695,14 @@ final class Menu extends AbstractMenu
      */
     private function hasAcceptedSubpages(PageInterface $page, array $options, int $level): bool
     {
-        $hasVisiblePages    = $page->hasPages(true);
+        $hasVisiblePages    = $page->hasPages(onlyVisible: true);
         $anySubpageAccepted = false;
 
         assert(is_int($options['maxDepth']) || $options['maxDepth'] === null);
 
         if ($hasVisiblePages && ($options['maxDepth'] === null || $level + 1 <= $options['maxDepth'])) {
             foreach ($page->getPages() as $subpage) {
-                if (!$this->accept($subpage, false)) {
+                if (!$this->accept($subpage, recursive: false)) {
                     continue;
                 }
 
@@ -718,7 +732,7 @@ final class Menu extends AbstractMenu
             return [false, false];
         }
 
-        $isActive = $page->isActive(true);
+        $isActive = $page->isActive(recursive: true);
         $accept   = true;
 
         assert(is_int($options['maxDepth']) || $options['maxDepth'] === null);
@@ -848,7 +862,7 @@ final class Menu extends AbstractMenu
         $label = (string) $page->getLabel();
         $title = $page->getTitle();
 
-        if ($this->translator !== null) {
+        if ($this->translator instanceof Translate) {
             try {
                 $label = ($this->translator)($label, $page->getTextDomain());
 
