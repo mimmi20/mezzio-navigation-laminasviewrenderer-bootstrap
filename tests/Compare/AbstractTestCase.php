@@ -73,6 +73,8 @@ use function sprintf;
 
 /**
  * Base class for navigation view helper tests
+ *
+ * @phpcs:disable SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification
  */
 abstract class AbstractTestCase extends TestCase
 {
@@ -108,7 +110,6 @@ abstract class AbstractTestCase extends TestCase
      *
      * @throws Exception
      * @throws ContainerExceptionInterface
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Override]
     protected function setUp(): void
@@ -120,7 +121,7 @@ abstract class AbstractTestCase extends TestCase
         $config      = require $this->files . '/navigation.php';
 
         $sm = $this->serviceManager = new ServiceManager();
-        $sm->setAllowOverride(true);
+        $sm->setAllowOverride(flag: true);
 
         $sm->setFactory('Navigation', DefaultNavigationFactory::class);
         $sm->setFactory('navigation', DefaultNavigationFactory::class);
@@ -140,16 +141,16 @@ abstract class AbstractTestCase extends TestCase
                 $pages            = $config;
                 $pages['default'] = $pages['nav_test1'];
 
-                $navConfig = new NavigationConfig();
-                $navConfig->setPages($pages);
-                $navConfig->setRouteResult(RouteResult::fromRoute(
+                $navigationConfig = new NavigationConfig();
+                $navigationConfig->setPages($pages);
+                $navigationConfig->setRouteResult(RouteResult::fromRoute(
                     $route,
                     [
                         'route' => 'post',
                         'id' => '1337',
                     ],
                 ));
-                $navConfig->setRouter(new class () implements RouterInterface {
+                $navigationConfig->setRouter(new class () implements RouterInterface {
                     /**
                      * @throws void
                      *
@@ -186,7 +187,7 @@ abstract class AbstractTestCase extends TestCase
                         return '';
                     }
                 });
-                $navConfig->setRequest(new class () implements ServerRequestInterface {
+                $navigationConfig->setRequest(new class () implements ServerRequestInterface {
                     /** @throws void */
                     #[Override]
                     public function getProtocolVersion(): string
@@ -653,7 +654,7 @@ abstract class AbstractTestCase extends TestCase
                     }
                 });
 
-                return $navConfig;
+                return $navigationConfig;
             },
         );
         $sm->setFactory(PageFactory::class, InvokableFactory::class);
@@ -751,7 +752,7 @@ abstract class AbstractTestCase extends TestCase
         $sm->setService('nav1', $nav1);
         $sm->setService('nav2', $nav2);
 
-        $sm->setAllowOverride(false);
+        $sm->setAllowOverride(flag: false);
     }
 
     /**
@@ -808,7 +809,7 @@ abstract class AbstractTestCase extends TestCase
      */
     protected function getTranslator(): Translator
     {
-        $loader = new TestAsset\ArrayTranslator(
+        $arrayTranslator = new TestAsset\ArrayTranslator(
             [
                 'Page 1' => 'Side 1',
                 'Page 1.1' => 'Side 1.1',
@@ -821,7 +822,7 @@ abstract class AbstractTestCase extends TestCase
         );
 
         $translator = new Translator();
-        $translator->getPluginManager()->setService('default', $loader);
+        $translator->getPluginManager()->setService('default', $arrayTranslator);
         $translator->addTranslationFile('default', '');
 
         return $translator;

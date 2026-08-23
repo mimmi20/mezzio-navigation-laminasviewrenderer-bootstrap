@@ -72,7 +72,7 @@ final class Menu14Test extends TestCase
         $parentParentTitle      = 'parent-parent-title';
 
         $parentPage = new Uri();
-        $parentPage->setVisible(true);
+        $parentPage->setVisible(visible: true);
         $parentPage->setResource($resource);
         $parentPage->setPrivilege($privilege);
         $parentPage->setId('parent-id');
@@ -84,7 +84,7 @@ final class Menu14Test extends TestCase
         $parentPage->setTextDomain($parentTextDomain);
 
         $parentParentPage = new Uri();
-        $parentParentPage->setVisible(true);
+        $parentParentPage->setVisible(visible: true);
         $parentParentPage->setResource($resource);
         $parentParentPage->setPrivilege($privilege);
         $parentParentPage->setId('parent-parent-id');
@@ -95,9 +95,7 @@ final class Menu14Test extends TestCase
         $parentParentPage->setTitle($parentParentTitle);
         $parentParentPage->setTextDomain($parentParentTextDomain);
 
-        $page = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $page = $this->createMock(PageInterface::class);
         $page->expects(self::never())
             ->method('isVisible');
         $page->expects(self::never())
@@ -132,9 +130,7 @@ final class Menu14Test extends TestCase
             ->method('hashCode')
             ->willReturn('page');
 
-        $page2 = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $page2 = $this->createMock(PageInterface::class);
         $page2->expects(self::never())
             ->method('isVisible');
         $page2->expects(self::never())
@@ -169,9 +165,7 @@ final class Menu14Test extends TestCase
             ->method('hashCode')
             ->willReturn('page2');
 
-        $page3 = $this->getMockBuilder(PageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $page3 = $this->createMock(PageInterface::class);
         $page3->expects(self::never())
             ->method('isVisible');
         $page3->expects(self::never())
@@ -211,64 +205,48 @@ final class Menu14Test extends TestCase
         $parentParentPage->addPage($page2);
         $parentParentPage->addPage($page3);
 
-        $container = new Navigation();
-        $container->addPage($parentParentPage);
+        $navigation = new Navigation();
+        $navigation->addPage($parentParentPage);
 
         $role = 'testRole';
 
-        $auth = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $auth = $this->createMock(AuthorizationInterface::class);
         $auth->expects(self::never())
             ->method('isGranted');
 
-        $containerParser = $this->getMockBuilder(ContainerParserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerParser = $this->createMock(ContainerParserInterface::class);
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with($name)
-            ->willReturn($container);
+            ->willReturn($navigation);
 
-        $escapeHtmlAttr = $this->getMockBuilder(EscapeHtmlAttr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
             ->method('__invoke');
 
-        $escapeHtml = $this->getMockBuilder(EscapeHtml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escapeHtml = $this->createMock(EscapeHtml::class);
         $escapeHtml->expects(self::never())
             ->method('__invoke');
 
-        $renderer = $this->getMockBuilder(PartialRendererInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PartialRendererInterface::class);
         $renderer->expects(self::never())
             ->method('render');
 
-        $translator = $this->getMockBuilder(Translate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(Translate::class);
         $translator->expects(self::never())
             ->method('__invoke');
 
         $expected = '<ul class="nav-escaped ul-class-escaped ul-escaped">' . PHP_EOL . '    <li class="nav-item-escaped dropup-escaped li-active-escaped">' . PHP_EOL . '        <details>' . PHP_EOL . '        <a parent-id-escaped="parent-id-escaped" parent-title-escaped="parent-title-escaped" parent-class-escaped="parent-class-escaped" parent-href-escaped="##-escaped" parent-target-escaped="self-escaped">parent-label-escaped</a>' . PHP_EOL . '        <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-parent-id-escaped">' . PHP_EOL . '            <li class="dropup-escaped li-active-escaped">' . PHP_EOL . '                <details>' . PHP_EOL . '                <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                <ul class="dropdown-details-menu-escaped" aria-labelledby="parent-id-escaped">' . PHP_EOL . '                    <li class="li-active-escaped">' . PHP_EOL . '                        <a idEscaped="testIdEscaped" titleEscaped="testTitleTranslatedAndEscaped" classEscaped="testClassEscaped" hrefEscaped="#Escaped">testLabelTranslatedAndEscaped</a>' . PHP_EOL . '                    </li>' . PHP_EOL . '                </ul>' . PHP_EOL . '                </details>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test2IdEscaped" titleEscaped="test2TitleTranslatedAndEscaped" classEscaped="test2ClassEscaped" hrefEscaped="#2Escaped">test2LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '            <li class="li-active-escaped">' . PHP_EOL . '                <a idEscaped="test3IdEscaped" titleEscaped="test3TitleTranslatedAndEscaped" classEscaped="test3ClassEscaped" hrefEscaped="#3Escaped">test3LabelTranslatedAndEscaped</a>' . PHP_EOL . '            </li>' . PHP_EOL . '        </ul>' . PHP_EOL . '        </details>' . PHP_EOL . '    </li>' . PHP_EOL . '</ul>';
 
-        $htmlElement = $this->getMockBuilder(HtmlElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlElement = $this->createMock(HtmlElementInterface::class);
         $htmlElement->expects(self::never())
             ->method('toHtml');
 
-        $htmlify = $this->getMockBuilder(HtmlifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $htmlify = $this->createMock(HtmlifyInterface::class);
         $htmlify->expects(self::never())
             ->method('toHtml');
 
-        $helper = new Menu(
+        $menu = new Menu(
             htmlify: $htmlify,
             containerParser: $containerParser,
             escaper: $escapeHtmlAttr,
@@ -278,21 +256,19 @@ final class Menu14Test extends TestCase
             translator: $translator,
         );
 
-        $helper->setRoles([$role]);
+        $menu->setRoles([$role]);
 
         assert($auth instanceof AuthorizationInterface);
-        $helper->setAuthorization($auth);
+        $menu->setAuthorization($auth);
 
-        $view = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $view = $this->createMock(PhpRenderer::class);
         $view->expects(self::never())
             ->method('plugin');
         $view->expects(self::never())
             ->method('getHelperPluginManager');
 
         assert($view instanceof PhpRenderer);
-        $helper->setView($view);
+        $menu->setView($view);
 
         $this->expectException(AssertionError::class);
         $this->expectExceptionMessage(
@@ -302,7 +278,7 @@ final class Menu14Test extends TestCase
 
         self::assertSame(
             $expected,
-            $helper->renderMenu(
+            $menu->renderMenu(
                 $name,
                 ['direction' => Menu::DROP_ORIENTATION_UP, 'sublink' => Menu::STYLE_SUBLINK_DETAILS, 'ulClass' => $ulClass, 'liActiveClass' => $liActiveClass, 'maxDepth' => true],
             ),

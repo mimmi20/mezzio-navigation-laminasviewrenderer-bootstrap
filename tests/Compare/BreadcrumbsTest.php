@@ -45,9 +45,9 @@ use const PHP_EOL;
 /**
  * Tests Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\Breadcrumbs.
  */
-#[Group('Laminas_View')]
-#[Group('Laminas_View_Helper')]
-#[Group('Compare')]
+#[Group(name: 'Laminas_View')]
+#[Group(name: 'Laminas_View_Helper')]
+#[Group(name: 'Compare')]
 final class BreadcrumbsTest extends AbstractTestCase
 {
     /**
@@ -61,7 +61,6 @@ final class BreadcrumbsTest extends AbstractTestCase
      * @throws Exception
      * @throws ExceptionInterface
      * @throws ContainerExceptionInterface
-     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     #[Override]
     protected function setUp(): void
@@ -119,9 +118,9 @@ final class BreadcrumbsTest extends AbstractTestCase
      */
     public function testHelperEntryPointWithoutAnyParams(): void
     {
-        $returned = ($this->helper)();
-        self::assertSame($this->helper, $returned);
-        self::assertSame($this->nav1, $returned->getContainer());
+        $breadcrumbs = ($this->helper)();
+        self::assertSame($this->helper, $breadcrumbs);
+        self::assertSame($this->nav1, $breadcrumbs->getContainer());
     }
 
     /**
@@ -130,10 +129,10 @@ final class BreadcrumbsTest extends AbstractTestCase
      */
     public function testHelperEntryPointWithContainerParam(): void
     {
-        $returned = ($this->helper)($this->nav2);
+        $breadcrumbs = ($this->helper)($this->nav2);
 
-        self::assertSame($this->helper, $returned);
-        self::assertSame($this->nav2, $returned->getContainer());
+        self::assertSame($this->helper, $breadcrumbs);
+        self::assertSame($this->nav2, $breadcrumbs->getContainer());
     }
 
     /**
@@ -142,11 +141,11 @@ final class BreadcrumbsTest extends AbstractTestCase
      */
     public function testNullOutContainer(): void
     {
-        $old = $this->helper->getContainer();
+        $container = $this->helper->getContainer();
         $this->helper->setContainer();
         $new = $this->helper->getContainer();
 
-        self::assertNotSame($old, $new);
+        self::assertNotSame($container, $new);
     }
 
     /**
@@ -197,7 +196,7 @@ final class BreadcrumbsTest extends AbstractTestCase
      */
     public function testLinkLastElement(): void
     {
-        $this->helper->setLinkLast(true);
+        $this->helper->setLinkLast(linkLast: true);
 
         $expected = $this->getExpected('bc/linklast.html');
         $actual   = rtrim($this->helper->render(), PHP_EOL);
@@ -342,7 +341,7 @@ final class BreadcrumbsTest extends AbstractTestCase
      */
     public function testLastBreadcrumbShouldBeEscaped(): void
     {
-        $container = new Navigation();
+        $navigation = new Navigation();
 
         $page = (new PageFactory())->factory(
             [
@@ -352,10 +351,10 @@ final class BreadcrumbsTest extends AbstractTestCase
             ],
         );
 
-        $container->addPage($page);
+        $navigation->addPage($page);
 
         $expected = $this->getExpected('bc/escaped.html');
-        $actual   = rtrim($this->helper->setMinDepth(0)->render($container), PHP_EOL);
+        $actual   = rtrim($this->helper->setMinDepth(0)->render($navigation), PHP_EOL);
 
         self::assertSame($expected, $actual);
     }
