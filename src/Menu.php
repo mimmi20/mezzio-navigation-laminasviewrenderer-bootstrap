@@ -169,9 +169,7 @@ final class Menu extends AbstractMenu
             );
         }
 
-        if ($container === null) {
-            $container = $this->getContainer();
-        }
+        $container ??= $this->getContainer();
 
         $options = $this->normalizeOptions($options);
 
