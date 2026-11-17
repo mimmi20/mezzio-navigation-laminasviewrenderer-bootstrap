@@ -503,20 +503,20 @@ final class Breadcrumbs3Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($uri);
         $page->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         $uri->addPage($page);
 
@@ -617,20 +617,20 @@ final class Breadcrumbs3Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($uri);
         $page->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         $uri->addPage($page);
 

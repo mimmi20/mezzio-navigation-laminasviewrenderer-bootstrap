@@ -181,20 +181,20 @@ final class Breadcrumbs2Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getParent')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: false);
+            ->willReturn(false);
 
         $navigation = new Navigation();
         $navigation->addPage($page);
@@ -259,20 +259,20 @@ final class Breadcrumbs2Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getParent')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         $navigation = new Navigation();
         $navigation->addPage($page);
@@ -350,7 +350,7 @@ final class Breadcrumbs2Test extends TestCase
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with(null)
-            ->willReturn(value: null);
+            ->willReturn(null);
 
         $escapePlugin = $this->createMock(EscapeHtml::class);
         $escapePlugin->expects(self::never())
@@ -553,20 +553,20 @@ final class Breadcrumbs2Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($uri);
         $page->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         $uri->addPage($page);
 

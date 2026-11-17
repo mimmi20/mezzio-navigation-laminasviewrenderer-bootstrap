@@ -79,7 +79,7 @@ final class MenuFactoryTest extends TestCase
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
-            ->willReturn(value: false);
+            ->willReturn(false);
 
         $container = $this->createMock(ServiceLocatorInterface::class);
         $matcher   = self::exactly(5);
@@ -149,7 +149,7 @@ final class MenuFactoryTest extends TestCase
         $viewHelperPluginManager->expects(self::once())
             ->method('has')
             ->with(Translate::class)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         $container = $this->createMock(ServiceLocatorInterface::class);
         $matcher   = self::exactly(5);
