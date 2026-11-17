@@ -26,6 +26,7 @@ use Mimmi20\NavigationHelper\ContainerParser\ContainerParserInterface;
 use Mimmi20\NavigationHelper\Htmlify\HtmlifyInterface;
 use Override;
 use RecursiveIteratorIterator;
+use Throwable;
 
 use function array_diff_key;
 use function array_filter;
@@ -524,7 +525,11 @@ final class Menu extends AbstractMenu
         $iterator = new RecursiveIteratorIterator($container, RecursiveIteratorIterator::SELF_FIRST);
 
         if (is_int($options['maxDepth'])) {
-            $iterator->setMaxDepth($options['maxDepth']);
+            try {
+                $iterator->setMaxDepth($options['maxDepth']);
+            } catch (Throwable) {
+                // do nothing
+            }
         }
 
         // iterate container
