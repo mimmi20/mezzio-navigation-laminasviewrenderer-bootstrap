@@ -70,20 +70,20 @@ final class Breadcrumbs5Test extends TestCase
         $subPage->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $subPage->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $subPage->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $subPage->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($parentPage);
         $subPage->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         assert($subPage instanceof PageInterface);
         $page->addPage($subPage);
@@ -287,20 +287,20 @@ final class Breadcrumbs5Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::exactly(2))
             ->method('getParent')
             ->willReturn($uri);
         $page->expects(self::exactly(2))
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::never())
             ->method('getLabel');
         $page->expects(self::never())
@@ -317,7 +317,7 @@ final class Breadcrumbs5Test extends TestCase
             ->method('getTarget');
         $page->expects(self::once())
             ->method('getLiClass')
-            ->willReturn(value: null);
+            ->willReturn(null);
 
         $uri->addPage($page);
 
