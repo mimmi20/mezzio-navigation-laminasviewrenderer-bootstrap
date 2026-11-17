@@ -250,7 +250,7 @@ final class Menu2Test extends TestCase
         $parentPage->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: false);
+            ->willReturn(false);
         $parentPage->expects(self::never())
             ->method('getResource');
         $parentPage->expects(self::never())
@@ -264,13 +264,13 @@ final class Menu2Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getParent')
             ->willReturn($parentPage);
@@ -350,16 +350,16 @@ final class Menu2Test extends TestCase
         $parentPage->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $parentPage->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $parentPage->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $parentPage->expects(self::once())
             ->method('getParent')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $parentPage->expects(self::never())
             ->method('isActive');
 
@@ -367,20 +367,20 @@ final class Menu2Test extends TestCase
         $page->expects(self::once())
             ->method('isVisible')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
         $page->expects(self::once())
             ->method('getResource')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getPrivilege')
-            ->willReturn(value: null);
+            ->willReturn(null);
         $page->expects(self::once())
             ->method('getParent')
             ->willReturn($parentPage);
         $page->expects(self::once())
             ->method('isActive')
             ->with(false)
-            ->willReturn(value: true);
+            ->willReturn(true);
 
         $navigation = new Navigation();
         $navigation->addPage($page);
@@ -464,7 +464,7 @@ final class Menu2Test extends TestCase
         $containerParser->expects(self::once())
             ->method('parseContainer')
             ->with(null)
-            ->willReturn(value: null);
+            ->willReturn(null);
 
         $escapeHtmlAttr = $this->createMock(EscapeHtmlAttr::class);
         $escapeHtmlAttr->expects(self::never())
