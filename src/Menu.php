@@ -149,10 +149,9 @@ final class Menu extends AbstractMenu
      *
      * Available $options:
      *
-     * @param ContainerInterface<PageInterface>|string|null $container [optional] container to create menu from.
-     *                                                                 Default is to use the container retrieved from {@link getContainer()}.
-     * @param array<string, bool|int|string|null>           $options   [optional] options for controlling rendering
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
+     * @param ContainerInterface<PageInterface>|string|null                                                                                                                                                                                                                                                                                                                                                                                                                                                 $container [optional] container to create menu from.
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Default is to use the container retrieved from {@link getContainer()}.
+     * @param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options   [optional] options for controlling rendering
      *
      * @throws View\Exception\RuntimeException
      * @throws View\Exception\InvalidArgumentException
@@ -276,11 +275,9 @@ final class Menu extends AbstractMenu
     /**
      * Normalizes given render options
      *
-     * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options
+     * @param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool} $options [optional] options to normalize
      *
-     * @return array<string, bool|int|string|null>
-     * @phpstan-return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
+     * @return array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string}
      *
      * @throws View\Exception\InvalidArgumentException
      */
@@ -374,9 +371,8 @@ final class Menu extends AbstractMenu
     /**
      * Renders the deepest active menu within [minDepth, maxDepth], (called from {@link renderMenu()}).
      *
-     * @param ContainerInterface<PageInterface>   $container container to render
-     * @param array<string, bool|int|string|null> $options   options for controlling rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @param ContainerInterface<PageInterface>                                                                                                                                                                                                                                                                                                                                                  $container container to render
+     * @param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options   options for controlling rendering
      *
      * @throws View\Exception\InvalidArgumentException
      * @throws View\Exception\RuntimeException
@@ -497,9 +493,8 @@ final class Menu extends AbstractMenu
     /**
      * Renders a normal menu (called from {@link renderMenu()}).
      *
-     * @param ContainerInterface<PageInterface>   $container container to render
-     * @param array<string, bool|int|string|null> $options   options for controlling rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @param ContainerInterface<PageInterface>                                                                                                                                                                                                                                                                                                                                                  $container container to render
+     * @param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options   options for controlling rendering
      *
      * @throws View\Exception\InvalidArgumentException
      * @throws View\Exception\RuntimeException
@@ -690,10 +685,9 @@ final class Menu extends AbstractMenu
     }
 
     /**
-     * @param PageInterface                       $page    current page to check
-     * @param array<string, bool|int|string|null> $options options for controlling rendering
-     * @param int                                 $level   current level of rendering
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @param PageInterface                                                                                                                                                                                                                                                                                                                                                                      $page    current page to check
+     * @param int                                                                                                                                                                                                                                                                                                                                                                                $level   current level of rendering
+     * @param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options options for controlling rendering
      *
      * @throws View\Exception\RuntimeException
      */
@@ -718,12 +712,10 @@ final class Menu extends AbstractMenu
     }
 
     /**
-     * @param PageInterface                         $page    current page to check
-     * @param array<string, bool|int|string|null>   $options options for controlling rendering
-     * @param int                                   $level   current level of rendering
-     * @param array<string, int|PageInterface|null> $found
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
-     * @phpstan-param array{page?: PageInterface|null, depth?: int|null} $found
+     * @param PageInterface                                                                                                                                                                                                                                                                                                                                                                      $page    current page to check
+     * @param int                                                                                                                                                                                                                                                                                                                                                                                $level   current level of rendering
+     * @param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options options for controlling rendering
+     * @param array{page?: PageInterface|null, depth?: int|null}                                                                                                                                                                                                                                                                                                                                 $found
      *
      * @return array<bool>
      *
@@ -750,12 +742,11 @@ final class Menu extends AbstractMenu
     }
 
     /**
-     * @param PageInterface                       $page           current page to check
-     * @param array<string, bool|int|string|null> $options        options for controlling rendering
-     * @param int                                 $level          current level of rendering
-     * @param array<int, string>                  $liClasses
-     * @param array<string, string>               $pageAttributes
-     * @phpstan-param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options
+     * @param PageInterface                                                                                                                                                                                                                                                                                                                                                                      $page           current page to check
+     * @param int                                                                                                                                                                                                                                                                                                                                                                                $level          current level of rendering
+     * @param array<int, string>                                                                                                                                                                                                                                                                                                                                                                 $liClasses
+     * @param array<string, string>                                                                                                                                                                                                                                                                                                                                                              $pageAttributes
+     * @param array{ulClass: string, liClass: string, indent: string, minDepth: int, maxDepth: int|null, onlyActiveBranch: bool, escapeLabels: bool, renderParents: bool, addClassToListItem: bool, liActiveClass: string, activeClass: string, role: string|null, style: string, substyle: string, sublink: string, class: string, ulRole: string|null, liRole: string|null, direction: string} $options        options for controlling rendering
      *
      * @throws void
      */
@@ -851,10 +842,9 @@ final class Menu extends AbstractMenu
     /**
      * Returns an HTML string for the given page
      *
-     * @param PageInterface                       $page       page to generate HTML for
-     * @param array<string, bool|int|string|null> $options    options for controlling rendering
-     * @param array<string, string>               $attributes
-     * @phpstan-param array{ulClass?: string, liClass?: string, indent?: string, minDepth?: int, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string, activeClass?: string, role?: string|null, style?: string, substyle?: string, sublink: string|null, class?: string, ulRole?: string|null, liRole?: string|null, direction?: string} $options
+     * @param PageInterface                                                                                                                                                                                                                                                                                                                                                                                            $page       page to generate HTML for
+     * @param array<string, string>                                                                                                                                                                                                                                                                                                                                                                                    $attributes
+     * @param array{ulClass?: string, liClass?: string, indent?: string, minDepth?: int, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string, activeClass?: string, role?: string|null, style?: string, substyle?: string, sublink: string|null, class?: string, ulRole?: string|null, liRole?: string|null, direction?: string} $options    options for controlling rendering
      *
      * @return string HTML string
      *
@@ -928,8 +918,7 @@ final class Menu extends AbstractMenu
     }
 
     /**
-     * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
+     * @param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options [optional] options to normalize
      *
      * @throws View\Exception\InvalidArgumentException
      */
@@ -972,8 +961,7 @@ final class Menu extends AbstractMenu
     }
 
     /**
-     * @param array<string, bool|int|string|null> $options [optional] options to normalize
-     * @phpstan-param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options
+     * @param array{ulClass?: string|null, liClass?: string|null, indent?: int|string|null, minDepth?: int|null, maxDepth?: int|null, onlyActiveBranch?: bool, escapeLabels?: bool, renderParents?: bool, addClassToListItem?: bool, liActiveClass?: string|null, activeClass?: string|null, tabs?: bool, pills?: bool, fill?: bool, justified?: bool, centered?: bool, right-aligned?: bool, vertical?: string, direction?: string, style?: string, substyle?: string, sublink?: string, in-navbar?: bool, style?: string|null, sublink?: string|null} $options [optional] options to normalize
      *
      * @throws View\Exception\InvalidArgumentException
      */
