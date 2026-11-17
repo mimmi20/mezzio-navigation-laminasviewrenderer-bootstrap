@@ -26,6 +26,7 @@ use Mimmi20\Mezzio\Navigation\LaminasView\View\Helper\Navigation\AbstractMenu;
 use Mimmi20\Mezzio\Navigation\Page\PageInterface;
 use Override;
 use RecursiveIteratorIterator;
+use Throwable;
 
 use function array_diff_key;
 use function array_filter;
@@ -526,7 +527,11 @@ final class Menu extends AbstractMenu
         $iterator = new RecursiveIteratorIterator($container, RecursiveIteratorIterator::SELF_FIRST);
 
         if (is_int($options['maxDepth'])) {
-            $iterator->setMaxDepth($options['maxDepth']);
+            try {
+                $iterator->setMaxDepth($options['maxDepth']);
+            } catch (Throwable) {
+                // do nothing
+            }
         }
 
         // iterate container
